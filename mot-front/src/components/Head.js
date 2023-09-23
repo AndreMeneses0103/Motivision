@@ -29,7 +29,7 @@ function Head() {
 				</button>
 			</div>
 			<div className="logo">
-				<button className="btn_logo" onClick={loadMain}>Motive</button>
+				<button className="btn_logo" onClick={loadMain}>Motivision</button>
 			</div>
 			<div className="upload_div">
 				<button id="upload_btn" onClick={loadUpload}>

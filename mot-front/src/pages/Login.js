@@ -1,4 +1,4 @@
-import "./Login.css";
+import "../Login.css";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -12,7 +12,7 @@ function Login() {
 		<div className="loginpage">
 			<div className="center">
 				<div className="card">
-					<div className="login_title">Motive</div>
+					<div className="login_title">Motivision</div>
 					<div className="input_title">Username</div>
 					<div className="user_div">
 						<input className="log_input" id="user_input" />
@@ -30,8 +30,6 @@ function Login() {
 					</a>
 				</div>
 			</div>
-			<div className="triangle1"></div>
-			<div className="triangle2"></div>
 		</div>
 	);
 }

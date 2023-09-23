@@ -1,6 +1,6 @@
 // import { useState } from "react";
-import "./Upload.css";
-import Head from "./components/Head";
+import "../Upload.css";
+import Head from "../components/Head";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Upload() {

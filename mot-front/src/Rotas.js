@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 
-import Video from "./Video";
-import Login from "./Login";
-import Upload from "./Upload";
-import Main from "./Main";
+import Video from "./pages/Video";
+import Login from "./pages/Login";
+import Upload from "./pages/Upload";
+import Main from "./pages/Main";
+import Profile from "./pages/Profile";
 
 function Rotas() {
     return (
@@ -12,6 +13,7 @@ function Rotas() {
             <Route path="/" element={<Login />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/main" element={<Main/>}/>
+            <Route path="/profile" element={<Profile/>}/>
         </Routes>
 		);
 }

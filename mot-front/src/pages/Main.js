@@ -1,6 +1,6 @@
 // import { useState } from "react";
-import "./Main.css"
-import Head from "./components/Head";
+import "../Main.css"
+import Head from "../components/Head";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Main() { 
@@ -64,6 +64,16 @@ function Main() {
 							></img>
 						</button>
 					</div>
+					<div className="mvid" id="video7">
+					<button className="vidButton">
+						<img
+							src="./images/image1.jpg"
+							className="vidImage"
+							alt="Imagem do video"
+						></img>
+					</button>
+				</div>
+
 				</div>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "./Video.css";
-import Head from "./components/Head";
+import "../Video.css";
+import Head from "../components/Head";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Video() {
@@ -18,7 +18,7 @@ function Video() {
 		<div className="mainpage">
 			<Head />
 			<div className="screen_video">
-				<video width={500} id="playing_video" controls src={loadVideo}></video>
+				<video id="playing_video" controls src={loadVideo}></video>
 			</div>
 			<div className="recommend_video">
 				<div className="rvid" id="video1">
@@ -62,15 +62,6 @@ function Video() {
 					<button className="vidButton">
 						<img
 							src="./images/image4.jpg"
-							className="vidImage"
-							alt="Imagem do video"
-						></img>
-					</button>
-				</div>
-				<div className="rvid" id="video5">
-					<button className="vidButton">
-						<img
-							src="./images/image1.jpg"
 							className="vidImage"
 							alt="Imagem do video"
 						></img>
