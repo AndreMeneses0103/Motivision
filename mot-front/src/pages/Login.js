@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
 
+	console.log("CHEGOU LOGIN");
 	const navigate = useNavigate();
 
 	function changePage() {
-		navigate('video');
+		navigate('main');
 	}
 	return (
 		<div className="loginpage">

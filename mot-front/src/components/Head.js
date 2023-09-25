@@ -6,15 +6,15 @@ function Head() {
 	const navigate = useNavigate();
 
 	const loadUpload = (e) => {
-		navigate('/upload')
+		navigate('/upload');
 	}
 
 	const loadProfile = (e) => {
-		alert("Perfil");
+		navigate('/profile')
 	}
 
 	const loadMain = (e) => {
-		alert("Main");
+		navigate('/main')
 	}
 	return (
 		<div className="header">

@@ -5,6 +5,8 @@
     padding: 20px;
     align-items: center;
     display: flex;
+    position: sticky;
+    top: 0;
 }
 
 .logo, .btn_logo{
