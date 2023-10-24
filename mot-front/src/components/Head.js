@@ -33,7 +33,7 @@ function Head() {
 			</div>
 			<div className="upload_div">
 				<button id="upload_btn" onClick={loadUpload}>
-					<img id="upload_img" src="./upload.png" alt="Upload Button"></img>
+					<img id="upload_img" src="./icons/upload.png" alt="Upload Button"></img>
 				</button>
 			</div>
 		</div>

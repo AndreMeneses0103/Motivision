@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 
-import Video from "./pages/Video";
-import Login from "./pages/Login";
-import Upload from "./pages/Upload";
-import Main from "./pages/Main";
-import Profile from "./pages/Profile";
+import Video from "./pages/Video/Video";
+import Login from "./pages/Login/Login";
+import Upload from "./pages/Upload/Upload";
+import Main from "./pages/Main/Main";
+import Profile from "./pages/Profile/Profile";
 
 function Rotas() {
     return (

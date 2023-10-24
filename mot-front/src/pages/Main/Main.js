@@ -1,29 +1,24 @@
-import "../Profile.css"
-import Head from "../components/Head";
+// import { useState } from "react";
+import "./Main.css"
+import Head from "../../components/Head";
+import { useNavigate } from "react-router-dom";
+// import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-function Profile(){
+function Main() { 
+    // setLoadVideo(<source src="./videos/video1.mp4" type="video/mp4"></source>);
+	const navigate = useNavigate();
 
-    console.log("CHEGOU PROFILE!");
-    return(
-        <div className="profile_main">
-            <Head/>
-            <div className="username">
-                Fadresde
-            </div>
-            <div className="user_photo">
-                <button type="button" className="photo_btn">
-                    <img
-                    id="profile_photo"
-                    itemID="profile_photo"
-                    src="./images/machinarium.png"
-                    alt="Foto do Usuario"
-                    />
-                </button>
-            </div>
-            <div className="user_videos">
-            <div className="Profile_Videos">
+	const loadVideo = (e) => {
+		navigate('/video');
+	}
+
+	return (
+		<div className="div_main">
+			<Head />
+			<div className="Align_Videos">
+				<div className="All_Videos">
 					<div className="mvid" id="video1">
-						<button className="vidButton">
+						<button className="vidButton" onClick={loadVideo}>
 							<img
 								src="./images/image1.jpg"
 								className="vidImage"
@@ -76,7 +71,7 @@ function Profile(){
 							></img>
 						</button>
 					</div>
-                    <div className="mvid" id="video7">
+					<div className="mvid" id="video7">
 					<button className="vidButton">
 						<img
 							src="./images/image1.jpg"
@@ -84,14 +79,13 @@ function Profile(){
 							alt="Imagem do video"
 						></img>
 					</button>
-                </div>
 				</div>
-            
-            </div>
-        </div>
-    );
 
+				</div>
+			</div>
+		</div>
+	);
 }
 
+export default Main;
 
-export default Profile;

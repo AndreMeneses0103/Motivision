@@ -2,11 +2,61 @@ body{
     background-color: #F7F7F2;
 }
 
+.video_channel{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 20px 0px 5px 0px;
+}
+
+.channel_btn{
+    /* margin: 20px 5px 5px 40px; */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.channel_btn img{
+    max-width: 200%;
+    max-height: 200%;
+}
+
+.channel_user{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: nowrap;
+    width: 130px;
+}
+
+#channel_name{
+    /* margin: 20px 5px 5px 0px; */
+}
+
+.subs_btn{
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+    border-style: none;
+    background-color: #222725;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 .screen_video{
     display: flex;
     align-items: center;
     justify-content: center;   
-    margin: 40px;
+    margin: 0px 40px 40px 40px;
 }
 
 #playing_video{
@@ -39,7 +89,6 @@ body{
     height: 90px;
     background-color: #726767;
     border-radius: 10px;
-    /* padding: 1px; */
     margin: 5px;}
 
 .vidImage{

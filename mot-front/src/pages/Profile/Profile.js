@@ -1,15 +1,32 @@
-// import { useState } from "react";
-import "../Main.css"
-import Head from "../components/Head";
-// import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "./Profile.css"
+import "../../components/Scroll.css"
+import Head from "../../components/Head";
 
-function Main() { 
+function Profile(){
 
-	return (
-		<div className="div_main">
-			<Head />
-			<div className="Align_Videos">
-				<div className="All_Videos">
+    console.log("CHEGOU PROFILE!");
+    return(
+        <div className="profile_main">
+            <Head/>
+            <div className="username">
+                Teste
+            </div>
+            <div className="user_photo">
+                <button type="button" className="photo_btn">
+                    <img
+                    id="profile_photo"
+                    itemID="profile_photo"
+                    src="./images/machinarium.png"
+                    alt="Foto do Usuario"
+                    />
+                </button>
+            </div>
+			<div className="user_infos">
+				<span id="user_subs">55 Subscribers</span>
+				<span id="user_numvid">7 Videos</span>
+			</div>
+            <div className="user_videos">
+            <div className="Profile_Videos">
 					<div className="mvid" id="video1">
 						<button className="vidButton">
 							<img
@@ -64,7 +81,7 @@ function Main() {
 							></img>
 						</button>
 					</div>
-					<div className="mvid" id="video7">
+                    <div className="mvid" id="video7">
 					<button className="vidButton">
 						<img
 							src="./images/image1.jpg"
@@ -72,13 +89,14 @@ function Main() {
 							alt="Imagem do video"
 						></img>
 					</button>
+                </div>
 				</div>
+            
+            </div>
+        </div>
+    );
 
-				</div>
-			</div>
-		</div>
-	);
 }
 
-export default Main;
 
+export default Profile;
