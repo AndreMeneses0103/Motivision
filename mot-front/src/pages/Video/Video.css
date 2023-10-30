@@ -10,7 +10,7 @@ body{
     margin: 20px 0px 5px 0px;
 }
 
-.channel_btn{
+.channel_btn, .c_prof_btn{
     /* margin: 20px 5px 5px 40px; */
     border-radius: 50%;
     width: 40px;
@@ -23,7 +23,7 @@ body{
     cursor: pointer;
 }
 
-.channel_btn img{
+.channel_btn, .c_prof_btn img{
     max-width: 200%;
     max-height: 200%;
 }
@@ -56,7 +56,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;   
-    margin: 0px 40px 40px 40px;
+    margin: 0px 40px 20px 40px;
 }
 
 #playing_video{
@@ -72,33 +72,32 @@ body{
 .recommend_video{
     display: flex;
     margin: auto;
-    margin-bottom: 10px;
+    margin-bottom: 20vh;
+    margin-top: 10vh;
     width: 80%;
-    /* height: 100px; */
     padding: 5px;
     background-color: #D9D9D9;
     border-radius: 5px;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-content: center;
-    justify-content: space-around;
+    overflow-x: auto;
 }
 
 .rvid{
-    width: 140px;
+    width: 160px;
     height: 90px;
     background-color: #726767;
     border-radius: 10px;
-    margin: 5px;}
+    margin: 5px 20px 5px 20px;
+}
 
 .vidImage{
-    width: 100%;
     height: 100%;
     border-radius: 10px;
 }
 
 .vidButton{
-    width: 100%;
     height: 100%;
     background-color: transparent;
     padding: 0;
@@ -110,4 +109,133 @@ body{
 
 .vidButton:hover{
     transform: scale(1.05, 1.05);
+}
+
+.video_icon_span{
+
+}
+
+.video_stats{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.video_icons{
+    width: 2.5vh;
+}
+
+#dislike_icon{
+    transform: rotate(180deg);
+}
+
+.hashtags_field{
+    background-color: #b1b1b1;
+    border-radius: 40px;
+    padding: 15px;
+}
+
+a{
+    text-decoration: none;
+    color: #000;
+}
+
+.hashtag{
+    margin: 0px 15px 0px 15px;
+    background-color: #808080;
+    padding: 5px;
+    border-radius: 20px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.video_title{
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    font-size: 35px;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+}
+
+.video_text{
+    display: flex;
+    margin: auto;
+    margin-bottom: 10px;
+    width: 80%;
+    padding: 25px;
+    background-color: #D9D9D9;
+    border-radius: 5px;
+    flex-direction: column;
+    align-content: center;
+}
+
+.desc_title{
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.desc_text{
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+.comments_field{
+    background-color: #D9D9D9;
+    width: 70%;
+    padding: 40px;
+    padding-top: 20px;
+    margin: 0 auto;
+    border-radius: 20px;
+}
+
+.comments_title{
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.add_comment_btn{
+    display: flex;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    border-style: none;
+    background-color: #222725;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.all_comments{
+
+}
+
+#channel_name_prof{
+    margin-left: 10px;
+}
+
+#comment_text{
+    margin: 15px 0px 30px 50px;
+    text-align: justify;
+}
+.comment{
+
+}
+
+.c_profile{
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
 }
