@@ -192,6 +192,7 @@ a{
     background-color: #D9D9D9;
     width: 70%;
     padding: 40px;
+    padding-bottom: 10px;
     padding-top: 20px;
     margin: 0 auto;
     border-radius: 20px;
@@ -223,13 +224,23 @@ a{
 }
 
 #channel_name_prof{
+    margin-left: 15px;
+    font-weight: 600;
+    font-size: large;
+}
+
+#data_comment{
+    font-size: smaller;
+    color: #909090;
     margin-left: 10px;
+    font-weight: 300;
 }
 
 #comment_text{
-    margin: 15px 0px 30px 50px;
+    margin: 0px 0px 20px 55px;
     text-align: justify;
 }
+
 .comment{
 
 }

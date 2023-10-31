@@ -1,91 +1,36 @@
 // import { useState } from "react";
-import "./Main.css"
+import "./Main.css";
 import Head from "../../components/Head";
-import { useNavigate } from "react-router-dom";
+import Videos from "./All_Videos";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-function Main() { 
-    // setLoadVideo(<source src="./videos/video1.mp4" type="video/mp4"></source>);
-	const navigate = useNavigate();
+function Main() {
 
-	const loadVideo = (e) => {
-		navigate('/video');
-	}
-
-	return (
-		<div className="div_main">
-			<Head />
-			<div className="Align_Videos">
-				<div className="All_Videos">
-					<div className="mvid" id="video1">
-						<button className="vidButton" onClick={loadVideo}>
-							<img
-								src="./images/image1.jpg"
-								className="vidImage"
-								alt="Imagem do video"
-							></img>
-						</button>
-					</div>
-					<div className="mvid" id="video2">
-						<button className="vidButton">
-							<img
-								src="./images/image2.jpg"
-								className="vidImage"
-								alt="Imagem do video"
-							></img>
-						</button>
-					</div>
-					<div className="mvid" id="video3">
-						<button className="vidButton">
-							<img
-								src="./images/image3.jpg"
-								className="vidImage"
-								alt="Imagem do video"
-							></img>
-						</button>
-					</div>
-					<div className="mvid" id="video4">
-						<button className="vidButton">
-							<img
-								src="./images/image4.jpg"
-								className="vidImage"
-								alt="Imagem do video"
-							></img>
-						</button>
-					</div>
-					<div className="mvid" id="video5">
-						<button className="vidButton">
-							<img
-								src="./images/image1.jpg"
-								className="vidImage"
-								alt="Imagem do video"
-							></img>
-						</button>
-					</div>
-					<div className="mvid" id="video6">
-						<button className="vidButton">
-							<img
-								src="./images/image1.jpg"
-								className="vidImage"
-								alt="Imagem do video"
-							></img>
-						</button>
-					</div>
-					<div className="mvid" id="video7">
-					<button className="vidButton">
-						<img
-							src="./images/image1.jpg"
-							className="vidImage"
-							alt="Imagem do video"
-						></img>
-					</button>
-				</div>
-
-				</div>
-			</div>
-		</div>
-	);
+    return (
+        <div className="div_main">
+            <Head />
+            <div className="Align_Videos">
+                <div className="src_container">
+                    <input
+                        type="text"
+                        className="search_input"
+                        id="search_input"
+                        placeholder="Search..."
+                    ></input>
+                    <button
+                        className="btn_search"
+                        id="btn_search"
+                        type="button"
+                    >
+                        <img src="./icons/search.png" alt="Search Icon" id="icon_search"></img>
+                    </button>
+                </div>
+                <div className="All_Videos">
+                    <Videos/>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default Main;
-
