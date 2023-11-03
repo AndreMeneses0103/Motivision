@@ -1,21 +1,21 @@
 function Comment({ id, src, channel, date, text }) {
-return (
-<div className="comment" id={id}>
-    <div className="c_profile">
-    <button className="c_prof_btn">
-        <img
-        id="userphoto"
-        itemID="userphoto"
-        src={src}
-        alt="Foto do Usuario"
-        />
-    </button>
-    <span id="channel_name_prof">{channel}</span>
-    <span id="data_comment">{date}</span>
+    return (
+    <div className="comment" id={id}>
+        <div className="c_profile">
+        <button className="c_prof_btn">
+            <img
+            id="userphoto"
+            itemID="userphoto"
+            src={src}
+            alt="Foto do Usuario"
+            />
+        </button>
+        <span id="channel_name_prof">{channel}</span>
+        <span id="data_comment">{date}</span>
+        </div>
+        <div id="comment_text">{text}</div>
     </div>
-    <div id="comment_text">{text}</div>
-</div>
-);
+    );
 }
 
 function AllComments() {
@@ -30,7 +30,7 @@ function AllComments() {
     return (
     <div>
         {data.map(com => (
-            <Comment key={com.id} {...com} />
+            <Comment key={com.id} id={com.id} src={com.src} channel={com.channel} date={com.date} text={com.text}/>
         ))}
     </div>
 );

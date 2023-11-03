@@ -1,19 +1,25 @@
-import { useState } from "react";
+// import { useState } from "react";
 import "../Video/Video.css";
 import Head from "../../components/Head";
 import AllComments from "./All_comments";
+import AllVideos from "./All_Random_Videos";
+import { useLocation } from "react-router-dom";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Video() {
-    const [loadVideo, setLoadVideo] = useState();
+    // const [loadVideo, setLoadVideo] = useState();
 
     // setLoadVideo(<source src="./videos/video1.mp4" type="video/mp4"></source>);
 
-    function trocaVideo(video) {
-        console.log("Video selecionado -> " + video);
-        const link = "./videos/" + video + ".mp4";
-        setLoadVideo(link);
-    }
+    // function trocaVideo(video) {
+    //     console.log("Video selecionado -> " + video);
+    //     const link = "./videos/" + video + ".mp4";
+    //     setLoadVideo(link);
+    // }
+
+    const local = useLocation();
+    const params = new URLSearchParams(local.search);
+    const url = params.get("videoId");
 
     return (
         <div className="mainpage">
@@ -25,7 +31,7 @@ function Video() {
                             <img
                                 id="userphoto"
                                 itemID="userphoto"
-                                src="./images/spiderman.jpg"
+                                src="../images/spiderman.jpg"
                                 alt="Foto do Usuario"
                             />
                         </button>
@@ -39,7 +45,7 @@ function Video() {
                 </div>
                 <div className="video_title">VIDEO TITLE</div>
                 <div className="screen_video">
-                    <video id="playing_video" controls src={loadVideo}></video>
+                    <video id="playing_video" controls src={`./videos/${url}.mp4`}></video>
                 </div>
 				<div className="video_stats">
                     <span className="video_icon_span"><img className="video_icons" id="view_icon" src="./icons/olho.png" alt="View"/> 0</span>
@@ -52,77 +58,14 @@ function Video() {
                     <span className="desc_title">Tags</span>
                     <div className="hashtags_field">
                         <span className="hashtag"><a href="https://www.spacejam.com/1996/">#yeah</a></span>
-                        <span className="hashtag"><a>#nice</a></span>
-                        <span className="hashtag"><a>#cool</a></span>
+                        <span className="hashtag"><a href="https://www.spacejam.com/1996/">#nice</a></span>
+                        <span className="hashtag"><a href="https://www.spacejam.com/1996/">#cool</a></span>
                     </div>
                 </div>
             </div>
 
             <div className="recommend_video">
-                <div className="rvid" id="video1">
-                    <button
-                        className="vidButton"
-                        onClick={() => {
-                            trocaVideo("video1");
-                        }}
-                    >
-                        <img
-                            src="./images/image1.jpg"
-                            className="vidImage"
-                            alt="Imagem do video"
-                        ></img>
-                    </button>
-                </div>
-                <div className="rvid" id="video2">
-                    <button
-                        className="vidButton"
-                        onClick={() => {
-                            trocaVideo("video2");
-                        }}
-                    >
-                        <img
-                            src="./images/image2.jpg"
-                            className="vidImage"
-                            alt="Imagem do video"
-                        ></img>
-                    </button>
-                </div>
-                <div className="rvid" id="video3">
-                    <button className="vidButton">
-                        <img
-                            src="./images/image3.jpg"
-                            className="vidImage"
-                            alt="Imagem do video"
-                        ></img>
-                    </button>
-                </div>
-                <div className="rvid" id="video4">
-                    <button className="vidButton">
-                        <img
-                            src="./images/image4.jpg"
-                            className="vidImage"
-                            alt="Imagem do video"
-                        ></img>
-                    </button>
-                </div>
-                <div className="rvid" id="video5">
-                    <button className="vidButton">
-                        <img
-                            src="./images/image4.jpg"
-                            className="vidImage"
-                            alt="Imagem do video"
-                        ></img>
-                    </button>
-                </div>
-                <div className="rvid" id="video6">
-                    <button className="vidButton">
-                        <img
-                            src="./images/image4.jpg"
-                            className="vidImage"
-                            alt="Imagem do video"
-                        ></img>
-                    </button>
-                </div>
+                <AllVideos/>
             </div>
             <div className="comments_field">
                 <div className="comments_title">All Comments</div>

@@ -7,11 +7,9 @@ import Rotas from './Rotas';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<Rotas/>
-		</BrowserRouter>
-	</React.StrictMode>
+	<BrowserRouter>
+		<Rotas/>
+	</BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

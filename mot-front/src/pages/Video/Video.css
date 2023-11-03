@@ -23,8 +23,8 @@ body{
     cursor: pointer;
 }
 
-.channel_btn, .c_prof_btn img{
-    max-width: 200%;
+.channel_btn img, .c_prof_btn img{
+    max-width: 150%;
     max-height: 200%;
 }
 
