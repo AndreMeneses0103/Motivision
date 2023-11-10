@@ -1,4 +1,4 @@
-class UserSetting {
+export default class UserSetting {
     private _name: string;
     private _email: string;
     private _password: string;
@@ -13,25 +13,23 @@ class UserSetting {
         return this._name;
     }
 
-    public set name(value: string) {
-        this._name = value;
+    public set name(name: string) {
+        this._name = name;
     }
 
     public get email(): string {
         return this._email;
     }
 
-    public set email(value: string) {
-        this._email = value;
+    public set email(email: string) {
+        this._email = email;
     }
 
     public get password(): string {
         return this._password;
     }
 
-    public set password(value: string) {
-        this._password = value;
+    public set password(password: string) {
+        this._password = password;
     }
 }
-
-export default UserSetting;

@@ -1,11 +1,13 @@
-class Video {
+import VideoData from "./VideoData";
+
+export default class Video {
     private _id: string;
     private _userid: string;
     private _thumb: string;
     private _title: string;
     private _description: string;
     private _tags: string[];
-    private _video_data: object[];
+    private _video_data: VideoData;
 
     constructor(
         id: string,
@@ -14,7 +16,7 @@ class Video {
         title: string,
         description: string,
         tags: string[],
-        video_data: any[]
+        video_data: VideoData
     ) {
         this._id = id;
         this._userid = userid;
@@ -49,37 +51,35 @@ class Video {
         return this._tags;
     }
 
-    get video_data(): any[] {
+    get video_data(): VideoData {
         return this._video_data;
     }
 
-    set id(value: string) {
-        this._id = value;
+    set id(id: string) {
+        this._id = id;
     }
 
-    set userid(value: string) {
-        this._userid = value;
+    set userid(userid: string) {
+        this._userid = userid;
     }
 
-    set thumb(value: string) {
-        this._thumb = value;
+    set thumb(thumb: string) {
+        this._thumb = thumb;
     }
 
-    set title(value: string) {
-        this._title = value;
+    set title(title: string) {
+        this._title = title;
     }
 
-    set description(value: string) {
-        this._description = value;
+    set description(description: string) {
+        this._description = description;
     }
 
-    set tags(value: string[]) {
-        this._tags = value;
+    set tags(tags: string[]) {
+        this._tags = tags;
     }
 
-    set video_data(value: any[]) {
-        this._video_data = value;
+    set video_data(video_data: VideoData) {
+        this._video_data = video_data;
     }
 }
-
-export default Video;

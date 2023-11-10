@@ -1,6 +1,6 @@
 import UserSetting from "./UserSetting";
 
-class User {
+export default class User {
     private _usersettings: UserSetting;
     private _videos: string[];
     private _watched_videos: string[];
@@ -73,5 +73,3 @@ class User {
         this._userphoto = value;
     }
 }
-
-export default User;
