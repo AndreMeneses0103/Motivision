@@ -18,7 +18,7 @@ video.tags[0] = "Surprise";
 console.log(video.tags);
 
 //Tests with User
-console.log('-----')
+console.log('-----');
 console.log(user.usersettings.name);
 console.log(user.subscribed);
 console.log(user.subscribers);
@@ -27,7 +27,7 @@ console.log(user.usersettings.name);
 console.log(user.usersettings.password);
 
 //Tests with Comment
-console.log('-----')
+console.log('-----');
 console.log(comment.date);
 console.log(comment.id);
 console.log(comment.text);
