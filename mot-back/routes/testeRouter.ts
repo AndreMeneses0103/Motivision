@@ -8,9 +8,9 @@ class testeRouter {
         this.configRouter();
     }
     private configRouter(): void {
-        // this.route.get("/:id", () => {
-        //     console.log("Test");
-        // });
+        this.route.get("/:id", () => {
+            return "Hi";
+        });
     }
 
     public getRouter(): Router{
