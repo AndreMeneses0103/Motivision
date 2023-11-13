@@ -1,8 +1,8 @@
-import User from './models/User';
-import UserSetting from './models/UserSetting';
-import Video from './models/Video';
-import Comments from './models/Comment';
-import VideoData from './models/VideoData';
+import User from './models/DTO/User';
+import UserSetting from './models/DTO/UserSetting';
+import Video from './models/DTO/Video';
+import Comments from './models/DTO/Comment';
+import VideoData from './models/DTO/VideoData';
 
 const user = new User(new UserSetting("Jose", "teste@email.com", "senha123"), ["asd123", "4f2123"], ["kdj2j3", "djah23"], ["4412", "4542"], 70, "./testes/test")
 

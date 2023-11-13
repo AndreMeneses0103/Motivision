@@ -5,10 +5,13 @@ import Database from './database';
 export default class App{
     private app: express.Application;
     private database: Database;
+    private route: testeRouter;
+
     
     constructor() {
         this.app = express();
         this.database = new Database('mongodb://127.0.0.1/motivision');
+        this.route = new testeRouter();
         this.config();
         this.routes();
     }    
@@ -19,13 +22,13 @@ export default class App{
     }
 
     private routes(): void{
-        this.app.use('/teste', testeRouter);
+        this.app.use('/a', this.route.getRouter());
 
-        this.app.use('/*', (req: Request, res:Response)=>{
-            res.send({
-                mensagem:"Ola mundo!"
-            });
-        })
+        // this.app.use('/*', (req: Request, res:Response)=>{
+        //     res.send({
+        //         mensagem:"Ola mundo!"
+        //     });
+        // })
     }
 
 

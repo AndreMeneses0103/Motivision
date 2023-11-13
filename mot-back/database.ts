@@ -26,4 +26,10 @@ export default class Database{
             console.error("Error to disconnect: ", err);
         }
     }
+
+    
+    public get getclient() : MongoClient {
+        return this.client;
+    }
+    
 }

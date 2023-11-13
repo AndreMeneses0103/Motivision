@@ -1,21 +1,20 @@
 import express, { Router } from "express";
+import TesteDAO from "../models/DAO/Teste";
 
-class testeRouter {
+export default class testeRouter {
     private route: Router;
-
+    private client: TesteDAO;
     constructor() {
         this.route = express.Router();
         this.configRouter();
     }
     private configRouter(): void {
-        this.route.get("/:id", () => {
-            return "Hi";
-        });
+        this.route.get("/hello", );
     }
 
     public getRouter(): Router{
         return this.route;
     }
 }
-const rota = new testeRouter();
-export default rota.getRouter();
+// const rota = new testeRouter();
+// export default rota.getRouter();
