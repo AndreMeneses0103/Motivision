@@ -1,29 +1,22 @@
-import { MongoClient } from "mongodb";
+import { Collection, MongoClient } from "mongodb";
 import User from "../DTO/User";
+import Database from "../../database";
 
 export default class TesteDAO {
-    private client: MongoClient;
-    private id: string;
-    private database: string;
-    private collection: string;
-    constructor(client:MongoClient, id:string) {
-        this.client = client;
-        this.id = id;
-        this.database = "motivision";
-        this.collection = "motivision";
+    private collection: Collection;
+    constructor(database: Database) {
+        this.collection = (database.getclient.db("motivision")).collection("motivision");
     }
 
     public async getAllUsers(): Promise<User[] | null> {
-        const database = this.client.db(this.database);
-        const collection = database.collection(this.collection);
-        const result = await collection.findOne({users: 1});
-
-        if(result){
-            return result.users;
-        }else{
+        const result = await this.collection.find().toArray();
+    
+        if (result && result.length > 0) {
+            return result[0].users; // Assuming the structure has a 'users' property
+        } else {
             return null;
         }
-        // return result ? [result.users] : null;
     }
+    
 
 }

@@ -5,15 +5,13 @@ import Database from './database';
 export default class App{
     private app: express.Application;
     private database: Database;
-    private route: testeRouter;
+    private route: testeRouter | null = null;
 
     
     constructor() {
         this.app = express();
         this.database = new Database('mongodb://127.0.0.1/motivision');
-        this.route = new testeRouter();
         this.config();
-        this.routes();
     }    
 
     private config(): void{
@@ -22,7 +20,12 @@ export default class App{
     }
 
     private routes(): void{
-        this.app.use('/a', this.route.getRouter());
+        if(this.route){
+            this.app.use('/a', this.route.getRouter());
+        }else{
+            console.error("Nao e possivel conectar as rotas.")
+        }
+        
 
         // this.app.use('/*', (req: Request, res:Response)=>{
         //     res.send({
@@ -35,6 +38,8 @@ export default class App{
     public async start(port:number | string): Promise<void>{
         try{
             await this.database.Connection();
+            this.route = new testeRouter(this.database);
+            this.routes();
             this.app.listen(port, ()=>{
                 console.log(`Servidor rodando em ${port}`);
             })
@@ -50,6 +55,10 @@ export default class App{
         }catch(err){
             console.error("Erro:", err);
         }
+    }
+
+    public getDatabase():Database{
+        return this.database;
     }
 
 }
