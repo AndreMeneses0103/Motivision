@@ -1,11 +1,11 @@
 import express, {Request, Response} from 'express';
-import testeRouter from './routes/testeRouter';
+import userRouter from './routes/userRouter';
 import Database from './database';
 
 export default class App{
     private app: express.Application;
     private database: Database;
-    private route: testeRouter | null = null;
+    private route: userRouter | null = null;
 
     
     constructor() {
@@ -21,7 +21,7 @@ export default class App{
 
     private routes(): void{
         if(this.route){
-            this.app.use('/a', this.route.getRouter());
+            this.app.use('/user', this.route.getRouter());
         }else{
             console.error("Nao e possivel conectar as rotas.")
         }
@@ -38,7 +38,7 @@ export default class App{
     public async start(port:number | string): Promise<void>{
         try{
             await this.database.Connection();
-            this.route = new testeRouter(this.database);
+            this.route = new userRouter(this.database);
             this.routes();
             this.app.listen(port, ()=>{
                 console.log(`Servidor rodando em ${port}`);
