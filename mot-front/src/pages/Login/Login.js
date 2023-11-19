@@ -20,7 +20,7 @@ function Login() {
 					</div>
 					<div className="input_title">Password</div>
 					<div className="pass_div">
-						<input className="log_input" id="pass_input" />
+						<input type="password" className="log_input" id="pass_input" />
 					</div>
 					<button
 						className="btn_login"
