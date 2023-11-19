@@ -16,14 +16,21 @@ export default class userRouter {
             res.json(users);
         });
 
-        this.route.get("/info", async (req: Request,res:Response)=>{
+        this.route.post("/postUserCredentials",async (req:Request, res:Response) => {           
+            const {name, password} = req.body;
+            const user = await this.data.postUserByCredentials(name,password);
+            res.json(user);
+        });
+
+        this.route.get("/getEmailInfo", async (req: Request,res:Response)=>{
             const email = req.query.email as string;
             const users = await this.data.getUserByEmail(email);
             res.json(users);
         });
 
-        this.route.get("/info", async (req: Request,res:Response)=>{
-            const nome = req.query.nome as string;
+        this.route.get("/getNameInfo", async (req: Request,res:Response)=>{
+            const nome = req.query.name as string;
+            console.log(nome);
             const users = await this.data.getUserByName(nome);
             res.json(users);
         });

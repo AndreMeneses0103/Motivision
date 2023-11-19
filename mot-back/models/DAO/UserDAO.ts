@@ -29,12 +29,27 @@ export default class UserDAO {
     }
     
     public async getUserByName(name:string): Promise<User[] | null> {
-        const result = await this.collection.findOne({"users.user_settings.userid": name},{"projection": {"_id": 0, "users.$": 1}});
+        const result = await this.collection.findOne({"users.name": name},{"projection": {"_id": 0, "users.$": 1}});
         
         if (result && result.users) {
             return result.users;
         } else {
             return null;
+        }
+    }
+
+    public async postUserByCredentials(name:string, password:string): Promise<Object | null> {
+        const result = await this.collection.findOne({"users.name": name, "users.user_settings.password": password}, {"projection":{"_id":0, "users.$": 1}});
+
+        if(result && result.users){
+            return {
+                status:"success",
+                user:result.users[0].user_settings.userid
+            };
+        }else{
+            return {
+                status:"error"
+            };
         }
     }
 }
