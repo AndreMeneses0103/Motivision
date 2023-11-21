@@ -40,5 +40,3 @@ export default class userRouter {
         return this.route;
     }
 }
-// const rota = new testeRouter();
-// export default rota.getRouter();
