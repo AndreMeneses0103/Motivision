@@ -2,11 +2,13 @@ import express, {Request, Response} from 'express';
 import cors from 'cors';
 import userRouter from './routes/userRouter';
 import Database from './database';
+import videoRouter from './routes/videoRouter';
 
 export default class App{
     private app: express.Application;
     private database: Database;
-    private route: userRouter | null = null;
+    private user_route: userRouter | null = null;
+    private video_route: videoRouter | null = null;
 
     
     constructor() {
@@ -22,12 +24,17 @@ export default class App{
     }
 
     private routes(): void{
-        if(this.route){
-            this.app.use('/user', this.route.getRouter());
+        if(this.user_route){
+            this.app.use('/user', this.user_route.getRouter());
         }else{
-            console.error("Nao e possivel conectar as rotas.")
+            console.error("Error to connect to User Routes")
         }
         
+        if(this.video_route){
+            this.app.use('/video', this.video_route.getRouter());
+        }else{
+            console.error("Error to connect to Video Routes")
+        }
 
         // this.app.use('/*', (req: Request, res:Response)=>{
         //     res.send({
@@ -40,7 +47,8 @@ export default class App{
     public async start(port:number | string): Promise<void>{
         try{
             await this.database.Connection();
-            this.route = new userRouter(this.database);
+            this.user_route = new userRouter(this.database);
+            this.video_route = new videoRouter(this.database);
             this.routes();
             this.app.listen(port, ()=>{
                 console.log(`Servidor rodando em ${port}`);
