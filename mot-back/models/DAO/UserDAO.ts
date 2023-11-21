@@ -1,5 +1,6 @@
 import { Collection, MongoClient } from "mongodb";
 import crypto from 'crypto';
+import * as jwt from 'jsonwebtoken';
 import User from "../DTO/User";
 import Database from "../../database";
 
@@ -48,10 +49,13 @@ export default class UserDAO {
         const result = await this.collection.findOne({"user.user_settings.name": name, "user.user_settings.password": this.encrypt(password)}, {"projection":{"_id":0}});
 
         if(result && result.user){
+            const key =  crypto.randomBytes(32).toString('hex');
+            const usertoken = jwt.sign({ userId: result.user.user_settings.userid }, key, { expiresIn: '1h' });
             return {
                 success:true,
                 message:"Successfully Login!",
-                user:result.user.user_settings.userid
+                user:result.user.user_settings.userid,
+                token:usertoken
             };
         }else{
             return {
