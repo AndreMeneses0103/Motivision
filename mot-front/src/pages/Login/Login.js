@@ -10,7 +10,7 @@ function Login() {
 	const navigate = useNavigate();
 
 	function changePage() {
-		axios.post("http://192.168.5.35:3000/user/postUserCredentials", {
+		axios.post("http://192.168.15.146:8080/user/postUserCredentials", {
 			"name": name,
 			"password": password
 		}, {
@@ -28,6 +28,7 @@ function Login() {
 		})
 		.catch((err)=>{
 			console.error("ERRO:", err);
+			alert("An error occurred, please try again later.")
 		})
 	}
 	return (

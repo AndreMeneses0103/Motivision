@@ -14,7 +14,7 @@ function One({id, imageSrc, alt, video}) {
         <div className="mvid" id={id}>
             <button className="vidButton" onClick={() => loadVideo(video)}>
                 <img
-                    src={imageSrc}
+                    src={"localhost:8080"+imageSrc}
                     className="vidImage"
                     alt={alt}
                 ></img>
@@ -30,12 +30,12 @@ function Videos(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await axios.get("http://192.168.5.35:3000/video/all");
+                const resp = await axios.get("http://192.168.15.146:8080/video/all");
                 let all_videos = resp.data;
                 let data = [];
                 
-                for(let x = 1; x <= all_videos.length; x++){
-                    data.push({ id: `video${x}`, imageSrc: `./images/image${x}.jpg`, alt: `Imagem do video ${x}`, video: `video${x}` })
+                for(let x = 0; x < all_videos.length; x++){
+                    data.push({ id: all_videos[x].id , imageSrc: all_videos[x].thumb, alt: all_videos[x].title, video: all_videos[x].source })
                 }
                 
                 setData(data);
