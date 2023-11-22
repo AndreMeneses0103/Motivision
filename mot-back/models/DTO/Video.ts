@@ -1,13 +1,13 @@
 import VideoData from "./VideoData";
 
 export default class Video {
-    private _id: string;
-    private _userid: string;
-    private _thumb: string;
-    private _title: string;
-    private _description: string;
-    private _tags: string[];
-    private _video_data: VideoData;
+    private id: string;
+    private userid: string;
+    private thumb: string;
+    private title: string;
+    private description: string;
+    private tags: string[];
+    private videodata: VideoData;
 
     constructor(
         id: string,
@@ -16,70 +16,70 @@ export default class Video {
         title: string,
         description: string,
         tags: string[],
-        video_data: VideoData
+        videodata: VideoData
     ) {
-        this._id = id;
-        this._userid = userid;
-        this._thumb = thumb;
-        this._title = title;
-        this._description = description;
-        this._tags = tags;
-        this._video_data = video_data;
+        this.id = id;
+        this.userid = userid;
+        this.thumb = thumb;
+        this.title = title;
+        this.description = description;
+        this.tags = tags;
+        this.videodata = videodata;
     }
 
-    get id(): string {
-        return this._id;
+    get getId(): string {
+        return this.id;
     }
 
-    get userid(): string {
-        return this._userid;
+    get getUserid(): string {
+        return this.userid;
     }
 
-    get thumb(): string {
-        return this._thumb;
+    get getThumb(): string {
+        return this.thumb;
     }
 
-    get title(): string {
-        return this._title;
+    get getTitle(): string {
+        return this.title;
     }
 
-    get description(): string {
-        return this._description;
+    get getDescription(): string {
+        return this.description;
     }
 
-    get tags(): string[] {
-        return this._tags;
+    get getTags(): string[] {
+        return this.tags;
     }
 
-    get video_data(): VideoData {
-        return this._video_data;
+    get getVideodata(): VideoData {
+        return this.videodata;
     }
 
-    set id(id: string) {
-        this._id = id;
+    set setId(id: string) {
+        this.id = id;
     }
 
-    set userid(userid: string) {
-        this._userid = userid;
+    set setUserid(userid: string) {
+        this.userid = userid;
     }
 
-    set thumb(thumb: string) {
-        this._thumb = thumb;
+    set setThumb(thumb: string) {
+        this.thumb = thumb;
     }
 
-    set title(title: string) {
-        this._title = title;
+    set setTitle(title: string) {
+        this.title = title;
     }
 
-    set description(description: string) {
-        this._description = description;
+    set setDescription(description: string) {
+        this.description = description;
     }
 
-    set tags(tags: string[]) {
-        this._tags = tags;
+    set setTags(tags: string[]) {
+        this.tags = tags;
     }
 
-    set video_data(video_data: VideoData) {
-        this._video_data = video_data;
+    set setVideodata(videodata: VideoData) {
+        this.videodata = videodata;
     }
 }

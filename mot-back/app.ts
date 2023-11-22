@@ -1,5 +1,6 @@
 import express, {Request, Response} from 'express';
 import cors from 'cors';
+import * as path from 'path';
 import userRouter from './routes/userRouter';
 import Database from './database';
 import videoRouter from './routes/videoRouter';
@@ -21,6 +22,9 @@ export default class App{
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
         this.app.use(cors());
+        this.app.use('/thumbs', express.static(path.join(__dirname, 'midia', 'photos', 'thumbs')));
+        this.app.use('/userphotos', express.static(path.join(__dirname, 'midia', 'photos', 'users')));
+        this.app.use('/videos', express.static(path.join(__dirname, 'midia', 'videos')));
     }
 
     private routes(): void{
