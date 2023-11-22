@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function One({id, imageSrc, alt, video}) {
     const navigate = useNavigate();
@@ -22,23 +24,45 @@ function One({id, imageSrc, alt, video}) {
 }
 
 function Videos(){
-    const data = [
-        { id: 'video1', imageSrc: './images/image1.jpg', alt: 'Imagem do video 1', video: 'video1' },
-        { id: 'video2', imageSrc: './images/image2.jpg', alt: 'Imagem do video 2', video: 'video2' },
-        { id: 'video3', imageSrc: './images/image3.jpg', alt: 'Imagem do video 3', video: 'video1' },
-        { id: 'video4', imageSrc: './images/image4.jpg', alt: 'Imagem do video 4', video: 'video2' },
-        { id: 'video5', imageSrc: './images/image1.jpg', alt: 'Imagem do video 5', video: 'video1' },
-        { id: 'video6', imageSrc: './images/image1.jpg', alt: 'Imagem do video 6', video: 'video2' },
-        { id: 'video7', imageSrc: './images/image1.jpg', alt: 'Imagem do video 7', video: 'video1' }
-    ]
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(false);
 
-    return(
-        <>
-            {data.map(com => (
-                <One key={com.id} id={com.id} imageSrc={com.imageSrc} alt={com.alt} video={com.video}/>
-            ))}
-        </>
-    );
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const resp = await axios.get("http://192.168.5.35:3000/video/all");
+                let all_videos = resp.data;
+                let data = [];
+                
+                for(let x = 1; x <= all_videos.length; x++){
+                    data.push({ id: `video${x}`, imageSrc: `./images/image${x}.jpg`, alt: `Imagem do video ${x}`, video: `video${x}` })
+                }
+                
+                setData(data);
+            } catch (err) {
+                console.error(err);
+                setError(true);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (error) {
+        return (
+            <h1>
+                ERRO!!!!
+            </h1>
+        );
+    } else {
+        return (
+            <>
+                {data.map(com => (
+                    <One key={com.id} id={com.id} imageSrc={com.imageSrc} alt={com.alt} video={com.video}/>
+                ))}
+            </>
+        );
+    }
 }
 
 export default Videos;

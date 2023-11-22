@@ -1,13 +1,34 @@
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 function Login() {
 
-	console.log("CHEGOU LOGIN");
+	const [name, setName] = useState('');
+	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
 
 	function changePage() {
-		navigate('main');
+		axios.post("http://192.168.5.35:3000/user/postUserCredentials", {
+			"name": name,
+			"password": password
+		}, {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+		.then((resp)=>{
+			let retorno = resp.data;
+			alert(retorno.message);
+			if(retorno.success === true){
+				document.cookie = `authToken=${retorno.token}; path=/`;
+				navigate('main');
+			}
+		})
+		.catch((err)=>{
+			console.error("ERRO:", err);
+		})
 	}
 	return (
 		<div className="loginpage">
@@ -16,11 +37,20 @@ function Login() {
 					<div className="login_title">Motivision</div>
 					<div className="input_title">Username</div>
 					<div className="user_div">
-						<input className="log_input" id="user_input" />
+						<input 
+						className="log_input" 
+						id="user_input" 
+						onChange={(e)=>setName(e.target.value)}
+					/>
 					</div>
 					<div className="input_title">Password</div>
 					<div className="pass_div">
-						<input type="password" className="log_input" id="pass_input" />
+						<input 
+							type="password" 
+							className="log_input" 
+							id="pass_input" 
+							onChange={(e)=>setPassword(e.target.value)}
+						/>
 					</div>
 					<button
 						className="btn_login"
