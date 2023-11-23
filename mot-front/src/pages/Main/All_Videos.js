@@ -14,7 +14,7 @@ function One({id, imageSrc, alt, video}) {
         <div className="mvid" id={id}>
             <button className="vidButton" onClick={() => loadVideo(video)}>
                 <img
-                    src={"localhost:8080"+imageSrc}
+                    src={`data:image/png;base64,${imageSrc}`}
                     className="vidImage"
                     alt={alt}
                 ></img>
