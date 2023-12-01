@@ -23,7 +23,7 @@ function Login() {
 			alert(retorno.message);
 			if(retorno.success === true){
 				document.cookie = `authToken=${retorno.token}; path=/`;
-				navigate('main');
+				navigate("/main");
 			}
 		})
 		.catch((err)=>{
@@ -31,6 +31,7 @@ function Login() {
 			alert("An error occurred, please try again later.")
 		})
 	}
+
 	return (
 		<div className="loginpage">
 			<div className="center">
