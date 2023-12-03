@@ -2,10 +2,16 @@
 import "./Main.css";
 import Head from "../../components/Head";
 import Videos from "./All_Videos";
+import accessToken from "../../scripts/getUser";
+import { useEffect } from "react";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Main() {
 
+    useEffect(()=>{
+        const token = accessToken();
+        console.log("TOKEN:", token);
+    })
     return (
         <div className="div_main">
             <Head />

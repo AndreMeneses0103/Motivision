@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import accessToken from "../../scripts/getUser";
 
 function One({id, imageSrc, alt, video}) {
     const navigate = useNavigate();
@@ -30,7 +31,13 @@ function Videos(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await axios.get("http://192.168.15.146:8080/video/all");
+                console.log("O TOKENS FRONT:", accessToken());
+                const headers ={
+                    "Autorization": accessToken(),
+                    "Content-Type":"application/json",
+                    "value": accessToken()
+                }
+                const resp = await axios.get("http://192.168.15.146:8080/video/all", {headers:headers});
                 let all_videos = resp.data;
                 let data = [];
                 
