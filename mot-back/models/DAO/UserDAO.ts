@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import User from "../DTO/User";
 import Database from "../../database";
+import createKey from "../../middlewares/createKey";
 
 export default class UserDAO {
     private collection: Collection;
@@ -49,7 +50,9 @@ export default class UserDAO {
         const result = await this.collection.findOne({"user.user_settings.name": name, "user.user_settings.password": this.encrypt(password)}, {"projection":{"_id":0}});
 
         if(result && result.user){
-            const key =  crypto.randomBytes(32).toString('hex');
+            const generator = new createKey();
+            const key = generator.generateKey();
+            console.log("CHAVSS:",key);
             const usertoken = jwt.sign({ userId: result.user.user_settings.userid }, key, { expiresIn: '1h' });
             return {
                 success:true,
