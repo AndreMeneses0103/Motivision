@@ -46,7 +46,7 @@
 -->
 Motivision is a platform developed for sharing and viewing videos, offering a incredible experience for both creators and viewers.
 
-This project is based on Youtube, and it has been builded for educational purposes only.
+This project is based on YouTube and has been built for educational purposes only..
 
 
 ## Built With
