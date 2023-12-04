@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import accessToken from "../../scripts/getUser";
+import {accessToken, refreshToken} from "../../scripts/getUser";
 
 function One({id, imageSrc, alt, video}) {
     const navigate = useNavigate();
@@ -31,7 +31,6 @@ function Videos(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log("O TOKENS FRONT:", accessToken());
                 const headers ={
                     "Autorization": accessToken(),
                     "Content-Type":"application/json",

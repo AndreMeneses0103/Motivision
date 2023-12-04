@@ -22,7 +22,8 @@ function Login() {
 			let retorno = resp.data;
 			alert(retorno.message);
 			if(retorno.success === true){
-				document.cookie = `authToken=${retorno.token}; path=/`;
+				document.cookie = `accessToken=${retorno.accessToken}; path=/`;
+				document.cookie = `refreshToken=${retorno.refreshToken}; path=/`;
 				navigate("/main");
 			}
 		})
