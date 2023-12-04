@@ -2,7 +2,7 @@ import * as jwt from 'jsonwebtoken';
 
 export default class authToken{
 
-    public validate(token: string, key: string): Promise<object | undefined> {
+    public validate(token: string, key: string): Promise<{auth:boolean, message:string, value: any} | undefined> {
         return new Promise((resolve) => {
             console.log("ESSE TOKEN:", token);
             console.log("CHAVE:", key);

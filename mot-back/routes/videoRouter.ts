@@ -25,15 +25,22 @@ export default class videoRouter{
             }
 
             const generator = new createKey();
-            const key = generator.generateKey();
+            const key = generator.generateAccessKey();
             const autorizer = new authToken();
             const verify = await autorizer.validate(tokenString, key);
 
             console.log("VERIFY:", verify);
-            
-            const users = await this.data.getAllVideos();
-            res.json(users);
 
+            if (verify !== undefined) {
+                if (verify.auth) {
+                    console.log("Token válido");
+                    const users = await this.data.getAllVideos();
+                    res.json(users);
+                } else {
+                    console.log("Token inválido");
+                    return res.status(401).json({ auth: false, message: 'Token inválido' });
+                }
+            }
         });
     }
 

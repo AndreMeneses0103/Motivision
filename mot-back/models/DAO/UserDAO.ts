@@ -51,14 +51,15 @@ export default class UserDAO {
 
         if(result && result.user){
             const generator = new createKey();
-            const key = generator.generateKey();
-            console.log("CHAVSS:",key);
-            const usertoken = jwt.sign({ userId: result.user.user_settings.userid }, key, { expiresIn: '1h' });
+            const key = generator.generateAccessKey();
+            const accessToken = jwt.sign({ userId: result.user.user_settings.userid }, key, { expiresIn: '15min' });
+            const refreshToken = jwt.sign({ userId: result.user.user_settings.userid }, key, { expiresIn: '7d' });
             return {
                 success:true,
                 message:"Successfully Login!",
                 user:result.user.user_settings.userid,
-                token:usertoken
+                accessToken:accessToken,
+                refreshToken:refreshToken,
             };
         }else{
             return {
