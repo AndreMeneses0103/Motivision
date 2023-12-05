@@ -1,4 +1,5 @@
 <h1 align="center">Motivision</h1>
+<h2 align="center">Note: Project still in progress.</h2>
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -46,7 +47,7 @@
 -->
 Motivision is a platform developed for sharing and viewing videos, offering a incredible experience for both creators and viewers.
 
-This project is based on YouTube and has been built for educational purposes only..
+This project is based on YouTube and has been built for experiential and learning purposes only.
 
 
 ## Built With
