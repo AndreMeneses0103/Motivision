@@ -54,13 +54,19 @@ This project is based on YouTube and has been built for experiential and learnin
 
 There are all of the Technologies I've used to develop this project.
 
-- [![Node][Node.js]][Node-url]
-- [![Ex][Ex]][Ex-url]
-- [![React][React.js]][React-url]
-- [![MongoDB][MongoDB]][Mongo-url]
-- [![JWT][Json]][Json-url]
-- [![Js][Js]][Js-url]
-- [![Ts][Ts]][Ts-url]
+[![Node][Node.js]][Node-url]
+
+[![Ex][Ex]][Ex-url]
+
+[![React][React.js]][React-url]
+
+[![MongoDB][MongoDB]][Mongo-url]
+
+[![JWT][Json]][Json-url]
+
+[![Js][Js]][Js-url]
+
+[![Ts][Ts]][Ts-url]
 
 
 <!-- PLEASE STAR -->
@@ -136,13 +142,24 @@ Don't forget to give the project a star! Thanks again!
 -->
 
 <!-- CONTACT -->
-<!--
-## Contact
 
-Your Name - (https://twitter.com/your_username) - email@example.com
+## Connect with Me
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
--->
+I enjoy connecting with the community! If you have any questions, feedback, or just want to say hello, feel free to reach out.
+
+[![Gmail][Gmail]][Gmail-url]
+
+[![linkedin-shield][linkedin-shield]][linkedin-url]
+
+[![Github][Github]][Github-url]
+
+
+If you liked my profile, I invite you to check my Website! It shows all my objectives and experiences.
+
+[![Website][Website]][Website-url]
+
+Don't hesitate to drop me a line or open an issue if you need assistance or want to contribute. Your engagement makes this project even better! 🚀
+
 <!-- ACKNOWLEDGMENTS -->
 <!--
 ## Acknowledgments
@@ -168,10 +185,14 @@ Use this space to list resources you find helpful and would like to give credit 
 [stars-url]: https://github.com/AndreMeneses0103/Motivision
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-shield]: https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white
+[linkedin-url]: https://www.linkedin.com/in/andre-meneses-dev/
+[Website]: https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white
+[Website-url]: andremenesesdev.vercel.app
+[Gmail]: https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white
+[Gmail-url]: mailto:andremeneses0103@gmail.com
+[Github]: https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white
+[Github-url]: https://github.com/AndreMeneses0103
 [product-screenshot]: images/screenshot.png
 [Node.js]: https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white
 [Node-url]: https://nodejs.org
