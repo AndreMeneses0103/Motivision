@@ -62,6 +62,14 @@ There are all of the Technologies I've used to develop this project.
 - [![Js][Js]][Js-url]
 - [![Ts][Ts]][Ts-url]
 
+
+<!-- PLEASE STAR -->
+## Show Your Support
+
+If you find this project helpful or interesting, please consider giving it a star on GitHub. Your support is greatly appreciated!
+
+[![GitHub stars][stars-shield]][stars-url]
+
 <!-- GETTING STARTED -->
 <!--
 ## Getting Started
@@ -156,8 +164,8 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[stars-shield]: https://img.shields.io/github/stars/AndreMeneses0103/Motivision.svg?style=for-the-badge
+[stars-url]: https://github.com/AndreMeneses0103/Motivision
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
