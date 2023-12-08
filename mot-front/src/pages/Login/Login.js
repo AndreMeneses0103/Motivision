@@ -24,7 +24,9 @@ function Login() {
 			if(retorno.success === true){
 				document.cookie = `accessToken=${retorno.accessToken}; path=/`;
 				document.cookie = `refreshToken=${retorno.refreshToken}; path=/`;
-				navigate("/main");
+				if(document.cookie){
+					navigate("/main");
+				}
 			}
 		})
 		.catch((err)=>{

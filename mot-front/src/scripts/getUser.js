@@ -1,10 +1,7 @@
-const all_cookies = console.log("COOKIE:", document.cookie.split(";"));
-
-function getAccessToken() {
-    const [key, token] = all_cookies[0].split("=");
+function getAccessToken(cookie) {
+    const [key, token] = cookie[0].split("=");
     if (key === "accessToken") {
         try {
-            console.log("Access Token:", token);
             return token;
         } catch (err) {
             return `Error: ${err}`;
@@ -14,11 +11,10 @@ function getAccessToken() {
     }
 }
 
-function getRefreshToken() {
-    const [key, token] = all_cookies[1].split("=");
+function getRefreshToken(cookie) {
+    const [key, token] = cookie[1].split("=");
     if (key === "refreshToken") {
         try {
-            console.log("Refresh Token:", token);
             return token;
         } catch (err) {
             return `Error: ${err}`;
@@ -29,7 +25,8 @@ function getRefreshToken() {
 }
 
 export function accessToken() {
-    const accessToken = getAccessToken();
+    const all_cookies = document.cookie.split(";");
+    const accessToken = getAccessToken(all_cookies);
     if (accessToken) {
         return accessToken;
     } else {
@@ -38,7 +35,8 @@ export function accessToken() {
 }
 
 export function refreshToken() {
-    const refreshToken = getRefreshToken();
+    const all_cookies = document.cookie.split(";");
+    const refreshToken = getRefreshToken(all_cookies);
     if (refreshToken) {
         return refreshToken;
     } else {

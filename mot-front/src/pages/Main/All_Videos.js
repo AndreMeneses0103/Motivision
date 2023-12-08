@@ -26,7 +26,7 @@ function One({id, imageSrc, alt, video}) {
 
 function Videos(){
     const [data, setData] = useState([]);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,7 +47,7 @@ function Videos(){
                 setData(data);
             } catch (err) {
                 console.error(err);
-                setError(true);
+                setError(err);
             }
         };
 
@@ -55,9 +55,10 @@ function Videos(){
     }, []);
 
     if (error) {
+        if(error.code === "ERR_BAD_REQUEST")
         return (
             <h1>
-                ERRO!!!!
+                Erro de autenticacao, realize o login novamente.
             </h1>
         );
     } else {
