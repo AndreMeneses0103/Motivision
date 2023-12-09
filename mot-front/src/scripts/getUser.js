@@ -13,7 +13,7 @@ function getAccessToken(cookie) {
 
 function getRefreshToken(cookie) {
     const [key, token] = cookie[1].split("=");
-    if (key === "refreshToken") {
+    if (key.trim() === "refreshToken") {
         try {
             return token;
         } catch (err) {

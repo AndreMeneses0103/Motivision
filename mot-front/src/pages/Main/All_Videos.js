@@ -31,10 +31,9 @@ function Videos(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const headers ={
-                    "Autorization": accessToken(),
-                    "Content-Type":"application/json",
-                    "value": accessToken()
+                const headers = {
+                    "Content-Type": "application/json",
+                    "Authorization": `${accessToken()}, ${refreshToken()}`,
                 }
                 const resp = await axios.get("http://192.168.15.146:8080/video/all", {headers:headers});
                 let all_videos = resp.data;
