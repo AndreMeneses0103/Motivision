@@ -31,8 +31,6 @@ function atualizarValorCookie(nomeCookie, novoValor) {
         var cookie = cookiesArray[i].trim();
 
         if (cookie.startsWith(nomeCookie + "=")) {
-            var cookieParts = cookie.split('=');
-            var antigoValor = cookieParts[1];
 
             document.cookie = nomeCookie + "=" + novoValor;
 
@@ -57,12 +55,12 @@ function Videos(){
                 const resp = await axios.get("http://192.168.15.146:8080/video/all", {headers:headers});
                 let all_videos = resp.data;
                 let data = [];
-                if('newAccessToken' in all_videos){
-                    atualizarValorCookie("accessToken", all_videos.newAccessToken);
+                if('newAccessToken' in all_videos.isValid){
+                    atualizarValorCookie("accessToken", all_videos.isValid.newAccessToken);
                 }
 
-                for(let x = 0; x < all_videos.users.length; x++){
-                    data.push({ id: all_videos.users[x].id , imageSrc: all_videos.users[x].thumb, alt: all_videos.users[x].title, video: all_videos.users[x].source })
+                for(let x = 0; x < all_videos.videos.length; x++){
+                    data.push({ id: all_videos.videos[x].id , imageSrc: all_videos.videos[x].thumb, alt: all_videos.videos[x].title, video: all_videos.videos[x].source})
                 }
                 
                 setData(data);
