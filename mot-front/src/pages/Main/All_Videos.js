@@ -7,7 +7,6 @@ function One({id, imageSrc, alt, video}) {
     const navigate = useNavigate();
 
     function loadVideo(link){
-        //trocar para o endpoint do video
         navigate(`/video?videoId=${link}`);
     };
 
@@ -24,6 +23,26 @@ function One({id, imageSrc, alt, video}) {
     );
 }
 
+function atualizarValorCookie(nomeCookie, novoValor) {
+    var todosCookies = document.cookie;
+    var cookiesArray = todosCookies.split(';');
+
+    for (var i = 0; i < cookiesArray.length; i++) {
+        var cookie = cookiesArray[i].trim();
+
+        if (cookie.startsWith(nomeCookie + "=")) {
+            var cookieParts = cookie.split('=');
+            var antigoValor = cookieParts[1];
+
+            document.cookie = nomeCookie + "=" + novoValor;
+
+            return;
+        }
+    }
+
+    document.cookie = nomeCookie + "=" + novoValor;
+}
+
 function Videos(){
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
@@ -38,9 +57,12 @@ function Videos(){
                 const resp = await axios.get("http://192.168.15.146:8080/video/all", {headers:headers});
                 let all_videos = resp.data;
                 let data = [];
-                
-                for(let x = 0; x < all_videos.length; x++){
-                    data.push({ id: all_videos[x].id , imageSrc: all_videos[x].thumb, alt: all_videos[x].title, video: all_videos[x].source })
+                if('newAccessToken' in all_videos){
+                    atualizarValorCookie("accessToken", all_videos.newAccessToken);
+                }
+
+                for(let x = 0; x < all_videos.users.length; x++){
+                    data.push({ id: all_videos.users[x].id , imageSrc: all_videos.users[x].thumb, alt: all_videos.users[x].title, video: all_videos.users[x].source })
                 }
                 
                 setData(data);
