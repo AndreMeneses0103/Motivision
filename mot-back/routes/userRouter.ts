@@ -12,6 +12,10 @@ export default class userRouter {
     }
     private configRouter(): void {
         this.route.get("/all", async (req: Request,res:Response)=>{
+            const allTokens = req.headers.authorization;
+            if(allTokens){
+                
+            }
             const users = await this.data.getAllUsers();
             res.json(users);
         });

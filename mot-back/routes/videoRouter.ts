@@ -1,8 +1,7 @@
 import express, { Router, Request, Response } from "express";
 import VideoDAO from "../models/DAO/VideoDAO";
 import Database from "../database";
-import authToken from "../middlewares/authToken";
-import createKey from "../middlewares/createKey";
+import Permission from "../middlewares/permission";
 
 export default class videoRouter {
     private route: Router;
@@ -18,41 +17,13 @@ export default class videoRouter {
         this.route.get("/all", async (req: Request, res: Response) => {
             const allTokens = req.headers.authorization;
             if (allTokens) {
-                const [accessToken, refreshToken] = allTokens
-                    .split(",")
-                    .map((token) => token.trim());
-                const generator = new createKey();
-                const accessKey = generator.generateAccessKey();
-                const refreshKey = generator.generateRefreshKey();
-                const autorizer = new authToken();
-                console.table({
-                    accessToken: accessToken,
-                    refreshToken: refreshToken,
-                    accessKey : accessKey,
-                    refreshKey: refreshKey
-                })
-                const verify = await autorizer.validate(
-                    accessToken,
-                    refreshToken,
-                    accessKey,
-                    refreshKey
-                );
-                if (verify !== undefined) {
-                    if (verify.auth) {
-                        let responsePayload: any = {};
-                
-                        if (verify.code === 1) {
-                            responsePayload.newAccessToken = verify.value.newAccessToken;
-                        }
-                
-                        responsePayload.users = await this.data.getAllVideos();
-                
-                        res.json(responsePayload);
-                    } else {
-                        return res
-                            .status(401)
-                            .json({ auth: false, message: verify.message });
-                    }
+                const pm = new Permission();
+                const isValid = await pm.getPermission(allTokens, this.data);
+                // console.log(isValid);
+                if(isValid.auth === true){
+                    let videos = await this.data.getAllVideos();
+                    let response = {isValid, videos};
+                    res.json(response);
                 }
             } else {
                 return res
