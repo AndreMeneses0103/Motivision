@@ -25,17 +25,29 @@ export default class videoRouter {
                 const accessKey = generator.generateAccessKey();
                 const refreshKey = generator.generateRefreshKey();
                 const autorizer = new authToken();
+                console.table({
+                    accessToken: accessToken,
+                    refreshToken: refreshToken,
+                    accessKey : accessKey,
+                    refreshKey: refreshKey
+                })
                 const verify = await autorizer.validate(
                     accessToken,
                     refreshToken,
                     accessKey,
                     refreshKey
                 );
-
                 if (verify !== undefined) {
                     if (verify.auth) {
-                        const users = await this.data.getAllVideos();
-                        res.json(users);
+                        let responsePayload: any = {};
+                
+                        if (verify.code === 1) {
+                            responsePayload.newAccessToken = verify.value.newAccessToken;
+                        }
+                
+                        responsePayload.users = await this.data.getAllVideos();
+                
+                        res.json(responsePayload);
                     } else {
                         return res
                             .status(401)

@@ -53,7 +53,7 @@ export default class UserDAO {
             const generator = new createKey();
             const key = generator.generateAccessKey();
             const key2 = generator.generateRefreshKey();
-            const accessToken = jwt.sign({ userId: result.user.user_settings.userid }, key, { expiresIn: '10sec' });
+            const accessToken = jwt.sign({ userId: result.user.user_settings.userid }, key, { expiresIn: '15min' });
             const refreshToken = jwt.sign({ userId: result.user.user_settings.userid }, key2, { expiresIn: '7d' });
             return {
                 success:true,
