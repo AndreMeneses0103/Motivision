@@ -15,10 +15,11 @@ export default class videoRouter {
 
     private configRouter(): void {
         this.route.get("/all", async (req: Request, res: Response) => {
-            const allTokens = req.headers.authorization;
-            if (allTokens) {
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            if (access && refresh) {
                 const pm = new Permission();
-                const isValid = await pm.getPermission(allTokens, this.data);
+                const isValid = await pm.getPermission(`${access}, ${refresh}`, this.data);
                 // console.log(isValid);
                 if(isValid.auth === true){
                     let videos = await this.data.getAllVideos();

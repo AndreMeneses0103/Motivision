@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from "express";
 import UserDAO from "../models/DAO/UserDAO";
 import Database from "../database";
+import Permission from "../middlewares/permission";
 
 export default class userRouter {
     private route: Router;
@@ -12,12 +13,21 @@ export default class userRouter {
     }
     private configRouter(): void {
         this.route.get("/all", async (req: Request,res:Response)=>{
-            const allTokens = req.headers.authorization;
-            if(allTokens){
-                
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            if (access && refresh) {
+                const pm = new Permission();
+                const isValid = await pm.getPermission(`${access}, ${refresh}`, this.data);
+                if(isValid.auth === true){
+                    let allUsers = await this.data.getAllUsers();
+                    let response = [isValid, allUsers];
+                    res.json(response);
+                }
+            }else{
+                return res
+                    .status(401)
+                    .json({ auth: false, message: "Tokens not found" });
             }
-            const users = await this.data.getAllUsers();
-            res.json(users);
         });
 
         this.route.post("/postUserCredentials",async (req:Request, res:Response) => {           
@@ -27,8 +37,26 @@ export default class userRouter {
         });
 
         this.route.get("/getEmailInfo", async (req: Request,res:Response)=>{
-            const email = req.query.email as string;
-            const users = await this.data.getUserByEmail(email);
+            const allTokens = req.headers.authorization;
+            if(allTokens){
+                const pm = new Permission();
+                const isValid = await pm.getPermission(allTokens, this.data);
+                if(isValid.auth === true){
+                    const email = req.query.email as string;
+                    const users = await this.data.getUserByEmail(email);
+                    res.json(users);
+                }
+            }else{
+                return res
+                    .status(401)
+                    .json({ auth: false, message: "Tokens not found" });
+            }
+            
+        });
+
+        this.route.get("/getIdInfo", async (req: Request,res:Response)=>{
+            const id = req.query.id as string;
+            const users = await this.data.getUserById(id);
             res.json(users);
         });
 
