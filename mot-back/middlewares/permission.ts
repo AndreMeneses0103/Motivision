@@ -29,6 +29,7 @@ export default class Permission {
                 } else {
                     responsePayload.auth = true;
                     responsePayload.message = verify.message;
+                    responsePayload.value = verify.value;
                 }
 
                 return responsePayload;

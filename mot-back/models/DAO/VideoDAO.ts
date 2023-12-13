@@ -12,14 +12,14 @@ export default class VideoDAO{
     }
 
     private encodeImageToBase64(imagePath: string): string {
-    try {
-        const imageBuffer = fs.readFileSync(imagePath);
-        return imageBuffer.toString('base64');
-    } catch (error) {
-        console.error(`Erro ao converter imagem: ${error}`);
-        return 'ERROR';
+        try {
+            const imageBuffer = fs.readFileSync(imagePath);
+            return imageBuffer.toString('base64');
+        } catch (error) {
+            console.error(`Erro ao converter imagem: ${error}`);
+            return 'ERROR';
+        }
     }
-}
 
     public async getAllVideos(): Promise<Video[] | null> {
         const result = await this.collection.find().toArray();

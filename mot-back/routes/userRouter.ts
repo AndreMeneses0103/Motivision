@@ -19,8 +19,13 @@ export default class userRouter {
                 const pm = new Permission();
                 const isValid = await pm.getPermission(`${access}, ${refresh}`);
                 if(isValid.auth === true){
-                    let allUsers = await this.data.getAllUsers();
-                    let response = [isValid, allUsers];
+                    let response = {};
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        let allUsers = await this.data.getAllUsers();
+                        response = {allUsers};
+                    }
                     res.json(response);
                 }else{
                     res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
@@ -60,9 +65,30 @@ export default class userRouter {
         });
 
         this.route.get("/getIdInfo", async (req: Request,res:Response)=>{
-            const id = req.query.id as string;
-            const users = await this.data.getUserById(id);
-            res.json(users);
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            if (access && refresh) {
+                const pm = new Permission();
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
+                if(isValid.auth === true){
+                    let response = {};
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        console.log(isValid.value);
+                        const id = isValid.value.userId as string;
+                        const users = await this.data.getUserById(id);
+                        response = {users};
+                    }
+                    res.json(response);
+                }else{
+                    res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
+                }
+            }else{
+                return res
+                    .status(401)
+                    .json({ auth: false, message: "Tokens not found" });
+            }
         });
 
         this.route.get("/getNameInfo", async (req: Request,res:Response)=>{
