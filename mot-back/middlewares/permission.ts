@@ -2,10 +2,11 @@ import authToken from "./authToken";
 import createKey from "./createKey";
 
 export default class Permission {
-    public async getPermission(allTokens: string, data: any) {
+    public async getPermission(allTokens: string) {
         const [accessToken, refreshToken] = allTokens
             .split(",")
             .map((token) => token.trim());
+        // console.log("ACCESS->", accessToken, "E REFRESH->", refreshToken);
         const generator = new createKey();
         const accessKey = generator.generateAccessKey();
         const refreshKey = generator.generateRefreshKey();

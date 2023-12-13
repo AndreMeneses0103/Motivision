@@ -19,12 +19,19 @@ export default class videoRouter {
             const refresh = req.headers['refresh-token'];
             if (access && refresh) {
                 const pm = new Permission();
-                const isValid = await pm.getPermission(`${access}, ${refresh}`, this.data);
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
                 // console.log(isValid);
                 if(isValid.auth === true){
-                    let videos = await this.data.getAllVideos();
-                    let response = {isValid, videos};
+                    let response = {};
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        let videos = await this.data.getAllVideos();
+                        response = {videos}
+                    }
                     res.json(response);
+                }else{
+                    res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
                 }
             } else {
                 return res

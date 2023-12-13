@@ -17,11 +17,13 @@ export default class userRouter {
             const refresh = req.headers['refresh-token'];
             if (access && refresh) {
                 const pm = new Permission();
-                const isValid = await pm.getPermission(`${access}, ${refresh}`, this.data);
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
                 if(isValid.auth === true){
                     let allUsers = await this.data.getAllUsers();
                     let response = [isValid, allUsers];
                     res.json(response);
+                }else{
+                    res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
                 }
             }else{
                 return res
@@ -37,14 +39,17 @@ export default class userRouter {
         });
 
         this.route.get("/getEmailInfo", async (req: Request,res:Response)=>{
-            const allTokens = req.headers.authorization;
-            if(allTokens){
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            if(access && refresh){
                 const pm = new Permission();
-                const isValid = await pm.getPermission(allTokens, this.data);
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
                 if(isValid.auth === true){
                     const email = req.query.email as string;
                     const users = await this.data.getUserByEmail(email);
                     res.json(users);
+                }else{
+                    res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
                 }
             }else{
                 return res
