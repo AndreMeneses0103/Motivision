@@ -117,18 +117,19 @@ export default class UserDAO {
 
         if (result && result.user) {
             const generator = new createKey();
-            const key = generator.generateAccessKey();
-            const key2 = generator.generateRefreshKey();
-            const accessToken = jwt.sign(
-                { userId: result.user.user_settings.userid },
-                key,
-                { expiresIn: "10sec" }
-            );
-            const refreshToken = jwt.sign(
-                { userId: result.user.user_settings.userid },
-                key2,
-                { expiresIn: "7d" }
-            );
+            
+            const accessTokenKey = generator.generateAccessKey();
+            const refreshTokenKey = generator.generateRefreshKey();
+        
+            const accessTokenDuration = "15min";
+            const refreshTokenDuration = "7d";
+        
+            const accessTokenPayload = { userId: result.user.user_settings.userid };
+            const refreshTokenPayload = { userId: result.user.user_settings.userid };
+        
+            const accessToken = jwt.sign(accessTokenPayload, accessTokenKey, { expiresIn: accessTokenDuration });
+            const refreshToken = jwt.sign(refreshTokenPayload, refreshTokenKey, { expiresIn: refreshTokenDuration });
+        
             return {
                 success: true,
                 message: "Successfully Login!",
@@ -139,8 +140,7 @@ export default class UserDAO {
         } else {
             return {
                 success: false,
-                message:
-                    "An error occurred in login, please review the informations.",
+                message: "An error occurred in login, please review the information.",
             };
         }
     }
