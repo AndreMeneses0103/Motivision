@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import "./Main.css";
-import Head from "../../components/Head";
+import Header from "../../components/Head";
 import Videos from "./All_Videos";
 import {accessToken, refreshToken} from "../../scripts/getUser";
 import { useEffect } from "react";
@@ -13,7 +13,7 @@ function Main() {
     })
     return (
         <div className="div_main">
-            <Head />
+            <Header/>
             <div className="Align_Videos">
                 <div className="src_container">
                     <input
