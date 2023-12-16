@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {accessToken, refreshToken} from "../../scripts/getUser";
+import {accessToken, refreshToken, refreshCookieValue} from "../../scripts/getUser";
 
 function One({id, imageSrc, alt, video}) {
     const navigate = useNavigate();
@@ -23,23 +23,7 @@ function One({id, imageSrc, alt, video}) {
     );
 }
 
-function atualizarValorCookie(nomeCookie, novoValor) {
-    var todosCookies = document.cookie;
-    var cookiesArray = todosCookies.split(';');
 
-    for (var i = 0; i < cookiesArray.length; i++) {
-        var cookie = cookiesArray[i].trim();
-
-        if (cookie.startsWith(nomeCookie + "=")) {
-
-            document.cookie = nomeCookie + "=" + novoValor;
-
-            return;
-        }
-    }
-
-    document.cookie = nomeCookie + "=" + novoValor;
-}
 
 function Videos(){
     const [data, setData] = useState([]);
@@ -57,7 +41,7 @@ function Videos(){
                 let all_videos = resp.data;
                 let data = [];
                 if(all_videos.isValid && 'newAccessToken' in all_videos.isValid){
-                    atualizarValorCookie("accessToken", all_videos.isValid.newAccessToken);
+                    refreshCookieValue("accessToken", all_videos.isValid.newAccessToken);
                     await fetchData();
                 }else{
                     for(let x = 0; x < all_videos.videos.length; x++){

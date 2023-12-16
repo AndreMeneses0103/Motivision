@@ -1,19 +1,19 @@
 // import { useState } from "react";
 import "./Main.css";
-import Header from "../../components/Head";
+import Head from "../../components/Head";
 import Videos from "./All_Videos";
-import {accessToken, refreshToken} from "../../scripts/getUser";
+// import {accessToken, refreshToken} from "../../scripts/getUser";
 import { useEffect } from "react";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Main() {
 
     useEffect(()=>{
-        const token = accessToken();
+        
     })
     return (
         <div className="div_main">
-            <Header/>
+            <Head/>
             <div className="Align_Videos">
                 <div className="src_container">
                     <input

@@ -24,3 +24,21 @@ export function refreshToken() {
     const refreshToken = getCookieValue(all_cookies.join(';'), "refreshToken");
     return refreshToken || null;
 }
+
+export function refreshCookieValue(cookieName, newValue) {
+    var todosCookies = document.cookie;
+    var cookiesArray = todosCookies.split(';');
+
+    for (var i = 0; i < cookiesArray.length; i++) {
+        var cookie = cookiesArray[i].trim();
+
+        if (cookie.startsWith(cookieName + "=")) {
+
+            document.cookie = cookieName + "=" + newValue;
+
+            return;
+        }
+    }
+
+    document.cookie = cookieName + "=" + newValue;
+}

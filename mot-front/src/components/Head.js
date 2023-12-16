@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { accessToken, refreshToken } from "../scripts/getUser";
+import { accessToken, refreshToken, refreshCookieValue } from "../scripts/getUser";
 
 import "./Head.css";
 
@@ -30,7 +30,7 @@ function Head() {
                     user_log.isValid &&
                     "newAccessToken" in user_log.isValid
                 ) {
-                    atualizarValorCookie(
+                    refreshCookieValue(
                         "accessToken",
                         user_log.isValid.newAccessToken
                     );
@@ -60,22 +60,6 @@ function Head() {
         navigate("/main");
     };
 
-    const atualizarValorCookie = (nomeCookie, novoValor) => {
-        var todosCookies = document.cookie;
-        var cookiesArray = todosCookies.split(";");
-
-        for (var i = 0; i < cookiesArray.length; i++) {
-            var cookie = cookiesArray[i].trim();
-
-            if (cookie.startsWith(nomeCookie + "=")) {
-                document.cookie = nomeCookie + "=" + novoValor;
-                return;
-            }
-        }
-
-        document.cookie = nomeCookie + "=" + novoValor;
-    };
-
     if (error) {
         if (error.code === "ERR_BAD_REQUEST") {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
@@ -84,7 +68,7 @@ function Head() {
         console.log("USER DATA:",userData);
         return (
             <div className="header">
-                    <div className="user" id={userData.id}>
+                    <div className="user" id="user">
                         <button className="btn_profile" onClick={loadProfile}>
                         {loading ? (
                             <img
@@ -97,7 +81,7 @@ function Head() {
                             <img
                                 id="userphoto"
                                 itemID="userphoto"
-                                src={`data:image/png;base64,${userData._userphoto}`}
+                                src={`data:image/png;base64,${userData.photo}`}
                                 alt="User Profile"
                             />
                         )}
