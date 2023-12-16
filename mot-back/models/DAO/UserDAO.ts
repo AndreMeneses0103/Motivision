@@ -41,7 +41,7 @@ export default class UserDAO {
         }
     }
 
-    public async getUserById(id: string): Promise<User | null> {
+    public async getUserById(id: string): Promise<Object | null> {
         const result = await this.collection.findOne(
             { "user.user_settings.userid": id },
             { projection: { _id: 0 } }
@@ -62,17 +62,25 @@ export default class UserDAO {
                 userData.user_settings.email,
                 userData.user_settings.password
             );
+            const users = {
+                profile: userSettings.name,
+                photo: convert64,
+                subscribers:userData.subscribers || 0,
+                subscribed:userData.subscribed || [],
+                videos: userData.videos || [],
+                watched_videos: userData.watched_videos
+            }
 
-            const user = new User(
-                userSettings,
-                userData.videos || [],
-                userData.watched_videos || [],
-                userData.subscribed || [],
-                userData.subscribers || 0,
-                convert64
-            );
+            // const user = new User(
+            //     userSettings,
+            //     userData.videos || [],
+            //     userData.watched_videos || [],
+            //     userData.subscribed || [],
+            //     userData.subscribers || 0,
+            //     convert64
+            // );
 
-            return user;
+            return users;
         } else {
             return null;
         }
