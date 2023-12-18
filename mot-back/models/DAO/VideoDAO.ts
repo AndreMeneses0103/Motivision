@@ -47,4 +47,34 @@ export default class VideoDAO{
             return null;
         }
     }
+
+    public async getVideo(ids: string[]): Promise<Video[] | null>{
+        const result = await this.collection.find(
+            { "video.id": { $in: ids } },
+            { projection: { _id: 0 } }
+        ).toArray();
+        if (result && result.length > 0) {
+            const videos = result.map(item=>{
+                const rightPath = path.resolve(__dirname, '../../midia/photos/thumbs')
+                const thumbPath = rightPath +"/"+ item.video.thumb;
+                const convert64 = this.encodeImageToBase64(thumbPath);
+
+                return{
+                    ...item.video,
+                    thumb:convert64
+                }
+            })
+            return videos.map(video => new Video(
+                video.id,
+                video.userid,
+                video.thumb,
+                video.title,
+                video.description,
+                video.tags,
+                video.video_data
+            ));
+        } else {
+            return null;
+        }
+    }
 }
