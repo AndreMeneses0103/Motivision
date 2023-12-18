@@ -25,7 +25,7 @@ function Head() {
                 );
 
                 let user_log = resp.data;
-                console.log("ALL VIDEOS:", user_log);
+                // console.log("ALL VIDEOS:", user_log);
                 if (
                     user_log.isValid &&
                     "newAccessToken" in user_log.isValid
@@ -65,7 +65,7 @@ function Head() {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
         }
     } else {
-        console.log("USER DATA:",userData);
+        // console.log("USER DATA:",userData);
         return (
             <div className="header">
                     <div className="user" id="user">

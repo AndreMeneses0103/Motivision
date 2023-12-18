@@ -18,7 +18,7 @@ function Videos({id, src, video}){
                 ></img>
             </button>
         </div>
-    );
+    )
 }
 
 export function UserInfos({num_subs, num_vids}){
@@ -45,7 +45,10 @@ export function ProfilePhoto({imageSrc}){
     )
 }
 
-export function ProfileVideos({userData}){
+export function ProfileVideos(videoData){
+    const videos = videoData.videoData.videos;
+    console.log(videos);
+    // console.log(videos.map(item=>(item.userid)));
     const data = [
         {id: "", src:"./images/image1.jpg", video: 'video1'},
         {id: "", src:"./images/image2.jpg", video: 'video2'},
@@ -53,7 +56,7 @@ export function ProfileVideos({userData}){
         {id: "", src:"./images/image4.jpg", video: 'video2'},
         {id: "", src:"./images/image2.jpg", video: 'video1'},
         {id: "", src:"./images/image3.jpg", video: 'video2'},
-    ];
+    ]
 
     for(let x = 0; x < data.length; x++){
         data[x].id = "video" + x;
@@ -63,7 +66,7 @@ export function ProfileVideos({userData}){
         <>
             {data.map(item => (
                 <Videos key={item.id} id={item.id} src={item.src} video={item.video}/>
-            ))};
+            ))}
         </>
     );
 }
