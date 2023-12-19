@@ -25,7 +25,7 @@ function Head() {
                 );
 
                 let user_log = resp.data;
-                // console.log("ALL VIDEOS:", user_log);
+
                 if (
                     user_log.isValid &&
                     "newAccessToken" in user_log.isValid

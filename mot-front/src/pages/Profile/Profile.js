@@ -9,11 +9,12 @@ import { useNavigate } from "react-router-dom";
 
 function Profile(){
     const [userData, setUserData] = useState([]);
+
     const [videoData, setVideoData] = useState([]);
     const [error, setError] = useState("");
     const [photoLoading, setPhotoLoading] = useState(true);
     const [videoLoading, setVideoLoading] = useState(true);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -28,7 +29,6 @@ function Profile(){
                 );
 
                 let user_log = resp.data;
-                // console.log("ALL VIDEOS:", user_log);
                 if (
                     user_log.isValid &&
                     "newAccessToken" in user_log.isValid
@@ -45,6 +45,7 @@ function Profile(){
             } catch (err) {
                 console.error(err);
                 setError(err);
+                setPhotoLoading(false);
             }
         };
         fetchData();
@@ -73,7 +74,7 @@ function Profile(){
                             "accessToken",
                             video_log.isValid.newAccessToken
                         );
-                        await fetchVideo();
+                        return;
                     } else {
                         setVideoData(video_log);
                         setVideoLoading(false);
@@ -82,6 +83,7 @@ function Profile(){
             } catch (err) {
                 console.error(err);
                 setError(err);
+                setVideoLoading(false);
             }
         };
         fetchVideo();
@@ -90,15 +92,83 @@ function Profile(){
         if (error.code === "ERR_BAD_REQUEST") {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
         }
-    }else{
+    }else if(userData.length === 0){
+        if(photoLoading){
+            const numVids = userData.videos ? userData.videos.length : 0;
+            return(
+                <div className="profile_main">
+                    <Head/>
+                    <div className="username">
+                        {userData.profile}
+                    </div>
+                        <ProfilePhoto imageSrc={"../icons/loading.gif"}/>
+                    <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
+                    <div className="user_videos">
+                    <div className="Profile_Videos">
+                        <img
+                            id="video_loading"
+                            itemID="video_loading"
+                            src="../icons/loading.gif"
+                            alt="Loading..."
+                        />
+                    </div>
+                    </div>
+                </div>
+            );
+        }else{
+            return <h1>Cant find the user</h1>;
+        }
+    }else if(videoData.length === 0){
+        if(videoLoading){
+            const numVids = userData.videos ? userData.videos.length : 0;
+            return(
+                <div className="profile_main">
+                    <Head/>
+                    <div className="username">
+                        {userData.profile}
+                    </div>
+                        <ProfilePhoto imageSrc={`data:image/png;base64,${userData.photo}`}/>
+                    <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
+                    <div className="user_videos">
+                    <div className="Profile_Videos">
+                        <img
+                            id="video_loading"
+                            itemID="video_loading"
+                            src="../icons/loading.gif"
+                            alt="Loading..."
+                        />
+                    </div>
+                    </div>
+                </div>
+            );
+        }else{
+            const numVids = userData.videos ? userData.videos.length : 0;
+            return(
+                <div className="profile_main">
+                    <Head/>
+                    <div className="username">
+                        {userData.profile}
+                    </div>
+                        <ProfilePhoto imageSrc={`data:image/png;base64,${userData.photo}`}/>
+                    <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
+                    <div className="user_videos">
+                    <div className="Profile_Videos">
+                        <h2>Error to find videos...</h2>
+                    </div>
+                    </div>
+                </div>
+            );
+        }
+        
+    }else if (videoData.length !== 0 && userData.length !== 0){
         const numVids = userData.videos ? userData.videos.length : 0;
         return(
             <div className="profile_main">
                 <Head/>
                 <div className="username">
-                    Teste
+                    {userData.profile}
                 </div>
-                    <ProfilePhoto imageSrc={userData.photo}/>
+                    <ProfilePhoto imageSrc={`data:image/png;base64,${userData.photo}`}/>
                 <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
                 <div className="user_videos">
                 <div className="Profile_Videos">

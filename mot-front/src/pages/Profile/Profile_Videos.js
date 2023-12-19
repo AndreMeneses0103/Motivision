@@ -12,7 +12,7 @@ function Videos({id, src, video}){
         <div className="mvid" id={id}>
             <button className="vidButton" onClick={()=>loadVideo(video)}>
                 <img
-                    src={src}
+                    src={`data:image/png;base64,${src}`}
                     className="vidImage"
                     alt="Imagem do video"
                 ></img>
@@ -37,7 +37,7 @@ export function ProfilePhoto({imageSrc}){
                     <img
                     id="profile_photo"
                     itemID="profile_photo"
-                    src={`data:image/png;base64,${imageSrc}`}
+                    src={imageSrc}
                     alt="Foto do Usuario"
                     />
                 </button>
@@ -47,25 +47,24 @@ export function ProfilePhoto({imageSrc}){
 
 export function ProfileVideos(videoData){
     const videos = videoData.videoData.videos;
-    console.log(videos);
-    // console.log(videos.map(item=>(item.userid)));
-    const data = [
-        {id: "", src:"./images/image1.jpg", video: 'video1'},
-        {id: "", src:"./images/image2.jpg", video: 'video2'},
-        {id: "", src:"./images/image3.jpg", video: 'video1'},
-        {id: "", src:"./images/image4.jpg", video: 'video2'},
-        {id: "", src:"./images/image2.jpg", video: 'video1'},
-        {id: "", src:"./images/image3.jpg", video: 'video2'},
-    ]
+    console.log(videos.map(item => (item.thumb)))
+    // const data = [
+    //     {id: "", src:"./images/image1.jpg", video: 'video1'},
+    //     {id: "", src:"./images/image2.jpg", video: 'video2'},
+    //     {id: "", src:"./images/image3.jpg", video: 'video1'},
+    //     {id: "", src:"./images/image4.jpg", video: 'video2'},
+    //     {id: "", src:"./images/image2.jpg", video: 'video1'},
+    //     {id: "", src:"./images/image3.jpg", video: 'video2'},
+    // ]
 
-    for(let x = 0; x < data.length; x++){
-        data[x].id = "video" + x;
-    }
+    // for(let x = 0; x < data.length; x++){
+    //     data[x].id = "video" + x;
+    // }
 
     return(
         <>
-            {data.map(item => (
-                <Videos key={item.id} id={item.id} src={item.src} video={item.video}/>
+            {videos.map(item => (
+                <Videos id={item.id} src={item.thumb} video={item.id}/>
             ))}
         </>
     );
