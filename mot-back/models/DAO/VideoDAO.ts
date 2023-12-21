@@ -48,6 +48,19 @@ export default class VideoDAO{
         }
     }
 
+    public async getSource(id: string): Promise<string|null>{
+        const result = await this.collection.findOne(
+            { "video.id":id},
+            { projection: { _id: 0 } }
+        );
+        if(result){
+            const videoPath = path.join(__dirname, `../../midia/videos/${result.video.source}`);
+            return videoPath;
+        }else{
+            return null;
+        }
+    }
+
     public async getVideo(ids: string[]): Promise<Video[] | null>{
         const result = await this.collection.find(
             { "video.id": { $in: ids } },

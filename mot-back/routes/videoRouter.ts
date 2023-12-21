@@ -67,6 +67,35 @@ export default class videoRouter {
                     .json({ auth: false, message: "Tokens not found" });
             }
         });
+
+        this.route.get("/source", async (req: Request, res: Response) => {
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            const video = req.query.video as string;
+            console.log(video);
+            if (access && refresh) {
+                const pm = new Permission();
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
+                if(isValid.auth === true){
+                    let response:object|string|null;
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        let videos = await this.data.getSource(video);
+                        response = videos
+                    }
+                    console.log(response);
+                    res.sendFile(response as string);
+                    // res.json(response);
+                }else{
+                    res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
+                }
+            } else {
+                return res
+                    .status(401)
+                    .json({ auth: false, message: "Tokens not found" });
+            }
+        });
     }
 
     public getRouter(): Router {
