@@ -1,3 +1,5 @@
+import {jwtDecode} from 'jwt-decode';
+
 function getCookieValue(cookie, name) {
     const cookiePairs = cookie.split(';');
     for (const pair of cookiePairs) {
@@ -41,4 +43,9 @@ export function refreshCookieValue(cookieName, newValue) {
     }
 
     document.cookie = cookieName + "=" + newValue;
+}
+
+export function getTokenId(token){
+    var decoded = jwtDecode(token);
+    return decoded.userId;
 }

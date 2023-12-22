@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { accessToken, refreshToken, refreshCookieValue } from "../scripts/getUser";
+import { accessToken, refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
 
 import "./Head.css";
 
@@ -14,13 +14,14 @@ function Head() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const userSelected = getTokenId(refreshToken());
                 const headers = {
                     "Content-Type": "application/json",
                     Authorization: `${accessToken()}`,
                     "Refresh-Token": `${refreshToken()}`,
                 };
                 const resp = await axios.get(
-                    "http://192.168.15.146:8080/user/getIdInfo",
+                    `http://192.168.15.146:8080/user/getIdInfo?user=${userSelected}`,
                     { headers: headers }
                 );
 
@@ -53,7 +54,7 @@ function Head() {
     };
 
     const loadProfile = () => {
-        navigate("/profile");
+        navigate(`/profile?user=${getTokenId(refreshToken())}`);
     };
 
     const loadMain = () => {

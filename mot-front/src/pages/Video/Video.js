@@ -4,22 +4,57 @@ import Head from "../../components/Head";
 import AllComments from "./All_comments";
 import AllVideos from "./All_Random_Videos";
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { accessToken, refreshCookieValue, refreshToken,} from "../../scripts/getUser";
+import axios from "axios";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Video() {
-    // const [loadVideo, setLoadVideo] = useState();
-
-    // setLoadVideo(<source src="./videos/video1.mp4" type="video/mp4"></source>);
-
-    // function trocaVideo(video) {
-    //     console.log("Video selecionado -> " + video);
-    //     const link = "./videos/" + video + ".mp4";
-    //     setLoadVideo(link);
-    // }
+//REQUISICAO PRONTA, DESENVOLVER O VIDEO NO FRONT
+    const [videoData, setVideoData] = useState([]);
+    const [videoSource, setVideoSource] = useState([]);
+    const [error, setError] = useState("");
+    const [videoLoading, setVideoLoading] = useState(true);
 
     const local = useLocation();
     const params = new URLSearchParams(local.search);
     const url = params.get("videoId");
+    console.log("URL:",url);
+
+    useEffect(()=>{
+        const fetchVideoData = async () =>{
+            try{
+                const headers = {
+                    "Content-Type": "application/json",
+                    Authorization: `${accessToken()}`,
+                    "Refresh-Token": `${refreshToken()}`,
+                };
+                const resp = await axios.get(
+                    `http://192.168.15.146:8080/video/search?videos=${url}`,
+                    { headers: headers }
+                );
+                let video_log = resp.data;
+                if (
+                    video_log.isValid &&
+                    "newAccessToken" in video_log.isValid
+                ) {
+                    refreshCookieValue(
+                        "accessToken",
+                        video_log.isValid.newAccessToken
+                    );
+                    return;
+                } else {
+                    setVideoData(video_log);
+                    setVideoLoading(false);
+                }
+            }catch(err){
+                console.error(err);
+                setError(err);
+                setVideoLoading(false);
+            };
+        }
+        fetchVideoData();
+    },[])
 
     return (
         <div className="mainpage">

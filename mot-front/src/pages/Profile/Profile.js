@@ -5,7 +5,7 @@ import {ProfileVideos, ProfilePhoto, UserInfos} from "./Profile_Videos"
 import { accessToken, refreshToken, refreshCookieValue } from "../../scripts/getUser";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function Profile(){
     const [userData, setUserData] = useState([]);
@@ -18,13 +18,15 @@ function Profile(){
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const url = new URL(window.location.href);
+                const userSelected = url.searchParams.get("user");
                 const headers = {
                     "Content-Type": "application/json",
                     Authorization: `${accessToken()}`,
                     "Refresh-Token": `${refreshToken()}`,
                 };
                 const resp = await axios.get(
-                    "http://192.168.15.146:8080/user/getIdInfo",
+                    `http://192.168.15.146:8080/user/getIdInfo?user=${userSelected}`,
                     { headers: headers }
                 );
 

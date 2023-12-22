@@ -48,18 +48,6 @@ export function ProfilePhoto({imageSrc}){
 export function ProfileVideos(videoData){
     const videos = videoData.videoData.videos;
     console.log(videos.map(item => (item.thumb)))
-    // const data = [
-    //     {id: "", src:"./images/image1.jpg", video: 'video1'},
-    //     {id: "", src:"./images/image2.jpg", video: 'video2'},
-    //     {id: "", src:"./images/image3.jpg", video: 'video1'},
-    //     {id: "", src:"./images/image4.jpg", video: 'video2'},
-    //     {id: "", src:"./images/image2.jpg", video: 'video1'},
-    //     {id: "", src:"./images/image3.jpg", video: 'video2'},
-    // ]
-
-    // for(let x = 0; x < data.length; x++){
-    //     data[x].id = "video" + x;
-    // }
 
     return(
         <>
