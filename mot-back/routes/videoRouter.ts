@@ -84,7 +84,8 @@ export default class videoRouter {
                         let videos = await this.data.getSource(video);
                         response = videos
                     }
-                    console.log(response);
+                    // console.log(response);
+                    res.header('Content-Type', 'video/mp4');
                     res.sendFile(response as string);
                     // res.json(response);
                 }else{

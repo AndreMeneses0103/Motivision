@@ -1,4 +1,5 @@
 ### Node ###
+midia/videos/*
 # Logs
 logs
 *.log
