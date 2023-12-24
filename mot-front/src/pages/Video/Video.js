@@ -198,7 +198,7 @@ function Video() {
                                 <span className="desc_title">Tags</span>
                                 <div className="hashtags_field">
                                     {(info.tags).map((item)=>(
-                                        <span className="hashtag"><a href="https://www.spacejam.com/1996/"># {item}</a></span>
+                                        <span className="hashtag"><a href="https://www.spacejam.com/1996/">#{item}</a></span>
                                     ))}
                                 </div>
                             </div>

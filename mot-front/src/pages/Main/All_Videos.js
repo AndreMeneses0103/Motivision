@@ -71,7 +71,7 @@ function Videos(){
         return (
             <>
                 {data.map(com => (
-                    <One key={com.id} id={com.id} imageSrc={com.imageSrc} alt={com.alt} video={com.video}/>
+                    <One key={com.id} id={com.id} imageSrc={com.imageSrc} alt={com.alt} video={com.id}/>
                 ))}
             </>
         );
