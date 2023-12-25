@@ -37,6 +37,13 @@ body{
     width: 130px;
 }
 
+.loading_space{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30vh;
+}
+
 #channel_name{
     /* margin: 20px 5px 5px 0px; */
 }

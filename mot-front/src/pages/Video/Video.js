@@ -21,18 +21,18 @@ function Video() {
     const url = params.get("videoId");
 
     useEffect(()=>{
-        const fetchVideoData = async () =>{
+        const fetchVideo = async () =>{
             try{
                 const headers = {
-                    "Content-Type": "application/json",
                     Authorization: `${accessToken()}`,
                     "Refresh-Token": `${refreshToken()}`,
                 };
-                const resp = await axios.get(
+                const dataResp = await axios.get(
                     `http://192.168.15.146:8080/video/search?videos=${url}`,
                     { headers: headers }
                 );
-                let video_log = resp.data;
+                const video_log = dataResp.data;
+                console.log("VIDEO DATA:", video_log);
                 if (
                     video_log.isValid &&
                     "newAccessToken" in video_log.isValid
@@ -44,31 +44,13 @@ function Video() {
                     return;
                 } else {
                     setVideoData(video_log.videos);
-                    setVideoLoading(false);
-                }
-            }catch(err){
-                console.error(err);
-                setError(err);
-                setVideoLoading(false);
-            };
-        }
-        fetchVideoData();
-    },[]);
-
-    useEffect(()=>{
-        const fetchUserData = async () => {
-            try {
-                if (videoData && videoData.length > 0 && videoData[0].userid !== undefined) {
-                    const headers = {
-                        Authorization: `${accessToken()}`,
-                        "Refresh-Token": `${refreshToken()}`,
-                    };
-                    const resp = await axios.get(
-                        `http://192.168.15.146:8080/user/getIdInfo?user=${videoData[0].userid}`,
+                    // setVideoLoading(false);
+                    const videoResp = await axios.get(
+                        `http://192.168.15.146:8080/user/getIdInfo?user=${video_log.videos[0].userid}`,
                         { headers: headers}
                     );
-                    const user = resp.data;
-                    console.table(user.users);
+                    const user = videoResp.data;
+                    console.log("USER DATA:", user);
                     if (
                         user.isValid &&
                         "newAccessToken" in user.isValid
@@ -80,53 +62,38 @@ function Video() {
                         return;
                     } else {
                         setUserData(user.users);
-                        setVideoLoading(false);
-                    }
-                }
-            } catch (err) {
-                console.error(err);
-                setError(err);
-                setVideoLoading(false);
-            }
-        };
-        fetchUserData();
-    }, [videoData]);
-    useEffect(()=>{
-        const fetchVideo = async () => {
-            try {
-                if (videoData) {
-                    const headers = {
-                        Authorization: `${accessToken()}`,
-                        "Refresh-Token": `${refreshToken()}`,
-                    };
-                    const resp = await axios.get(
-                        `http://192.168.15.146:8080/video/source?video=${url}`,
-                        { headers: headers, responseType: 'blob' }
-                    );
-                    const video_src = new Blob([resp.data]);
-                    const videoUrl = URL.createObjectURL(video_src);
-                    if (
-                        video_src.isValid &&
-                        "newAccessToken" in video_src.isValid
-                    ) {
-                        refreshCookieValue(
-                            "accessToken",
-                            video_src.isValid.newAccessToken
+                        const userResp = await axios.get(
+                            `http://192.168.15.146:8080/video/source?video=${url}`,
+                            { headers: headers, responseType: 'blob' }
                         );
-                        return;
-                    } else {
-                        setVideoSource(videoUrl);
-                        setVideoLoading(false);
+                        const video_src = new Blob([userResp.data]);
+                        const videoUrl = URL.createObjectURL(video_src);
+                        console.log("VIDEO SRC:", video_src);
+                        if (
+                            video_src.isValid &&
+                            "newAccessToken" in video_src.isValid
+                        ) {
+                            refreshCookieValue(
+                                "accessToken",
+                                video_src.isValid.newAccessToken
+                            );
+                            return;
+                        } else {
+                            setVideoSource(videoUrl);
+                            setVideoLoading(false);
+                        }
+                        // setVideoLoading(false);
                     }
                 }
-            } catch (err) {
+            }catch(err){
                 console.error(err);
                 setError(err);
                 setVideoLoading(false);
-            }
-        };
+            };
+        }
         fetchVideo();
-    }, [videoData]);
+    },[]);
+
     if(error){
         if (error.code === "ERR_BAD_REQUEST") {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
@@ -138,6 +105,7 @@ function Video() {
                     <div className="mainpage">
                         <Head/>
                         <div className="video_itens">
+                        <div className="loading_space">
                             <img
                                 id="video_loading"
                                 itemID="video_loading"
@@ -145,9 +113,11 @@ function Video() {
                                 alt="Loading..."
                             />
                         </div>
+                        </div>
                     </div>
                 );
-            }else{
+            }
+            else{
                 return (
                     <div className="mainpage">
                         <Head/>
@@ -157,9 +127,9 @@ function Video() {
                     </div>
                 );
             }
-        }else{
+        }
+        else{
             if(videoSource !== undefined){
-                console.log(videoData);
                 const info = videoData[0];
                 return (
                     <div className="mainpage">
