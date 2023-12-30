@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { accessToken, refreshCookieValue, refreshToken } from "../../scripts/getUser";
 // import { useState } from "react";
 
-function Video({id, video, src}) {
+function Video({id, video, alt, imageSrc}) {
     const navigate = useNavigate();
 
     function loadVideo(link){
@@ -9,15 +12,6 @@ function Video({id, video, src}) {
         navigate(`/video?videoId=${link}`);
     };
 
-    // const [loadVideo, setLoadVideo] = useState();
-
-    // setLoadVideo(<source src="./videos/video1.mp4" type="video/mp4"></source>);
-
-    // function trocaVideo(video) {
-    //     console.log("Video selecionado -> " + video);
-    //     const link = "./videos/" + video + ".mp4";
-    //     setLoadVideo(link);
-    // }
     return(
     <div className="rvid" id={id}>
         <button
@@ -25,9 +19,9 @@ function Video({id, video, src}) {
             onClick={() => loadVideo(video)}
         >
             <img
-                src={src}
+                src={`data:image/png;base64,${imageSrc}`}
                 className="vidImage"
-                alt="Imagem do video"
+                alt={alt}
             ></img>
         </button>
     </div>
@@ -35,27 +29,60 @@ function Video({id, video, src}) {
 }
 
 function AllVideos(){
-    const data = [
-        { id: '', src: './images/image1.jpg', video: 'video1' },
-        { id: '', src: './images/image2.jpg', video: 'video2' },
-        { id: '', src: './images/image3.jpg', video: 'video1' },
-        { id: '', src: './images/image4.jpg', video: 'video2' },
-        { id: '', src: './images/image1.jpg', video: 'video1' },
-        { id: '', src: './images/image1.jpg', video: 'video2' },
-        { id: '', src: './images/image1.jpg', video: 'video1' }
-    ]
+    const [data, setData] = useState([]);
+    const [error, setError] = useState('');
 
-    for(let x = 0; x < data.length; x++){
-        data[x].id = "video" + x;
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const headers = {
+                    "Content-Type": "application/json",
+                    "Authorization": `${accessToken()}`,
+                    "Refresh-Token": `${refreshToken()}`,
+                }
+                const resp = await axios.get("http://192.168.15.146:8080/video/all", {headers:headers});
+                let all_videos = resp.data;
+                let data = [];
+                if(all_videos.isValid && 'newAccessToken' in all_videos.isValid){
+                    refreshCookieValue("accessToken", all_videos.isValid.newAccessToken);
+                    await fetchData();
+                }else{
+                    for(let x = 0; x < all_videos.videos.length; x++){
+                        data.push({ id: all_videos.videos[x].id , imageSrc: all_videos.videos[x].thumb, alt: all_videos.videos[x].title, video: all_videos.videos[x].source})
+                    }
+                    setData(data);
+                }
+
+                
+            } catch (err) {
+                console.error(err);
+                setError(err);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if(error){
+        if(error.code === "ERR_BAD_REQUEST"){
+            return(
+                <h1>
+                    Erro de autenticação, realize o login novamente.
+                </h1>
+            )
+        }
+    } else{
+        //id, video, alt, imageSrc
+        return(
+            <>
+                {data.map(com => (
+                    <Video key={com.id} id={com.id} video={com.id} alt={com.alt} imageSrc={com.imageSrc} />
+                ))}
+            </>
+        );
     }
 
-    return(
-        <>
-            {data.map(com => (
-                <Video key={com.id} id={com.id} src={com.src} video={com.video}/>
-            ))}
-        </>
-    );
+    
 }
 
 export default AllVideos;

@@ -22,6 +22,7 @@ function Video() {
 
     useEffect(()=>{
         const fetchVideo = async () =>{
+            console.log("CHEGA AQUIIIIII");
             try{
                 const headers = {
                     Authorization: `${accessToken()}`,
@@ -92,7 +93,7 @@ function Video() {
             };
         }
         fetchVideo();
-    },[]);
+    },[url]);
 
     if(error){
         if (error.code === "ERR_BAD_REQUEST") {
