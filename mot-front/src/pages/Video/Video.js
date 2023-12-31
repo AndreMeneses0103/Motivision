@@ -22,7 +22,6 @@ function Video() {
 
     useEffect(()=>{
         const fetchVideo = async () =>{
-            console.log("CHEGA AQUIIIIII");
             try{
                 const headers = {
                     Authorization: `${accessToken()}`,

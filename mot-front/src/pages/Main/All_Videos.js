@@ -12,10 +12,10 @@ function One({id, imageSrc, alt, video}) {
 
     return(
         <div className="mvid" id={id}>
-            <button className="vidButton" onClick={() => loadVideo(video)}>
+            <button className="vidMainButton" onClick={() => loadVideo(video)}>
                 <img
                     src={`data:image/png;base64,${imageSrc}`}
-                    className="vidImage"
+                    className="vidMainImage"
                     alt={alt}
                 ></img>
             </button>

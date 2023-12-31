@@ -38,8 +38,28 @@ body, html{
 
 .mvid{
     margin: 20px;
-    width: 200px;
-    height: 130px;
+    max-width: 50vw;
+    height: 20vh;
+}
+
+.vidMainButton {
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.5s ease; /* Adicionando a transição para a propriedade transform */
+}
+
+.vidMainButton:hover {
+    transform: scale(1.05, 1.05);
+}
+
+.vidMainImage{
+    height: 100%;
+    width: inherit;
+    border-radius: 10px;
+    object-fit: cover;
 }
 
 .src_container{
