@@ -12,7 +12,8 @@ async function verifyLog(userId){
         refreshCookieValue("accessToken", req.data.isValid.newAccessToken);
         req = await api.get(`/user/getIdInfo?user=${userId}`);
     }
-    return true;
+
+    return !!req;
 }
 
 function setLogin(name,password){

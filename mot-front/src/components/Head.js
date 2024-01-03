@@ -20,7 +20,7 @@ function Head() {
             refreshCookieValue("accessToken",data.isValid.newAccessToken);
             data = await getUser(userSelected);
         }
-        setUser(data.data.user)
+        setUser(data.user)
     }
 
     async function tryGetUser(){

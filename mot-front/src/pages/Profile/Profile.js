@@ -3,15 +3,15 @@ import "../../components/Scroll.css"
 // import Head from "../../components/Head";
 import {ProfileVideos, ProfilePhoto, UserInfos} from "./Profile_Videos"
 import { accessToken, refreshToken, refreshCookieValue, getTokenId } from "../../scripts/getUser";
-import axios from "axios";
+// import axios from "axios";
 import { useEffect, useState } from "react";
 import { getUser, verifyLog } from "../../services/userFetch";
+import { getAllUserVideos } from "../../services/videoFetch";
 // import { useNavigate } from "react-router-dom";
 
 function Profile(){
     const [user, setUser] = useState(null);
-
-    const [video, setVideo] = useState([]);
+    const [video, setVideo] = useState(null);
     const [error, setError] = useState("");
     const [photoLoading, setPhotoLoading] = useState(true);
     const [videoLoading, setVideoLoading] = useState(true);
@@ -20,7 +20,7 @@ function Profile(){
     async function getUserData(){
         const url = new URL(window.location.href);
         const userSelected = url.searchParams.get("user");
-        const logUser = verifyLog(getTokenId(refreshToken()));
+        const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
             const data = await getUser(userSelected);
             setUser(data)
@@ -30,7 +30,8 @@ function Profile(){
     async function getVideoData(){
         const logUser = verifyLog(getTokenId(refreshToken()));
         if(logUser){
-            const data = await
+            const data = await getAllUserVideos(user.user.videos);
+            setVideo(data);
         }
     }
 
@@ -42,6 +43,16 @@ function Profile(){
             setError(error);
         }finally{
             setPhotoLoading(false);
+        }
+    }
+
+    async function tryGetVideos(){
+        try{
+            await getVideoData();
+        }catch(error){
+            console.error(error);
+            setError(error);
+        }finally{
             setVideoLoading(false);
         }
     }
@@ -52,96 +63,28 @@ function Profile(){
         })();
     },[])
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const url = new URL(window.location.href);
-                const userSelected = url.searchParams.get("user");
-                const headers = {
-                    "Content-Type": "application/json",
-                    Authorization: `${accessToken()}`,
-                    "Refresh-Token": `${refreshToken()}`,
-                };
-                const resp = await axios.get(
-                    `http://192.168.15.146:8080/user/getIdInfo?user=${userSelected}`,
-                    { headers: headers }
-                );
+    useEffect(()=>{
+        (async()=>{
+            if(user !== null){
+                await tryGetVideos();
+            }
+        })();
+    },[user])
 
-                let user_log = resp.data;
-                if (
-                    user_log.isValid &&
-                    "newAccessToken" in user_log.isValid
-                ) {
-                    refreshCookieValue(
-                        "accessToken",
-                        user_log.isValid.newAccessToken
-                    );
-                    await fetchData();
-                } else {
-                    setUserData(user_log.users);
-                    setPhotoLoading(false);
-                }
-            } catch (err) {
-                console.error(err);
-                setError(err);
-                setPhotoLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
-    useEffect(() => {
-        const fetchVideo = async () => {
-            try {
-                if (userData && Array.isArray(userData.videos)) {
-                    const headers = {
-                        "Content-Type": "application/json",
-                        Authorization: `${accessToken()}`,
-                        "Refresh-Token": `${refreshToken()}`,
-                    };
-                    let userVideos = userData.videos.filter(Boolean);
-                    const resp = await axios.get(
-                        `http://192.168.15.146:8080/video/search?videos=${userVideos.join(',')}`,
-                        { headers: headers }
-                    );
-                    let video_log = resp.data;
-                    // console.log("ALL VIDEOS:", video_log);
-                    if (
-                        video_log.isValid &&
-                        "newAccessToken" in video_log.isValid
-                    ) {
-                        refreshCookieValue(
-                            "accessToken",
-                            video_log.isValid.newAccessToken
-                        );
-                        return;
-                    } else {
-                        setVideoData(video_log);
-                        setVideoLoading(false);
-                    }
-                }
-            } catch (err) {
-                console.error(err);
-                setError(err);
-                setVideoLoading(false);
-            }
-        };
-        fetchVideo();
-    }, [userData]);
     if(error){
         if (error.code === "ERR_BAD_REQUEST") {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
         }
-    }else if(userData.length === 0){
+    }else if(user === null){
         if(photoLoading){
-            const numVids = userData.videos ? userData.videos.length : 0;
+            const numVids = user.user.videos ? user.videos.length : 0;
             return(
                 <div className="profile_main">
-                    
                     <div className="username">
-                        {userData.profile}
+                        {user.profile}
                     </div>
                         <ProfilePhoto imageSrc={"../icons/loading.gif"}/>
-                    <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
+                    <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
                     <div className="user_videos">
                     <div className="Profile_Videos">
                         <img
@@ -157,17 +100,17 @@ function Profile(){
         }else{
             return <h1>Cant find the user</h1>;
         }
-    }else if(videoData.length === 0){
+    }else if(video === null){
         if(videoLoading){
-            const numVids = userData.videos ? userData.videos.length : 0;
+            const numVids = video.videos ? video.videos.length : 0;
             return(
                 <div className="profile_main">
                     
                     <div className="username">
-                        {userData.profile}
+                        {user.profile}
                     </div>
-                        <ProfilePhoto imageSrc={`data:image/png;base64,${userData.photo}`}/>
-                    <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
+                        <ProfilePhoto imageSrc={`data:image/png;base64,${user.photo}`}/>
+                    <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
                     <div className="user_videos">
                     <div className="Profile_Videos">
                         <img
@@ -181,15 +124,15 @@ function Profile(){
                 </div>
             );
         }else{
-            const numVids = userData.videos ? userData.videos.length : 0;
+            const numVids = user.videos ? user.videos.length : 0;
             return(
                 <div className="profile_main">
                     
                     <div className="username">
-                        {userData.profile}
+                        {user.profile}
                     </div>
-                        <ProfilePhoto imageSrc={`data:image/png;base64,${userData.photo}`}/>
-                    <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
+                        <ProfilePhoto imageSrc={`data:image/png;base64,${user.photo}`}/>
+                    <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
                     <div className="user_videos">
                     <div className="Profile_Videos">
                         <h2>Error to find videos...</h2>
@@ -199,19 +142,19 @@ function Profile(){
             );
         }
         
-    }else if (videoData.length !== 0 && userData.length !== 0){
-        const numVids = userData.videos ? userData.videos.length : 0;
+    }else if (video !== null && user !== null){
+        const numVids = user.videos ? user.videos.length : 0;
         return(
             <div className="profile_main">
                 
                 <div className="username">
-                    {userData.profile}
+                    {user.profile}
                 </div>
-                    <ProfilePhoto imageSrc={`data:image/png;base64,${userData.photo}`}/>
-                <UserInfos num_subs={userData.subscribers} num_vids={numVids}/>
+                    <ProfilePhoto imageSrc={`data:image/png;base64,${user.photo}`}/>
+                <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
                 <div className="user_videos">
                 <div className="Profile_Videos">
-                    <ProfileVideos videoData={videoData}/>
+                    <ProfileVideos videoData={video}/>
                 </div>
                 
                 </div>
