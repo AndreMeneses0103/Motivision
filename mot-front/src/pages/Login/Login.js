@@ -1,40 +1,37 @@
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import { setLogin } from "../../services/userFetch";
 
 function Login() {
 
 	const [name, setName] = useState('');
 	const [password, setPassword] = useState('');
+	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
-	function changePage() {
-		axios.post("http://192.168.15.146:8080/user/postUserCredentials", {
-			"name": name,
-			"password": password
-		}, {
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-		.then((resp)=>{
-			let retorno = resp.data;
-			alert(retorno.message);
-			if(retorno.success === true){
-				document.cookie = `accessToken=${retorno.accessToken}; path=/`;
-				document.cookie = `refreshToken=${retorno.refreshToken}; path=/`;
-				if(document.cookie){
-					navigate("/main");
-				}
-			}
-		})
-		.catch((err)=>{
-			console.error("ERRO:", err);
-			alert("An error occurred, please try again later.")
-		})
+	async function setUserLogin(){
+		setLoading(true);
+		const req = await setLogin(name,password);
+		const data = req.data;
+		if(data.success === true){
+			document.cookie = `accessToken=${data.accessToken}; path=/`;
+			document.cookie = `refreshToken=${data.refreshToken}; path=/`;
+			navigate("/main");
+		}
 	}
 
+	async function tryLogin(){
+		try{
+			await setUserLogin();
+		}catch(error){
+			console.error(error);
+		}finally{
+			setLoading(false);
+		}
+	}
+	
 	return (
 		<div className="loginpage">
 			<div className="center">
@@ -59,8 +56,9 @@ function Login() {
 					</div>
 					<button
 						className="btn_login"
-						onClick={changePage}
-					>Login</button>
+						onClick={tryLogin}
+						disabled={loading}
+					>{loading ? "Logging in..." : "Login"}</button>
 					<a className="register" href="https://www.w3schools.com">
 						Don&#39;t have a Login? Click here to register
 					</a>

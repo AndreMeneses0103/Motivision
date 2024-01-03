@@ -4,10 +4,12 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
 import Rotas from './Rotas';
+import Head from './components/Head';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<BrowserRouter>
+		<Head/>
 		<Rotas/>
 	</BrowserRouter>
 );

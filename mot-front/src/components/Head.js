@@ -1,53 +1,82 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { accessToken, refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
-
 import "./Head.css";
+import { getUser, verifyLog } from "../services/userFetch";
 
 function Head() {
-    const [userData, setUserData] = useState([]);
+    // const [userData, setUserData] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+
+    async function getUserData(){
+        const userSelected = getTokenId(refreshToken());
+        let teste = await verifyLog(userSelected);
+        let data = await getUser(userSelected);
+        if (data.isValid && "newAccessToken" in data.isValid) {
+            refreshCookieValue("accessToken",data.isValid.newAccessToken);
+            data = await getUser(userSelected);
+        }
+        setUser(data.data.user)
+    }
+
+    async function tryGetUser(){
+        try {
+            await getUserData();
+        } catch(error){
+            console.error(error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userSelected = getTokenId(refreshToken());
-                const headers = {
-                    "Content-Type": "application/json",
-                    Authorization: `${accessToken()}`,
-                    "Refresh-Token": `${refreshToken()}`,
-                };
-                const resp = await axios.get(
-                    `http://192.168.15.146:8080/user/getIdInfo?user=${userSelected}`,
-                    { headers: headers }
-                );
+        (async () => {
+            await tryGetUser();
+        })();
+    },[])
 
-                let user_log = resp.data;
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const userSelected = getTokenId(refreshToken());
+    //             const headers = {
+    //                 "Content-Type": "application/json",
+    //                 Authorization: `${accessToken()}`,
+    //                 "Refresh-Token": `${refreshToken()}`,
+    //             };
+    //             const resp = await axios.get(
+    //                 `http://192.168.15.146:8080/user/getIdInfo?user=${userSelected}`,
+    //                 { headers: headers }
+    //             );
 
-                if (
-                    user_log.isValid &&
-                    "newAccessToken" in user_log.isValid
-                ) {
-                    refreshCookieValue(
-                        "accessToken",
-                        user_log.isValid.newAccessToken
-                    );
-                    await fetchData();
-                } else {
-                    setUserData(user_log.users);
-                    setLoading(false);
-                }
-            } catch (err) {
-                console.error(err);
-                setError(err);
-            }
-        };
+    //             let user_log = resp.data;
 
-        fetchData();
-    }, []);
+    //             if (
+    //                 user_log.isValid &&
+    //                 "newAccessToken" in user_log.isValid
+    //             ) {
+    //                 refreshCookieValue(
+    //                     "accessToken",
+    //                     user_log.isValid.newAccessToken
+    //                 );
+    //                 await fetchData();
+    //             } else {
+    //                 setUserData(user_log.users);
+    //                 setLoading(false);
+    //             }
+    //         } catch (err) {
+    //             console.error(err);
+    //             setError(err);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
 
     const loadUpload = () => {
         navigate("/upload");
@@ -66,7 +95,7 @@ function Head() {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
         }
     } else {
-        // console.log("USER DATA:",userData);
+        console.log("USER:", user);
         return (
             <div className="header">
                     <div className="user" id="user">
@@ -82,7 +111,7 @@ function Head() {
                             <img
                                 id="userphoto"
                                 itemID="userphoto"
-                                src={`data:image/png;base64,${userData.photo}`}
+                                src={`data:image/png;base64,${user.photo}`}
                                 alt="User Profile"
                             />
                         )}

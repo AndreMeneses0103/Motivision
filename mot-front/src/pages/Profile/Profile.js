@@ -1,20 +1,57 @@
 import "./Profile.css"
 import "../../components/Scroll.css"
-import Head from "../../components/Head";
+// import Head from "../../components/Head";
 import {ProfileVideos, ProfilePhoto, UserInfos} from "./Profile_Videos"
-import { accessToken, refreshToken, refreshCookieValue } from "../../scripts/getUser";
+import { accessToken, refreshToken, refreshCookieValue, getTokenId } from "../../scripts/getUser";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { getUser, verifyLog } from "../../services/userFetch";
 // import { useNavigate } from "react-router-dom";
 
 function Profile(){
-    const [userData, setUserData] = useState([]);
+    const [user, setUser] = useState(null);
 
-    const [videoData, setVideoData] = useState([]);
+    const [video, setVideo] = useState([]);
     const [error, setError] = useState("");
     const [photoLoading, setPhotoLoading] = useState(true);
     const [videoLoading, setVideoLoading] = useState(true);
     // const navigate = useNavigate();
+
+    async function getUserData(){
+        const url = new URL(window.location.href);
+        const userSelected = url.searchParams.get("user");
+        const logUser = verifyLog(getTokenId(refreshToken()));
+        if(logUser){
+            const data = await getUser(userSelected);
+            setUser(data)
+        }
+    }
+
+    async function getVideoData(){
+        const logUser = verifyLog(getTokenId(refreshToken()));
+        if(logUser){
+            const data = await
+        }
+    }
+
+    async function tryGetUser(){
+        try{
+            await getUserData();
+        }catch(error){
+            console.error(error);
+            setError(error);
+        }finally{
+            setPhotoLoading(false);
+            setVideoLoading(false);
+        }
+    }
+
+    useEffect(()=>{
+        (async()=>{
+            await tryGetUser();
+        })();
+    },[])
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -99,7 +136,7 @@ function Profile(){
             const numVids = userData.videos ? userData.videos.length : 0;
             return(
                 <div className="profile_main">
-                    <Head/>
+                    
                     <div className="username">
                         {userData.profile}
                     </div>
@@ -125,7 +162,7 @@ function Profile(){
             const numVids = userData.videos ? userData.videos.length : 0;
             return(
                 <div className="profile_main">
-                    <Head/>
+                    
                     <div className="username">
                         {userData.profile}
                     </div>
@@ -147,7 +184,7 @@ function Profile(){
             const numVids = userData.videos ? userData.videos.length : 0;
             return(
                 <div className="profile_main">
-                    <Head/>
+                    
                     <div className="username">
                         {userData.profile}
                     </div>
@@ -166,7 +203,7 @@ function Profile(){
         const numVids = userData.videos ? userData.videos.length : 0;
         return(
             <div className="profile_main">
-                <Head/>
+                
                 <div className="username">
                     {userData.profile}
                 </div>

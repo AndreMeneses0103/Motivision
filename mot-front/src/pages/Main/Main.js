@@ -13,7 +13,6 @@ function Main() {
     })
     return (
         <div className="div_main">
-            <Head/>
             <div className="Align_Videos">
                 <div className="src_container">
                     <input

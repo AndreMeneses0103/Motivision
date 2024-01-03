@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import "../Video/Video.css";
-import Head from "../../components/Head";
+// import Head from "../../components/Head";
 import AllComments from "./All_comments";
 import AllVideos from "./All_Random_Videos";
 import { useLocation } from "react-router-dom";
@@ -103,7 +103,7 @@ function Video() {
             if(videoLoading){
                 return (
                     <div className="mainpage">
-                        <Head/>
+                        
                         <div className="video_itens">
                         <div className="loading_space">
                             <img
@@ -120,7 +120,7 @@ function Video() {
             else{
                 return (
                     <div className="mainpage">
-                        <Head/>
+                        
                         <div className="video_itens">
                             <h1>An error occurred in system. Please, try again later</h1>
                         </div>
@@ -133,7 +133,7 @@ function Video() {
                 const info = videoData[0];
                 return (
                     <div className="mainpage">
-                        <Head/>
+                        
                         <div className="video_itens">
                             <div className="video_channel">
                                 <div className="channel_user">
