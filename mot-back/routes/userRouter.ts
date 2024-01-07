@@ -65,10 +65,9 @@ export default class userRouter {
         });
 
         this.route.get("/getIdInfo", async (req: Request,res:Response)=>{
-            //TESTAR SE USER ESTA VINDO CORRETAMENTE!!!
             const access = req.headers.authorization;
             const refresh = req.headers['refresh-token'];
-            const user = req.query.user as string;
+            const userSelected = req.query.user as string;
             if (access && refresh) {
                 const pm = new Permission();
                 const isValid = await pm.getPermission(`${access}, ${refresh}`);
@@ -78,8 +77,8 @@ export default class userRouter {
                         response = {isValid}
                     }else{
                         // console.log(isValid.value);
-                        const users = await this.data.getUserById(user);
-                        response = {users};
+                        const user = await this.data.getUserById(userSelected);
+                        response = {user};
                     }
                     res.json(response);
                 }else{
