@@ -89,10 +89,11 @@ body{
     flex-wrap: nowrap;
     align-content: center;
     overflow-x: auto;
+    justify-content: space-between;
 }
 
 .rvid{
-    width: 160px;
+    /* width: 160px; */
     height: 90px;
     background-color: #726767;
     border-radius: 10px;
@@ -101,6 +102,8 @@ body{
 
 .vidImage{
     height: 100%;
+    width: 150px;
+    object-fit: cover;
     border-radius: 10px;
 }
 

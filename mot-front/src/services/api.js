@@ -8,6 +8,15 @@ const api = axios.create({
         "Refresh-Token": `${refreshToken()}`,
     }
 });
+const blob_api = axios.create({
+    baseURL:"//localhost:8080",
+    headers:{
+        "Content-Type": "application/json",
+        Authorization: `${accessToken()}`,
+        "Refresh-Token": `${refreshToken()}`,
+    },
+    responseType:'blob'
+})
 const log_api = axios.create({
     baseURL:"//localhost:8080",
     headers:{
@@ -27,4 +36,16 @@ api.interceptors.request.use(config =>{
     return config;
 })
 
-export {api, log_api};
+blob_api.interceptors.request.use(config =>{
+    if(accessToken() !== null){
+        config.headers.Authorization = accessToken();
+    }
+
+    if(refreshToken()!==null){
+        config.headers["Refresh-Token"] = refreshToken();
+    }
+
+    return config;
+})
+
+export {api, log_api, blob_api};

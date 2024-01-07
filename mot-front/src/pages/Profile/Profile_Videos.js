@@ -55,13 +55,12 @@ export function ProfilePhoto({imageSrc}){
     )
 }
 
-export function ProfileVideos(videoData){
-    const videos = videoData.videoData;
-    console.log(videos.map(item => (item.thumb)))
+export function ProfileVideos({videoData}){
+    console.log(videoData.map(item => (item.thumb)))
 
     return(
         <>
-            {videos.map(item => (
+            {videoData.map(item => (
                 <Videos id={item.id} src={item.thumb} video={item.id}/>
             ))}
         </>

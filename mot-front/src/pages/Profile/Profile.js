@@ -55,9 +55,8 @@ function renderAllLoading(){
     );
 }
 
-//CORRIGIR DIFERENCA DOS VIDEOS VINDO DE USUARIO E OS REAIS
 function renderAllProfile(user, video){
-    const numVids = (video).length;
+    const numVids = video.length;
     return(
         <div className="profile_main">
             
@@ -103,7 +102,7 @@ function Profile(){
                 setError("nonexistent");
             }else{
                 setError("");
-                setUser(data);
+                setUser(data.user);
             }
         }
     }
@@ -111,8 +110,8 @@ function Profile(){
     async function getVideoData(){
         const logUser = verifyLog(getTokenId(refreshToken()));
         if(logUser){
-            const data = await getAllUserVideos(user.user.videos);
-            setVideo(data);
+            const data = await getAllUserVideos(user.videos);
+            setVideo(data.videos);
         }
     }
 
@@ -152,8 +151,6 @@ function Profile(){
         })();
     },[user])
 
-
-    console.log(user)
     if(error){
         if (error.code === "ERR_BAD_REQUEST") {
             return renderError("Erro de autenticação, realize o login novamente.");
@@ -165,7 +162,7 @@ function Profile(){
         if(photoLoading && videoLoading){
             return renderAllLoading();
         }else{
-            return renderError();
+            return renderError("Um erro ocorreu no sistema, tente novamente mais tarde.");
         }
     }else if(video === null && user !== null){
         if(photoLoading){
@@ -174,7 +171,7 @@ function Profile(){
             return renderVideoLoading(user);
         }
     }else{
-        return renderAllProfile(user.user, video.videos);
+        return renderAllProfile(user, video);
     }
 }
 
