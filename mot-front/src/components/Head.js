@@ -14,7 +14,6 @@ function Head() {
 
     async function getUserData(){
         const userSelected = getTokenId(refreshToken());
-        let teste = await verifyLog(userSelected);
         let data = await getUser(userSelected);
         if (data.isValid && "newAccessToken" in data.isValid) {
             refreshCookieValue("accessToken",data.isValid.newAccessToken);
@@ -95,7 +94,6 @@ function Head() {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
         }
     } else {
-        console.log("USER:", user);
         return (
             <div className="header">
                     <div className="user" id="user">

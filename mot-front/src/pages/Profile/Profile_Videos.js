@@ -22,12 +22,22 @@ function Videos({id, src, video}){
 }
 
 export function UserInfos({num_subs, num_vids}){
-    return(
-        <div className="user_infos">
-            <span id="user_subs">{num_subs} Subscribers</span>
-            <span id="user_numvid">{num_vids} Videos</span>
-        </div>
-    )
+    if(num_subs === "x" || num_vids === "x"){
+        return(
+            <div className="user_infos">
+                <span id="user_subs">Loading...</span>
+                <span id="user_numvid">Loading...</span>
+            </div>
+        )
+    }else{
+        return(
+            <div className="user_infos">
+                <span id="user_subs">{num_subs} {num_subs > 2 ? "Subscribers" : "Subscriber"}</span>
+                <span id="user_numvid">{num_vids} {num_vids > 2 ? "Videos" : "Video"}</span>
+            </div>
+        )
+    }
+
 }
 
 export function ProfilePhoto({imageSrc}){
@@ -46,7 +56,7 @@ export function ProfilePhoto({imageSrc}){
 }
 
 export function ProfileVideos(videoData){
-    const videos = videoData.videoData.videos;
+    const videos = videoData.videoData;
     console.log(videos.map(item => (item.thumb)))
 
     return(

@@ -2,6 +2,18 @@
 
 }
 
+.errorMsg{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    height: 80vh;
+    align-items: center;
+    font-size: xx-large;
+    color: red;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
 .username{
     text-align: center;
     margin: 20px;
