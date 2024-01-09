@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import "./Main.css";
+import "../../styles/Main.css";
 import Head from "../../components/Head";
 import Videos from "./All_Videos";
 // import {accessToken, refreshToken} from "../../scripts/getUser";

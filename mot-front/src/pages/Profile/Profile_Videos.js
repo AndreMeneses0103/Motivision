@@ -13,7 +13,7 @@ function Videos({id, src, video}){
             <button className="vidButton" onClick={()=>loadVideo(video)}>
                 <img
                     src={`data:image/png;base64,${src}`}
-                    className="vidImage"
+                    className="profImage"
                     alt="Imagem do video"
                 ></img>
             </button>

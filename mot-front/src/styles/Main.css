@@ -48,7 +48,7 @@ body, html{
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: transform 0.5s ease; /* Adicionando a transição para a propriedade transform */
+    transition: transform 0.5s ease;
 }
 
 .vidMainButton:hover {
@@ -57,6 +57,7 @@ body, html{
 
 .vidMainImage{
     height: 100%;
+    max-width: 200px;
     width: inherit;
     border-radius: 10px;
     object-fit: cover;

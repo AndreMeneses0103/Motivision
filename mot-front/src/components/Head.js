@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { accessToken, refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
-import "./Head.css";
+import "../styles/Head.css";
 import { getUser, verifyLog } from "../services/userFetch";
 
 function Head() {

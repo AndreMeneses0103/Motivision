@@ -1,5 +1,5 @@
-import "./Profile.css"
-import "../../components/Scroll.css"
+import "../../styles/Profile.css"
+import "../../styles/Scroll.css"
 // import Head from "../../components/Head";
 import {ProfileVideos, ProfilePhoto, UserInfos} from "./Profile_Videos"
 import { accessToken, refreshToken, refreshCookieValue, getTokenId } from "../../scripts/getUser";

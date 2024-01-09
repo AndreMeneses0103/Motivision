@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import "./Upload.css";
+import "../../styles/Upload.css";
 import Head from "../../components/Head";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 

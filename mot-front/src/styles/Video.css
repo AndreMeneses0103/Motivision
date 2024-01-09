@@ -79,9 +79,10 @@ body{
 .recommend_video{
     display: flex;
     margin: auto;
-    margin-bottom: 20vh;
+    margin-bottom: 15vh;
     margin-top: 10vh;
     width: 80%;
+    height: 25vh;
     padding: 5px;
     background-color: #D9D9D9;
     border-radius: 5px;
@@ -94,7 +95,7 @@ body{
 
 .rvid{
     /* width: 160px; */
-    height: 90px;
+    height: auto;
     background-color: #726767;
     border-radius: 10px;
     margin: 5px 20px 5px 20px;
@@ -102,13 +103,14 @@ body{
 
 .vidImage{
     height: 100%;
-    width: 150px;
+    width: 100%;
     object-fit: cover;
     border-radius: 10px;
 }
 
 .vidButton{
     height: 100%;
+    width: 18em;
     background-color: transparent;
     padding: 0;
     border-radius: 10px;

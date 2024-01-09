@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Kavoon&display=swap');
 
+@font-face {
+    font-family: 'ttmilks';
+    src: url('../../public/fonts/font.ttf');
+}
+
 .header{
     background: #899878;
     padding: 20px;
@@ -13,7 +18,7 @@
 .logo, .btn_logo{
     color: #fff;
     font-size: 40px;
-    font-family: 'Kavoon', cursive;
+    font-family: 'ttmilks', sans-serif;
     text-align: center;
     flex: 1;
     background-color: transparent;

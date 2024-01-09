@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { accessToken, refreshCookieValue, refreshToken } from "../../scripts/getUser";
 
 function LoginChecker() {
     const navigate = useNavigate();
@@ -14,9 +15,10 @@ function LoginChecker() {
     }, [navigate]);
 
     function getToken() {
-        const [key, token] = document.cookie.split("=");
-        if (key === "authToken") {
-            return token;
+        const haveRefresh = refreshToken();
+        console.log("Refresh:", haveRefresh)
+        if (haveRefresh !== null) {
+            return true;
         } else {
             return null;
         }

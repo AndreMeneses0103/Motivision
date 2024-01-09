@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import "../Video/Video.css";
+import "../../styles/Video.css";
 // import Head from "../../components/Head";
 import AllComments from "./All_comments";
 import AllVideos from "./All_Random_Videos";
