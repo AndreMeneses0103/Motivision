@@ -6,16 +6,37 @@ import LoginChecker from "./pages/Login/CheckLogin";
 import Upload from "./pages/Upload/Upload";
 import Main from "./pages/Main/Main";
 import Profile from "./pages/Profile/Profile";
+import Head from "./components/Head";
 
 function Rotas() {
     return (
         <Routes>
-            <Route path="/video" element={<Video />} />
+            <Route path="/video" element={
+                <>
+                    <Head/>
+                    <Video />
+                </>
+            } />
             <Route path="/" element={<LoginChecker />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/main" element={<Main/>}/>
-            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/upload" element={
+                <>
+                <Head/>
+                <Upload />
+            </>
+            } />
+            <Route path="/main" element={
+                <>
+                <Head/>
+                <Main />
+            </>
+            }/>
+            <Route path="/profile" element={
+                <>
+                <Head/>
+                <Profile />
+            </>
+            }/>
         </Routes>
 		);
 }
