@@ -58,12 +58,14 @@ export default class UserDAO {
             const convert64 = this.encodeImageToBase64(thumbPath);
 
             const userSettings = new UserSetting(
+                userData.user_settings.userid,
                 userData.user_settings.name,
                 userData.user_settings.email,
                 userData.user_settings.password
             );
             const users = {
                 profile: userSettings.name,
+                id:userSettings.userid,
                 photo: convert64,
                 subscribers:userData.subscribers || 0,
                 subscribed:userData.subscribed || [],
