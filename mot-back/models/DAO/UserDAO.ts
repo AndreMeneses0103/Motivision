@@ -73,15 +73,6 @@ export default class UserDAO {
                 watched_videos: userData.watched_videos
             }
 
-            // const user = new User(
-            //     userSettings,
-            //     userData.videos || [],
-            //     userData.watched_videos || [],
-            //     userData.subscribed || [],
-            //     userData.subscribers || 0,
-            //     convert64
-            // );
-
             return users;
         } else {
             return null;

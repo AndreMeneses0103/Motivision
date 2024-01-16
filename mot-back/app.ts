@@ -4,12 +4,14 @@ import * as path from 'path';
 import userRouter from './routes/userRouter';
 import Database from './database';
 import videoRouter from './routes/videoRouter';
+import CommentRouter from './routes/commentRouter';
 
 export default class App{
     private app: express.Application;
     private database: Database;
     private user_route: userRouter | null = null;
     private video_route: videoRouter | null = null;
+    private comment_route: CommentRouter | null = null;
 
     
     constructor() {
@@ -40,6 +42,12 @@ export default class App{
             console.error("Error to connect to Video Routes")
         }
 
+        if(this.comment_route){
+            this.app.use('/comment', this.comment_route.getRouter());
+        }else{
+            console.error("Error to connect to Comment Routes")
+        }
+
         // this.app.use('/*', (req: Request, res:Response)=>{
         //     res.send({
         //         mensagem:"Ola mundo!"
@@ -53,6 +61,7 @@ export default class App{
             await this.database.Connection();
             this.user_route = new userRouter(this.database);
             this.video_route = new videoRouter(this.database);
+            this.comment_route = new CommentRouter(this.database);
             this.routes();
             this.app.listen(port, ()=>{
                 console.log(`Servidor rodando em ${port}`);
