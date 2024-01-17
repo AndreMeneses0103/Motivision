@@ -39,7 +39,6 @@ function Video() {
     
     
     const loadChannel = () => {
-        console.log("USER DATA:", userData);
         navigate(`/profile?user=${userData.id}`);
     };
     

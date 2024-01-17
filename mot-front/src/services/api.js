@@ -1,5 +1,6 @@
 import axios from "axios";
 import { accessToken, refreshToken } from "../scripts/getUser";
+//PARA ACESSAR O LOCALHOST NO CELULAR, USAR O DEVTOOLS NO GOOGLE CHROME COM DEPURACAO
 const api = axios.create({
     baseURL:"//localhost:8080",
     headers:{

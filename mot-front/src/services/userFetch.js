@@ -17,6 +17,7 @@ async function verifyLog(userId){
 }
 
 function setLogin(name,password){
+    console.log("NOME:", name," E SENHA:", password);
     const req = log_api.post(`/user/postUserCredentials`, {
         "name": name,
         "password": password

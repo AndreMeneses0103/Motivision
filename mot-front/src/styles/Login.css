@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Kavoon&display=swap');
 
+@font-face {
+    font-family: 'ttmilks';
+    src: url('../../public/fonts/font.ttf');
+}
+
 
 body{
     background-color: #F7F7F2;
@@ -29,7 +34,7 @@ body{
     margin: 25px 0px 30px;
     color: #fff;
     font-size: 40px;
-    font-family: 'Kavoon', cursive;
+    font-family: 'ttmilks', cursive;
 }
 
 

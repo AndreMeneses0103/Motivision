@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { accessToken, refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
+import {refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
 import "../styles/Head.css";
-import { getUser, verifyLog } from "../services/userFetch";
+import { getUser } from "../services/userFetch";
 
 function Head() {
     // const [userData, setUserData] = useState([]);
@@ -38,44 +39,6 @@ function Head() {
             await tryGetUser();
         })();
     },[])
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const userSelected = getTokenId(refreshToken());
-    //             const headers = {
-    //                 "Content-Type": "application/json",
-    //                 Authorization: `${accessToken()}`,
-    //                 "Refresh-Token": `${refreshToken()}`,
-    //             };
-    //             const resp = await axios.get(
-    //                 `http://192.168.15.146:8080/user/getIdInfo?user=${userSelected}`,
-    //                 { headers: headers }
-    //             );
-
-    //             let user_log = resp.data;
-
-    //             if (
-    //                 user_log.isValid &&
-    //                 "newAccessToken" in user_log.isValid
-    //             ) {
-    //                 refreshCookieValue(
-    //                     "accessToken",
-    //                     user_log.isValid.newAccessToken
-    //                 );
-    //                 await fetchData();
-    //             } else {
-    //                 setUserData(user_log.users);
-    //                 setLoading(false);
-    //             }
-    //         } catch (err) {
-    //             console.error(err);
-    //             setError(err);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, []);
 
     const loadUpload = () => {
         navigate("/upload");

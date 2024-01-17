@@ -58,7 +58,7 @@ function Login() {
 						className="btn_login"
 						onClick={tryLogin}
 						disabled={loading}
-					>{loading ? "Logging in..." : "Login"}</button>
+					>{loading ? "..." : "Login"}</button>
 					<a className="register" href="https://www.w3schools.com">
 						Don&#39;t have a Login? Click here to register
 					</a>
