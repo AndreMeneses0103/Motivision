@@ -79,6 +79,46 @@ export default class UserDAO {
         }
     }
 
+    public async getUsersByIds(ids: Array<string>): Promise<Object | null> {
+        console.log("ARRAY USERS:", ids);
+        const result = await this.collection.find(
+            { "user.user_settings.userid": { $in: ids } },
+            { projection: { _id: 0 } }
+        ).toArray();
+
+        if (result) {
+            console.log(result);
+            // const userData = result.user;
+            // console.log(userData);
+            // const rightPath = path.resolve(
+            //     __dirname,
+            //     "../../midia/photos/users"
+            // );
+            // const thumbPath = rightPath + "/" + userData.photo;
+            // const convert64 = this.encodeImageToBase64(thumbPath);
+
+            // const userSettings = new UserSetting(
+            //     userData.user_settings.userid,
+            //     userData.user_settings.name,
+            //     userData.user_settings.email,
+            //     userData.user_settings.password
+            // );
+            // const users = {
+            //     profile: userSettings.name,
+            //     id:userSettings.userid,
+            //     photo: convert64,
+            //     subscribers:userData.subscribers || 0,
+            //     subscribed:userData.subscribed || [],
+            //     videos: userData.videos || [],
+            //     watched_videos: userData.watched_videos
+            // }
+
+            return result;
+        } else {
+            return null;
+        }
+    }
+
     public async getUserByEmail(email: string): Promise<User[] | null> {
         const result = await this.collection.findOne(
             { "user.user_settings.email": email },

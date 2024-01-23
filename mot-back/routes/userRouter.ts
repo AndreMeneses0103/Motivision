@@ -64,6 +64,35 @@ export default class userRouter {
             
         });
 
+        this.route.get("/getIdsInfos", async(req: Request, res:Response)=>{
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            const userSelected = req.query.users as string;
+            const allUsers = userSelected.split(",");
+            console.log("ALL USERS:", allUsers);
+            if (access && refresh) {
+                const pm = new Permission();
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
+                if(isValid.auth === true){
+                    let response = {};
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        // console.log(isValid.value);
+                        const user = await this.data.getUsersByIds(allUsers);
+                        response = {user};
+                    }
+                    res.json(response);
+                }else{
+                    res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
+                }
+            }else{
+                return res
+                    .status(401)
+                    .json({ auth: false, message: "Tokens not found" });
+            }
+        })
+
         this.route.get("/getIdInfo", async (req: Request,res:Response)=>{
             const access = req.headers.authorization;
             const refresh = req.headers['refresh-token'];
