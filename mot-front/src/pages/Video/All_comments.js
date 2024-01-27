@@ -1,34 +1,39 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getUser, verifyLog } from "../../services/userFetch";
+import { getUsers, verifyLog } from "../../services/userFetch";
 import { getTokenId, refreshToken } from "../../scripts/getUser";
 import { getComments } from "../../services/commentFetch";
 
-function Comment({ id, src, channel, date, text }) {
-    return (
-    <div className="comment" id={id}>
-        <div className="c_profile">
-        <button className="c_prof_btn">
-            <img
-            id="userphoto"
-            itemID="userphoto"
-            src={src}
-            alt="Foto do Usuario"
-            />
-        </button>
-        <span id="channel_name_prof">{channel}</span>
-        <span id="data_comment">{date}</span>
-        </div>
-        <div id="comment_text">{text}</div>
-    </div>
-    );
-}
-
 function AllComments() {
+
+    const loadChannel = (id) => {
+        navigate(`/profile?user=${id}`);
+    };
+
+    function Comment({ id, src, channel, date, text }) {
+        return (
+        <div className="comment" id={id}>
+            <div className="c_profile">
+            <button className="c_prof_btn" onClick={() => loadChannel(id)}>
+                <img
+                id="userphoto"
+                itemID="userphoto"
+                src={`data:image/png;base64,${src}`}
+                alt="Foto do Usuario"
+                />
+            </button>
+            <span id="channel_name_prof">{channel}</span>
+            <span id="data_comment">{date}</span>
+            </div>
+            <div id="comment_text">{text}</div>
+        </div>
+        );
+    }
 
     const [commentData, setCommentData] = useState(null);
     const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loadingComment, setLoadingComment] = useState(true);
+    const [loadingUsers, setLoadingUsers] = useState(true);
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -40,7 +45,7 @@ function AllComments() {
         const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
             const data = await getComments(url);
-            if(data.video === null){
+            if(data === null){
                 setError("nonexistent")
             }else{
                 setError("");
@@ -49,16 +54,23 @@ function AllComments() {
         }
     }
 
-    //FAZER REQUISICAO NO ENDPOINT DE USERS COM IDS
-    async function getAllUserData(){
+    async function getAllUserData(data){
+        let allUsers = "";
+        for(let i = 0; i < data.allComments.length; i++){
+            allUsers += data.allComments[i].userid;
+            if(i < data.allComments.length - 1){
+                allUsers += ",";
+            }
+        }
         const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
-            const data = await getUser(commentData);
-            if(data.user === null){
+            console.log("ALL USERS:", allUsers);
+            const data = await getUsers(allUsers);
+            if(data === null){
                 setError("nonexistent");
             }else{
                 setError("");
-                setUserData(data.user)
+                setUserData(data);
             }
         }
     }
@@ -70,7 +82,18 @@ function AllComments() {
             console.error(error);
             setError(error);
         }finally{
-            setLoading(false);
+            setLoadingComment(false);
+        }
+    }
+
+    async function tryGetAllUsersData(){
+        try{
+            await getAllUserData(commentData);
+        }catch(error){
+            console.error(error);
+            setError(error);
+        }finally{
+            setLoadingUsers(false);
         }
     }
 
@@ -80,24 +103,39 @@ function AllComments() {
         })();
     },[]);
 
-    //ADICIONAR COMENTARIOS DA REQUISICAO NO MAP
-    if(commentData !== null){
-        console.log(commentData.allComments);
-    }
+    useEffect(()=>{
+        (async()=>{
+            if(commentData !== null){
+                await tryGetAllUsersData();
+            }
+        })()
+    }, [commentData]);
 
-    if(commentData === null){
+    if(loadingComment || loadingUsers){
         return (
             <div>
                 Loading...
             </div>
         )
     }else{
+        let allData = {...commentData, ...userData};
+        console.log(allData);
+        console.log(allData.user[0]._usersettings);
         return (
             <div>
-                {(commentData.allComments).map(com => (
-
-                    <Comment key={com.userid} id={com.userid} src={"test"} channel={"hello"} date={com.date} text={com.text}/>
-                ))}
+                {allData.allComments.map(comment =>{
+                    const user = allData.user.find(u => u._usersettings._userid === comment.userid);
+                    return (
+                        <Comment
+                            key={comment.id}
+                            id={comment.userid}
+                            src={user._userphoto}
+                            channel={user._nickname}
+                            date={comment.date}
+                            text={comment.text}
+                        />
+                    );
+                })}
             </div>
         )
     }

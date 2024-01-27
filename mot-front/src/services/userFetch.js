@@ -6,6 +6,11 @@ async function getUser(userId) {
     return req.data;
 }
 
+async function getUsers(usersIds){
+    const req = await api.get(`/user/getIdsInfos?users=${usersIds}`);
+    return req.data;
+}
+
 async function verifyLog(userId){
     let req = await api.get(`/user/getIdInfo?user=${userId}`);
     if(req.data.isValid && "newAccessToken" in req.data.isValid){
@@ -27,6 +32,7 @@ function setLogin(name,password){
 
 export {
     getUser,
+    getUsers,
     setLogin,
     verifyLog
 }
