@@ -12,12 +12,10 @@ export default class CommentDAO{
 
     //CORRIGIR OBJECT PARA COMMENT[]
     public async getAllComments(id:string): Promise<Object | null>{
-        console.log("ID!!!!!!!: ", id);
         const result = await this.collection.findOne(
             { "video_id": id },
             { projection: { _id: 0 } }
         );  
-        console.log("RESULTADO:", result);
 
         if(result && result.comments){
             return result.comments;

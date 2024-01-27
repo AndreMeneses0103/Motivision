@@ -7,6 +7,7 @@ export default class User {
     private _subscribed: string[];
     private _subscribers: number;
     private _userphoto: string;
+    private _nickname: string;
 
     constructor(
         usersettings: UserSetting,
@@ -14,7 +15,8 @@ export default class User {
         watched_videos: string[],
         subscribed: string[],
         subscribers: number,
-        userphoto: string
+        userphoto: string,
+        nickname: string
     ) {
         this._usersettings = usersettings;
         this._videos = videos;
@@ -22,6 +24,7 @@ export default class User {
         this._subscribed = subscribed;
         this._subscribers = subscribers;
         this._userphoto = userphoto;
+        this._nickname = nickname;
     }
 
     get usersettings(): UserSetting {
@@ -48,6 +51,10 @@ export default class User {
         return this._userphoto;
     }
 
+    get nickname():string{
+        return this._nickname;
+    }
+
     set usersettings(value: UserSetting) {
         this._usersettings = value;
     }
@@ -71,5 +78,9 @@ export default class User {
 
     set userphoto(value: string) {
         this._userphoto = value;
+    }
+
+    set nickname(value: string){
+        this._nickname = value;
     }
 }

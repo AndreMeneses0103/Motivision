@@ -69,7 +69,6 @@ export default class userRouter {
             const refresh = req.headers['refresh-token'];
             const userSelected = req.query.users as string;
             const allUsers = userSelected.split(",");
-            console.log("ALL USERS:", allUsers);
             if (access && refresh) {
                 const pm = new Permission();
                 const isValid = await pm.getPermission(`${access}, ${refresh}`);
@@ -122,7 +121,6 @@ export default class userRouter {
 
         this.route.get("/getNameInfo", async (req: Request,res:Response)=>{
             const nome = req.query.name as string;
-            console.log(nome);
             const users = await this.data.getUserByName(nome);
             res.json(users);
         });

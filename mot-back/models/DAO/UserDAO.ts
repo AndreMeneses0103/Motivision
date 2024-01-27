@@ -79,41 +79,42 @@ export default class UserDAO {
         }
     }
 
-    public async getUsersByIds(ids: Array<string>): Promise<Object | null> {
-        console.log("ARRAY USERS:", ids);
+    public async getUsersByIds(ids: Array<string>): Promise<User[] | null> {
         const result = await this.collection.find(
             { "user.user_settings.userid": { $in: ids } },
             { projection: { _id: 0 } }
         ).toArray();
 
         if (result) {
-            console.log(result);
-            // const userData = result.user;
-            // console.log(userData);
-            // const rightPath = path.resolve(
-            //     __dirname,
-            //     "../../midia/photos/users"
-            // );
-            // const thumbPath = rightPath + "/" + userData.photo;
-            // const convert64 = this.encodeImageToBase64(thumbPath);
+            const userData = result.map(doc => doc.user);
+            const rightPath = path.resolve(
+                __dirname,
+                "../../midia/photos/users"
+            );
+            // console.log(userData.map(doc => doc.photo));
+            const thumbPaths = userData.map(user => path.join(rightPath, user.photo));
+            const convert64Array = thumbPaths.map(thumbPath => this.encodeImageToBase64(thumbPath));
 
-            // const userSettings = new UserSetting(
-            //     userData.user_settings.userid,
-            //     userData.user_settings.name,
-            //     userData.user_settings.email,
-            //     userData.user_settings.password
-            // );
-            // const users = {
-            //     profile: userSettings.name,
-            //     id:userSettings.userid,
-            //     photo: convert64,
-            //     subscribers:userData.subscribers || 0,
-            //     subscribed:userData.subscribed || [],
-            //     videos: userData.videos || [],
-            //     watched_videos: userData.watched_videos
-            // }
+            const users: User[] = userData.map((user, index) => {
+                const userSettings = new UserSetting(
+                    user.user_settings.userid,
+                    user.user_settings.name,
+                    user.user_settings.email
+                );
+                const newUser = new User(
+                    userSettings,
+                    user.videos || [],
+                    user.watched_videos || [],
+                    user.subscribed || [],
+                    user.subscribers || 0,
+                    convert64Array[index],
+                    user.nickname
+                );
+            
+                return newUser;
+            });
 
-            return result;
+            return users;
         } else {
             return null;
         }
