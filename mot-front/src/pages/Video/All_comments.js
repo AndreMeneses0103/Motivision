@@ -30,6 +30,14 @@ function AllComments() {
         );
     }
 
+    function NoComments() {
+        return (
+        <div className="comment">
+            <div className="no_comment">No comments yet. Be the first to share your thoughts!</div>
+        </div>
+        );
+    }
+
     const [commentData, setCommentData] = useState(null);
     const [userData, setUserData] = useState(null);
     const [loadingComment, setLoadingComment] = useState(true);
@@ -118,26 +126,32 @@ function AllComments() {
             </div>
         )
     }else{
-        let allData = {...commentData, ...userData};
-        console.log(allData);
-        console.log(allData.user[0]._usersettings);
-        return (
-            <div>
-                {allData.allComments.map(comment =>{
-                    const user = allData.user.find(u => u._usersettings._userid === comment.userid);
-                    return (
-                        <Comment
-                            key={comment.id}
-                            id={comment.userid}
-                            src={user._userphoto}
-                            channel={user._nickname}
-                            date={comment.date}
-                            text={comment.text}
-                        />
-                    );
-                })}
-            </div>
-        )
+        if(commentData.allComments === null){
+            return(
+                <NoComments/>
+            )
+        }else{
+            let allData = {...commentData, ...userData};
+            console.log(allData);
+            console.log(allData.user[0]._usersettings);
+            return (
+                <div>
+                    {allData.allComments.map(comment =>{
+                        const user = allData.user.find(u => u._usersettings._userid === comment.userid);
+                        return (
+                            <Comment
+                                key={comment.id}
+                                id={comment.userid}
+                                src={user._userphoto}
+                                channel={user._nickname}
+                                date={comment.date}
+                                text={comment.text}
+                            />
+                        );
+                    })}
+                </div>
+            )
+        }
     }
 }
 

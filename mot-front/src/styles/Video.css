@@ -262,3 +262,8 @@ a{
     align-items: center;
     margin-right: 30px;
 }
+
+.no_comment{
+    display: flex;
+    justify-content: center;
+}

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 // import axios from "axios";
 import { setLogin } from "../../services/userFetch";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
 
@@ -16,9 +18,15 @@ function Login() {
 		const req = await setLogin(name,password);
 		const data = req.data;
 		if(data.success === true){
+			successToast();
 			document.cookie = `accessToken=${data.accessToken}; path=/`;
 			document.cookie = `refreshToken=${data.refreshToken}; path=/`;
-			navigate("/main");
+			setTimeout(()=>{
+				navigate("/main");
+			}, 2000);
+			
+		}else{
+			errorToast();
 		}
 	}
 
@@ -30,6 +38,18 @@ function Login() {
 		}finally{
 			setLoading(false);
 		}
+	}
+
+	const errorToast = () =>{
+		toast.error("Invalid username or password. Please try again.",{
+			autoClose: 5000
+		});
+	}
+
+	const successToast = () =>{
+		toast.success("Login successful. Welcome back!",{
+			autoClose: 1500
+		});
 	}
 	
 	return (
@@ -59,6 +79,7 @@ function Login() {
 						onClick={tryLogin}
 						disabled={loading}
 					>{loading ? "..." : "Login"}</button>
+					<ToastContainer/>
 					<a className="register" href="https://www.w3schools.com">
 						Don&#39;t have a Login? Click here to register
 					</a>

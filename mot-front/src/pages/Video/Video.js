@@ -223,7 +223,7 @@ function Video() {
             return <h1>Erro de autenticação, realize o login novamente.</h1>;
         }
         if(error === "nonexistent"){
-            return renderError("Usuario nao encontrado.");
+            return renderError("User not found.");
         }
     }else{
         if(videoSource === null || videoData === null || userData === null){
@@ -231,6 +231,7 @@ function Video() {
                 return renderLoading();
             }
             else{
+                //ARRUMAR ERRO APARECE NO SUCESSO
                 return renderError("Um erro ocorreu no sistema, tente novamente mais tarde.");
             }
         }

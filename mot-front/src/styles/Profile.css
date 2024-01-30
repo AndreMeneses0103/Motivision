@@ -87,3 +87,8 @@
 .user_videos{
 
 }
+
+.no_videos{
+    margin: 18vh auto;
+    font-size: larger;
+}

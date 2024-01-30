@@ -32,6 +32,24 @@ function renderVideoLoading(user){
     );
 }
 
+function renderNoVideos(user){
+    const numVids = user.videos ? user.videos.length : 0;
+    return(
+        <div className="profile_main">
+            <div className="username">
+                {user.profile}
+            </div>
+                <ProfilePhoto imageSrc={`data:image/png;base64,${user.photo}`}/>
+            <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
+            <div className="user_videos">
+            <div className="Profile_Videos">
+                <div className="no_videos">This user does not have any videos yet.</div>
+            </div>
+            </div>
+        </div>
+    );
+}
+
 
 function renderAllLoading(){
     return(
@@ -156,7 +174,7 @@ function Profile(){
             return renderError("Erro de autenticação, realize o login novamente.");
         }
         if(error === "nonexistent"){
-            return renderError("Usuario nao encontrado.");
+            return renderError("User not found.");
         }
     }else if(user === null && video === null){
         if(photoLoading && videoLoading){
@@ -165,10 +183,12 @@ function Profile(){
             return renderError("Um erro ocorreu no sistema, tente novamente mais tarde.");
         }
     }else if(video === null && user !== null){
-        if(photoLoading){
+        if(photoLoading && videoLoading){
             return renderAllLoading();
-        }else{
+        }else if(!photoLoading && videoLoading){
             return renderVideoLoading(user);
+        }else{
+            return renderNoVideos(user);
         }
     }else{
         return renderAllProfile(user, video);
