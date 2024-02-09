@@ -41,7 +41,7 @@ export default class UserDAO {
         }
     }
 
-    public async getUserById(id: string): Promise<Object | null> {
+    public async getUserById(id: string): Promise<User | null> {
         const result = await this.collection.findOne(
             { "user.user_settings.userid": id },
             { projection: { _id: 0 } }
@@ -49,7 +49,6 @@ export default class UserDAO {
 
         if (result && result.user) {
             const userData = result.user;
-            console.log(userData);
             const rightPath = path.resolve(
                 __dirname,
                 "../../midia/photos/users"
@@ -60,18 +59,17 @@ export default class UserDAO {
             const userSettings = new UserSetting(
                 userData.user_settings.userid,
                 userData.user_settings.name,
-                userData.user_settings.email,
-                userData.user_settings.password
+                userData.user_settings.email
             );
-            const users = {
-                profile: userSettings.name,
-                id:userSettings.userid,
-                photo: convert64,
-                subscribers:userData.subscribers || 0,
-                subscribed:userData.subscribed || [],
-                videos: userData.videos || [],
-                watched_videos: userData.watched_videos
-            }
+            const users = new User(
+                userSettings,
+                userData.videos || null,
+                userData.watched_videos,
+                userData.subscribed || null,
+                userData.subscribers || 0,
+                userData.nickname,
+                convert64
+            )
 
             return users;
         } else {
@@ -107,8 +105,8 @@ export default class UserDAO {
                     user.watched_videos || [],
                     user.subscribed || [],
                     user.subscribers || 0,
-                    convert64Array[index],
-                    user.nickname
+                    user.nickname,
+                    convert64Array[index]
                 );
             
                 return newUser;

@@ -72,7 +72,6 @@ export default class videoRouter {
             const access = req.headers.authorization;
             const refresh = req.headers['refresh-token'];
             const video = req.query.video as string;
-            console.log(video);
             if (access && refresh) {
                 const pm = new Permission();
                 const isValid = await pm.getPermission(`${access}, ${refresh}`);

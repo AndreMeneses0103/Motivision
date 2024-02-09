@@ -1,13 +1,13 @@
 import UserSetting from "./UserSetting";
 
 export default class User {
-    private _usersettings: UserSetting;
-    private _videos: string[];
-    private _watched_videos: string[];
-    private _subscribed: string[];
-    private _subscribers: number;
-    private _userphoto: string;
-    private _nickname: string;
+    private usersettings: UserSetting;
+    private videos: string[];
+    private watched_videos: string[];
+    private subscribed: string[];
+    private subscribers: number;
+    private userphoto?: string;
+    private nickname: string;
 
     constructor(
         usersettings: UserSetting,
@@ -15,72 +15,72 @@ export default class User {
         watched_videos: string[],
         subscribed: string[],
         subscribers: number,
-        userphoto: string,
-        nickname: string
+        nickname: string,
+        userphoto?: string
     ) {
-        this._usersettings = usersettings;
-        this._videos = videos;
-        this._watched_videos = watched_videos;
-        this._subscribed = subscribed;
-        this._subscribers = subscribers;
-        this._userphoto = userphoto;
-        this._nickname = nickname;
+        this.usersettings = usersettings;
+        this.videos = videos;
+        this.watched_videos = watched_videos;
+        this.subscribed = subscribed;
+        this.subscribers = subscribers;
+        this.nickname = nickname;
+        this.userphoto = userphoto;
     }
 
-    get usersettings(): UserSetting {
-        return this._usersettings;
+    get getUserSettings(): UserSetting {
+        return this.usersettings;
     }
 
-    get videos(): string[] {
-        return this._videos;
+    get getVideos(): string[] {
+        return this.videos;
     }
 
-    get watched_videos(): string[] {
-        return this._watched_videos;
+    get getWatched_videos(): string[] {
+        return this.watched_videos;
     }
 
-    get subscribed(): string[] {
-        return this._subscribed;
+    get getSubscribed(): string[] {
+        return this.subscribed;
     }
 
-    get subscribers(): number {
-        return this._subscribers;
+    get getSubscribers(): number {
+        return this.subscribers;
     }
 
-    get userphoto(): string {
-        return this._userphoto;
+    get getUserphoto(): string {
+        return this.userphoto !== undefined && this.userphoto !== null ? this.userphoto : "";
     }
 
-    get nickname():string{
-        return this._nickname;
+    get getNickname():string{
+        return this.nickname;
     }
 
-    set usersettings(value: UserSetting) {
-        this._usersettings = value;
+    set getUserSettings(value: UserSetting) {
+        this.usersettings = value;
     }
 
-    set videos(value: string[]) {
-        this._videos = value;
+    set getVideos(value: string[]) {
+        this.videos = value;
     }
 
-    set watched_videos(value: string[]) {
-        this._watched_videos = value;
+    set getWatched_videos(value: string[]) {
+        this.watched_videos = value;
     }
 
-    set subscribed(value: string[]) {
-        this._subscribed = value;
+    set getSubscribed(value: string[]) {
+        this.subscribed = value;
     }
 
-    set subscribers(value: number) {
+    set getSubscribers(value: number) {
         // Validando que subscribers não seja negativo
-        this._subscribers = Math.max(value, 0);
+        this.subscribers = Math.max(value, 0);
     }
 
-    set userphoto(value: string) {
-        this._userphoto = value;
+    set getUserphoto(value: string) {
+        this.userphoto = value;
     }
 
-    set nickname(value: string){
-        this._nickname = value;
+    set getNickname(value: string){
+        this.nickname = value;
     }
 }
