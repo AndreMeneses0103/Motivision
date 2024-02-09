@@ -39,7 +39,7 @@ function Video() {
     
     
     const loadChannel = () => {
-        navigate(`/profile?user=${userData.id}`);
+        navigate(`/profile?user=${userData.usersettings._userid}`);
     };
     
     function renderVideo(videoData,userData,videoSource){
@@ -53,11 +53,11 @@ function Video() {
                                 <img
                                     id="userphoto"
                                     itemID="userphoto"
-                                    src={`data:image/png;base64,${userData.photo}`}
+                                    src={`data:image/png;base64,${userData.userphoto}`}
                                     alt="Foto do Usuario"
                                 />
                             </button>
-                            <span id="channel_name">{userData.profile}</span>
+                            <span id="channel_name">{userData.nickname}</span>
                         </div>
                         <div className="video_subs">
                             <button className="subs_btn">

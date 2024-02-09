@@ -72,7 +72,7 @@ function Head() {
                             <img
                                 id="userphoto"
                                 itemID="userphoto"
-                                src={`data:image/png;base64,${user.photo}`}
+                                src={`data:image/png;base64,${user.userphoto}`}
                                 alt="User Profile"
                             />
                         )}

@@ -7,7 +7,6 @@ function Upload() {
 
 	return (
 		<div className="uploadpage">
-			<Head />
 			<div className="up_text">Upload a Video</div>
 			<div className="up_itens">
 				<div className="up_inputs">

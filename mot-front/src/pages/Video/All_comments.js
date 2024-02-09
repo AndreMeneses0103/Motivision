@@ -133,17 +133,17 @@ function AllComments() {
         }else{
             let allData = {...commentData, ...userData};
             console.log(allData);
-            console.log(allData.user[0]._usersettings);
+            console.log(allData.user[0].usersettings);
             return (
                 <div>
                     {allData.allComments.map(comment =>{
-                        const user = allData.user.find(u => u._usersettings._userid === comment.userid);
+                        const user = allData.user.find(u => u.usersettings._userid === comment.userid);
                         return (
                             <Comment
                                 key={comment.id}
-                                id={comment.userid}
-                                src={user._userphoto}
-                                channel={user._nickname}
+                                id={comment._userid}
+                                src={user.userphoto}
+                                channel={user.nickname}
                                 date={comment.date}
                                 text={comment.text}
                             />
