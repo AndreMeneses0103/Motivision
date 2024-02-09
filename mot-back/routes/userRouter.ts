@@ -19,7 +19,6 @@ export default class userRouter {
 
         this.route.post("/postUserCredentials", this.controller.postUserByCredentials.bind(this.controller));
 
-        //PASSAR O RESTO
         this.route.get("/getEmailInfo", this.controller.getUserByEmail.bind(this.controller));
 
         this.route.get("/getIdsInfos", this.controller.getUsersByIds.bind(this.controller));

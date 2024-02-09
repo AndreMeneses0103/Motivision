@@ -24,7 +24,7 @@ class UserController{
                         let allUsers = await this.userDao.getAllUsers();
                         response = {allUsers};
                     }
-                    if(!response){
+                    if(response){
                         res.status(404).json("No users found");
                     }else{
                         res.status(200).json(response);
@@ -48,7 +48,7 @@ class UserController{
         try{
             const {name, password} = req.body;
             const user = await this.userDao.postUserByCredentials(name,password);
-            if(user){
+            if(!user){
                 res.status(200).json(user);
             }else{
                 res.status(404).json({message:"User not found"})
@@ -69,7 +69,7 @@ class UserController{
                 if(isValid.auth === true){
                     const email = req.query.email as string;
                     const users = await this.userDao.getUserByEmail(email);
-                    if(users){
+                    if(!users){
                         res.status(200).json(users);
                     }else{
                         res.status(404).json({message: "User not found"});
@@ -191,8 +191,6 @@ class UserController{
             res.status(500).json({error:"An error occurred in server."})
         }
     }
-
-    //CONTINUAR PASSAR CONTROLLERS DO ROUTES PARA CA
 }
 
 export{
