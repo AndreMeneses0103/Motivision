@@ -6,10 +6,13 @@ import { setLogin } from "../../services/userFetch";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function Login() {
+function Register() {
 
 	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [photo, setPhoto] = useState('');
+	const [showNext, setShowNext] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
@@ -52,25 +55,35 @@ function Login() {
 		});
 	}
 	
+	//
 	return (
-		<div className="loginpage">
+		<div className="registerpage">
 			<div className="center">
 				<div className="card">
 					<div className="login_title">Motivision</div>
 					<div className="input_title">Username</div>
 					<div className="user_div">
 						<input 
-						className="log_input" 
-						id="user_input" 
+						className="reg_input" 
+						id="name_r_input" 
 						onChange={(e)=>setName(e.target.value)}
 					/>
+					</div>
+					<div className="input_title">E-Mail</div>
+					<div className="email_div">
+						<input 
+							type="text" 
+							className="reg_input" 
+							id="email_r_input" 
+							onChange={(e)=>setPassword(e.target.value)}
+						/>
 					</div>
 					<div className="input_title">Password</div>
 					<div className="pass_div">
 						<input 
 							type="password" 
-							className="log_input" 
-							id="pass_input" 
+							className="reg_input" 
+							id="pass_r_input" 
 							onChange={(e)=>setPassword(e.target.value)}
 						/>
 					</div>
@@ -78,15 +91,12 @@ function Login() {
 						className="btn_login"
 						onClick={tryLogin}
 						disabled={loading}
-					>{loading ? "..." : "Login"}</button>
+					>Next</button>
 					<ToastContainer/>
-					<a className="register" href="https://www.w3schools.com">
-						Don&#39;t have a Login? Click here to register
-					</a>
 				</div>
 			</div>
 		</div>
 	);
 }
 
-export default Login;
+export default Register;

@@ -7,6 +7,7 @@ import Upload from "./pages/Upload/Upload";
 import Main from "./pages/Main/Main";
 import Profile from "./pages/Profile/Profile";
 import Head from "./components/Head";
+import Register from "./pages/Register/Register";
 
 function Rotas() {
     return (
@@ -37,6 +38,7 @@ function Rotas() {
                 <Profile />
             </>
             }/>
+            <Route path="/register" element={<Register />} />
         </Routes>
 		);
 }
