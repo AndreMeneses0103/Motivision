@@ -48,7 +48,7 @@ class UserController{
         try{
             const {name, password} = req.body;
             const user = await this.userDao.postUserByCredentials(name,password);
-            if(!user){
+            if(user){
                 res.status(200).json(user);
             }else{
                 res.status(404).json({message:"User not found"})

@@ -7,11 +7,9 @@ import { UserController } from "../controllers/UserController";
 export default class userRouter {
     private route: Router;
     private controller: UserController;
-    private data: UserDAO;
     constructor(database: Database) {
         this.route = express.Router();
         this.controller = new UserController(new UserDAO(database));
-        this.data = new UserDAO(database);
         this.configRouter();
     }
     private configRouter(): void {

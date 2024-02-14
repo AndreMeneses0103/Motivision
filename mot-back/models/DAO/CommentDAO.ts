@@ -11,14 +11,24 @@ export default class CommentDAO{
     }
 
     //CORRIGIR OBJECT PARA COMMENT[]
-    public async getAllComments(id:string): Promise<Object | null>{
+    public async getAllComments(id:string): Promise<Comments[] | null>{
         const result = await this.collection.findOne(
             { "video_id": id },
             { projection: { _id: 0 } }
         );  
 
         if(result && result.comments){
-            return result.comments;
+            const commentData = result.comments;
+            const allComments: Comments[] = commentData.map((cmt: any)=>{
+                const newComment = new Comments(
+                    cmt.id,
+                    cmt.userid,
+                    cmt.date,
+                    cmt.text
+                )
+                return newComment;
+            })
+            return allComments;
         }else{
             return null;
         }

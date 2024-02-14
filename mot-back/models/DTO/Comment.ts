@@ -1,59 +1,60 @@
 export default class Comments {
-    private _id: string;
-    private _userid: string;
+    private id: string;
 
-    private _videoid: string;
+    private userid: string;
 
-    private _date: string;
+    private videoid?: string;
 
-    private _text:string;
+    private date: string;
+
+    private text:string;
 
     constructor(
         id: string, 
-        userid: string, 
-        videoid: string, 
+        userid: string,
         date: string, 
-        text: string
+        text: string,
+        videoid?: string
     ) {
-        this._id = id;
-        this._userid = userid;
-        this._videoid = videoid;
-        this._date = date;
-        this._text = text;
+        this.id = id;
+        this.userid = userid;
+        this.date = date;
+        this.text = text;
+        this.videoid = videoid;
     }    
 
-    public get id(): string {
-        return this._id;
+    public get getId(): string {
+        return this.id;
     }
-    public set id(value: string) {
-        this._id = value;
+    public set setId(value: string) {
+        this.id = value;
     }
 
-    public get userid(): string {
-        return this._userid;
+    public get getUserid(): string {
+        return this.userid;
     }
-    public set userid(value: string) {
-        this._userid = value;
+    public set setUserid(value: string) {
+        this.userid = value;
     }
     
-    public get videoid(): string {
-        return this._videoid;
+    public get getVideoid(): string {
+        return this.videoid !== undefined && this.videoid !== null ? this.videoid : "";
     }
-    public set videoid(value: string) {
-        this._videoid = value;
-    }
-
-    public get date(): string {
-        return this._date;
-    }
-    public set date(value: string) {
-        this._date = value;
+    public set setVideoid(value: string) {
+        this.videoid = value;
     }
 
-    public get text():string{
-        return this._text;
+    public get getDate(): string {
+        return this.date;
     }
-    public set text(value: string){
-        this._text = value;
+    public set setDate(value: string) {
+        this.date = value;
+    }
+
+    public get getText():string{
+        return this.text;
+    }
+    public set setText(value: string){
+        this.text = value;
     }
 }
