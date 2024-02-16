@@ -14,12 +14,33 @@ function Register() {
 	const [password, setPassword] = useState('');
 	const [photo, setPhoto] = useState('');
 	const [showNext, setShowNext] = useState(false);
+	const [isHovered, setIsHovered] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
 	function nextPage(){
-		setShowNext(true);
-		toast.info(`NAME: ${name}, EMAIL: ${email}, PASSWORD: ${password}`);
+		const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+		const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_\-])[A-Za-z\d@$!%*?&_\-]{8,}$/;
+		
+		// Pelo menos uma letra minúscula ((?=.*[a-z])).
+		// Pelo menos uma letra maiúscula ((?=.*[A-Z])).
+		// Pelo menos um dígito ((?=.*\d)).
+		// Pelo menos um caractere especial entre @$!%*?& (?=.*[@$!%*?&_\-]).
+		// Um comprimento mínimo de 8 caracteres ({8,}).
+		
+		if(name === "" || email === "" || password === ""){
+			errorToast("Please complete all the fields!");
+		}else if(!(regexEmail.test(email))){
+			errorToast("Please insert a valid E-mail!");
+		}else if(!(regexPass.test(password))){
+			errorToast("Please insert a strong password!");
+		}else{
+			setShowNext(true);
+		}
+	}
+
+	function returnPage(){
+		setShowNext(false);
 	}
 
 	async function setUserLogin(){
@@ -49,9 +70,9 @@ function Register() {
 		}
 	}
 
-	const errorToast = () =>{
-		toast.error("Invalid username or password. Please try again.",{
-			autoClose: 5000
+	const errorToast = (message) =>{
+		toast.error(message,{
+			autoClose: 2000
 		});
 	}
 
@@ -62,26 +83,32 @@ function Register() {
 	}
 	
 	//
-	console.log(`showNext: ${showNext}`)
+
 	return (
 		<div className="registerpage">
 			<div className="center">
 			{showNext ? (
 				<div className="card_reg">
-					<button className="reg_back">
-						X
+					<div className="reg_corner">
+					<button className="reg_back" onClick={returnPage}>
+						←
 					</button>
+					</div>
 					<input 
 						className="reg_channel" 
 						id="channel_r_input" 
+						placeholder="Channel Name"
 						onChange={(e)=>setChannel(e.target.value)}
 					/>
 					<div className="photo_space">
 						<button
 							className="photo_button"
 							id="photo_button"
+							onMouseEnter={() => setIsHovered(true)}
+							onMouseLeave={() => setIsHovered(false)}
 						>
-							<img className="button_image" src="https://www.streetfighter.com/6/assets/images/character/zangief/zangief.png"></img>
+							<img className="button_image" src="../icons/default_user.png"></img>
+							<div className="image_placeholder">Click to change</div>
 						</button>
 					</div>
 					<button
@@ -89,46 +116,57 @@ function Register() {
 						onClick={tryLogin}
 						disabled={loading}
 					>Register</button>
-					<ToastContainer/>
 				</div>
 			) : (
 				<div className="card_reg">
 					<div className="register_title">Motivision</div>
-					<div className="input_title">Username</div>
 					<div className="user_div">
 						<input 
-						className="reg_input" 
-						id="name_r_input" 
-						onChange={(e)=>setName(e.target.value)}
-					/>
+							className="reg_input" 
+							id="name_r_input"
+							placeholder="Username"
+							value={name}
+							onChange={(e)=>setName(e.target.value)}
+						/>
 					</div>
-					<div className="input_title">E-Mail</div>
 					<div className="email_div">
 						<input 
 							type="text" 
 							className="reg_input" 
-							id="email_r_input" 
+							id="email_r_input"
+							placeholder="E-Mail"
+							value={email}
 							onChange={(e)=>setEmail(e.target.value)}
 						/>
 					</div>
-					<div className="input_title">Password</div>
 					<div className="pass_div">
 						<input 
 							type="password" 
 							className="reg_input" 
 							id="pass_r_input" 
+							placeholder="Password"
+							value={password}
 							onChange={(e)=>setPassword(e.target.value)}
 						/>
+						<div className="pass_rec">
+						Your password needs at least:
+						<ul className="all_itens">
+							<li id="item1">One lowercase letter</li>
+							<li id="item2">One uppercase letter</li>
+							<li id="item4">One special character</li>
+							<li id="item5">Minimum length of 8 characters</li>
+						</ul>
+					</div>
 					</div>
 					<button
 						className="btn_next"
 						onClick={nextPage}
 					>Next</button>
-					<ToastContainer/>
+					
 				</div>
 			)}
-				
 			</div>
+			<ToastContainer/>
 		</div>
 	);
 }

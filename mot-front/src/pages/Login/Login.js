@@ -80,7 +80,7 @@ function Login() {
 						disabled={loading}
 					>{loading ? "..." : "Login"}</button>
 					<ToastContainer/>
-					<a className="register" href="https://www.w3schools.com">
+					<a className="register" href="/register">
 						Don&#39;t have a Login? Click here to register
 					</a>
 				</div>
