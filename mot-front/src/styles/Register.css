@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Kavoon&display=swap');
+
+@font-face {
+    font-family: 'ttmilks';
+    src: url('../../public/fonts/font.ttf');
+}
+
+
+body{
+    background-color: #F7F7F2;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.card_reg{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #899878;
+    margin: auto;
+    border-radius: 50px;
+}
+
+.center{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.register_title{
+    margin: 25px 6vh 30px 6vh;
+    color: #fff;
+    font-size: 40px;
+    font-family: 'ttmilks', cursive;
+}
+
+
+/* .user_div{
+
+} */
+
+.reg_input{
+    background-color: #D9D9D9;
+    border-width: 1px;
+    border-radius: 5px;
+    margin: 0px 0px 40px 0px;
+    padding: 8px;
+    outline: none;
+}
+
+/* .pass_div{
+
+} */
+
+.btn_register, .btn_next{
+    width: 120px;
+    height: 34px;
+    border-radius: 20px;
+    border-style: none;
+    background-color: #222725;
+    color: #fff;
+    font-size: 25px;
+    cursor: pointer;
+    margin: 20px;
+}
+
+.input_title{
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.register{
+    margin: 30px;
+}
+
+.card_reg{
+
+}
+
+
+.reg_channel{
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 2px solid #000;
+    outline: none;
+    margin: 6vh;
+}
+
+.reg_channel:focus{
+    border-bottom: 2px solid #00f;
+}
+
+.photo_button{
+    width: 25vh;
+    height: 25vh;
+    border-radius: 50%;
+    border: 1px solid black;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.button_image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+#channel_r_input{
+
+}

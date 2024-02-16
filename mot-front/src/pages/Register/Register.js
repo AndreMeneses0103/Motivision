@@ -1,4 +1,4 @@
-import "../../styles/Login.css";
+import "../../styles/Register.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 // import axios from "axios";
@@ -9,12 +9,18 @@ import "react-toastify/dist/ReactToastify.css";
 function Register() {
 
 	const [name, setName] = useState('');
+	const [channel, setChannel] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [photo, setPhoto] = useState('');
 	const [showNext, setShowNext] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
+
+	function nextPage(){
+		setShowNext(true);
+		toast.info(`NAME: ${name}, EMAIL: ${email}, PASSWORD: ${password}`);
+	}
 
 	async function setUserLogin(){
 		setLoading(true);
@@ -56,11 +62,38 @@ function Register() {
 	}
 	
 	//
+	console.log(`showNext: ${showNext}`)
 	return (
 		<div className="registerpage">
 			<div className="center">
-				<div className="card">
-					<div className="login_title">Motivision</div>
+			{showNext ? (
+				<div className="card_reg">
+					<button className="reg_back">
+						X
+					</button>
+					<input 
+						className="reg_channel" 
+						id="channel_r_input" 
+						onChange={(e)=>setChannel(e.target.value)}
+					/>
+					<div className="photo_space">
+						<button
+							className="photo_button"
+							id="photo_button"
+						>
+							<img className="button_image" src="https://www.streetfighter.com/6/assets/images/character/zangief/zangief.png"></img>
+						</button>
+					</div>
+					<button
+						className="btn_next"
+						onClick={tryLogin}
+						disabled={loading}
+					>Register</button>
+					<ToastContainer/>
+				</div>
+			) : (
+				<div className="card_reg">
+					<div className="register_title">Motivision</div>
 					<div className="input_title">Username</div>
 					<div className="user_div">
 						<input 
@@ -75,7 +108,7 @@ function Register() {
 							type="text" 
 							className="reg_input" 
 							id="email_r_input" 
-							onChange={(e)=>setPassword(e.target.value)}
+							onChange={(e)=>setEmail(e.target.value)}
 						/>
 					</div>
 					<div className="input_title">Password</div>
@@ -88,12 +121,13 @@ function Register() {
 						/>
 					</div>
 					<button
-						className="btn_login"
-						onClick={tryLogin}
-						disabled={loading}
+						className="btn_next"
+						onClick={nextPage}
 					>Next</button>
 					<ToastContainer/>
 				</div>
+			)}
+				
 			</div>
 		</div>
 	);
