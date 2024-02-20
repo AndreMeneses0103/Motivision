@@ -151,6 +151,10 @@ body{
     display: contents;
 }
 
+.login_page{
+    margin: 30px;
+}
+
 .reg_back{
     background-color: transparent;
     border: none;
@@ -182,7 +186,7 @@ body{
 }
 
 ul {
-    list-style: none; /* Remover a bolinha padrão */
+    list-style: none;
 }
 
 #item1::before, #item2::before, #item3::before, #item4::before, #item5::before {

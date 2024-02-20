@@ -1,6 +1,6 @@
 import "../../styles/Register.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 // import axios from "axios";
 import { setLogin } from "../../services/userFetch";
 import { toast, ToastContainer } from "react-toastify";
@@ -18,10 +18,11 @@ function Register() {
 		item3: false,
 		item4: false
 	})
-	const [photo, setPhoto] = useState('');
+	const [photo, setPhoto] = useState("../icons/default_user.png");
 	const [showNext, setShowNext] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const photoInput = useRef(null);
 	const navigate = useNavigate();
 
 	function nextPage(){
@@ -71,12 +72,25 @@ function Register() {
 		}else{
 			updatePassCase.item4 = false;
 		}
-
 		setPasswordCase(updatePassCase);
 	}
 
 	function returnPage(){
 		setShowNext(false);
+	}
+
+	function getPhoto(){
+		photoInput.current.click();
+	}
+
+	function changePhoto(e){
+		const selectedPhoto = e.target.files[0];
+		console.log(selectedPhoto);
+		if(selectedPhoto && selectedPhoto.type.startsWith("image/")){
+			setPhoto(URL.createObjectURL(selectedPhoto));
+		}else{
+			errorToast("Please, select a image type file")
+		}
 	}
 
 	async function setUserLogin(){
@@ -142,10 +156,17 @@ function Register() {
 							id="photo_button"
 							onMouseEnter={() => setIsHovered(true)}
 							onMouseLeave={() => setIsHovered(false)}
+							onClick={getPhoto}
 						>
-							<img className="button_image" src="../icons/default_user.png"></img>
+							<img className="button_image" src={photo}></img>
 							<div className="image_placeholder">Click to change</div>
 						</button>
+						<input
+							type="file"
+							ref={photoInput}
+							style={{ display: 'none' }}
+							onChange={changePhoto}
+						/>
 					</div>
 					<button
 						className="btn_next"
@@ -201,6 +222,9 @@ function Register() {
 						className="btn_next"
 						onClick={nextPage}
 					>Next</button>
+					<a className="login_page" href="/login">
+						Already have a login? Click here
+					</a>
 				</div>
 			)}
 			</div>
