@@ -12,6 +12,12 @@ function Register() {
 	const [channel, setChannel] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [passwordCase, setPasswordCase] = useState({
+		item1: false,
+		item2: false,
+		item3: false,
+		item4: false
+	})
 	const [photo, setPhoto] = useState('');
 	const [showNext, setShowNext] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
@@ -37,6 +43,36 @@ function Register() {
 		}else{
 			setShowNext(true);
 		}
+	}
+
+	const checkPassword = (e) =>{
+		const lowerRegex = /.*[a-z].*/;
+		const upperRegex = /.*[A-Z].*/;
+		const specialRegex = /.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-].*/;
+		const eightRegex = /^.{8,}$/;
+		const updatePassCase = passwordCase;
+		if(lowerRegex.test(e)){
+			updatePassCase.item1 = true;
+		}else{
+			updatePassCase.item1 = false;
+		}
+		if(upperRegex.test(e)){
+			updatePassCase.item2 = true;
+		}else{
+			updatePassCase.item2 = false;
+		}
+		if(specialRegex.test(e)){
+			updatePassCase.item3 = true;
+		}else{
+			updatePassCase.item3 = false;
+		}
+		if(eightRegex.test(e)){
+			updatePassCase.item4 = true;
+		}else{
+			updatePassCase.item4 = false;
+		}
+
+		setPasswordCase(updatePassCase);
 	}
 
 	function returnPage(){
@@ -146,15 +182,18 @@ function Register() {
 							id="pass_r_input" 
 							placeholder="Password"
 							value={password}
-							onChange={(e)=>setPassword(e.target.value)}
+							onChange={(e)=>{
+								setPassword(e.target.value);
+								checkPassword(e.target.value);
+							}}
 						/>
 						<div className="pass_rec">
 						Your password needs at least:
 						<ul className="all_itens">
-							<li id="item1">One lowercase letter</li>
-							<li id="item2">One uppercase letter</li>
-							<li id="item4">One special character</li>
-							<li id="item5">Minimum length of 8 characters</li>
+							<li id={passwordCase.item1 ? "item1c": "item1"}>One lowercase letter</li>
+							<li id={passwordCase.item2 ? "item2c": "item2"}>One uppercase letter</li>
+							<li id={passwordCase.item3 ? "item3c": "item3"}>One special character</li>
+							<li id={passwordCase.item4 ? "item4c": "item4"}>Minimum length of 8 characters</li>
 						</ul>
 					</div>
 					</div>
@@ -162,7 +201,6 @@ function Register() {
 						className="btn_next"
 						onClick={nextPage}
 					>Next</button>
-					
 				</div>
 			)}
 			</div>
