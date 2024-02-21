@@ -194,27 +194,15 @@ class UserController{
 
     async getRegistersByName(req:Request, res: Response){
         try{
-            const access = req.headers.authorization;
-            const refresh = req.headers['refresh-token'];
             const nome = req.query.name as string;
-            if (access && refresh){
-                const pm = new Permission();
-                const isValid = await pm.getPermission(`${access}, ${refresh}`);
-                if(isValid.auth === true){
-                    let response = {};
-                    if(isValid.newAccessToken){
-                        response = {isValid}
-                    }else{
-                        // console.log(isValid.value);
-                        const user = await this.userDao.getRegistersByName(nome);
-                        response = {user};
-                    }
-                    if(response){
-                        res.status(200).json(response);
-                    }else{
-                        res.status(404).json({message:"User not found"});
-                    }
-                }
+            let response = {};
+            const user = await this.userDao.getRegistersByName(nome);
+            response = {user};
+            
+            if(response){
+                res.status(200).json(response);
+            }else{
+                res.status(404).json({message:"User not found"});
             }
         }catch(error){
             console.error(error);
@@ -224,27 +212,14 @@ class UserController{
 
     async getRegistersByEmail(req:Request, res: Response){
         try{
-            const access = req.headers.authorization;
-            const refresh = req.headers['refresh-token'];
             const email = req.query.email as string;
-            if (access && refresh){
-                const pm = new Permission();
-                const isValid = await pm.getPermission(`${access}, ${refresh}`);
-                if(isValid.auth === true){
-                    let response = {};
-                    if(isValid.newAccessToken){
-                        response = {isValid}
-                    }else{
-                        // console.log(isValid.value);
-                        const user = await this.userDao.getRegistersByEmail(email);
-                        response = {user};
-                    }
-                    if(response){
-                        res.status(200).json(response);
-                    }else{
-                        res.status(404).json({message:"User not found"});
-                    }
-                }
+            let response = {};
+            const user = await this.userDao.getRegistersByEmail(email);
+            response = {user};
+            if(response){
+                res.status(200).json(response);
+            }else{
+                res.status(404).json({message:"User not found"});
             }
         }catch(error){
             console.error(error);
