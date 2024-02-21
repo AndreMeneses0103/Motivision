@@ -25,9 +25,9 @@ class UserController{
                         response = {allUsers};
                     }
                     if(response){
-                        res.status(404).json("No users found");
-                    }else{
                         res.status(200).json(response);
+                    }else{
+                        res.status(404).json("No users found");
                     }
                 }else{
                     res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
@@ -69,7 +69,7 @@ class UserController{
                 if(isValid.auth === true){
                     const email = req.query.email as string;
                     const users = await this.userDao.getUserByEmail(email);
-                    if(!users){
+                    if(users){
                         res.status(200).json(users);
                     }else{
                         res.status(404).json({message: "User not found"});
@@ -177,6 +177,66 @@ class UserController{
                     }else{
                         // console.log(isValid.value);
                         const user = await this.userDao.getUserByName(nome);
+                        response = {user};
+                    }
+                    if(response){
+                        res.status(200).json(response);
+                    }else{
+                        res.status(404).json({message:"User not found"});
+                    }
+                }
+            }
+        }catch(error){
+            console.error(error);
+            res.status(500).json({error:"An error occurred in server."})
+        }
+    }
+
+    async getRegistersByName(req:Request, res: Response){
+        try{
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            const nome = req.query.name as string;
+            if (access && refresh){
+                const pm = new Permission();
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
+                if(isValid.auth === true){
+                    let response = {};
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        // console.log(isValid.value);
+                        const user = await this.userDao.getRegistersByName(nome);
+                        response = {user};
+                    }
+                    if(response){
+                        res.status(200).json(response);
+                    }else{
+                        res.status(404).json({message:"User not found"});
+                    }
+                }
+            }
+        }catch(error){
+            console.error(error);
+            res.status(500).json({error:"An error occurred in server."})
+        }
+    }
+
+    async getRegistersByEmail(req:Request, res: Response){
+        try{
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            const email = req.query.email as string;
+            if (access && refresh){
+                const pm = new Permission();
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
+                if(isValid.auth === true){
+                    let response = {};
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        // console.log(isValid.value);
+                        const user = await this.userDao.getRegistersByEmail(email);
                         response = {user};
                     }
                     if(response){

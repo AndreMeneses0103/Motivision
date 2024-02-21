@@ -24,6 +24,10 @@ export default class userRouter {
         this.route.get("/getIdInfo", this.controller.getUserById.bind(this.controller));
 
         this.route.get("/getNameInfo",this.controller.getUserByName.bind(this.controller));
+
+        this.route.get("/getRegisteredName", this.controller.getRegistersByName.bind(this.controller));
+
+        this.route.get("/getRegisteredEmail", this.controller.getRegistersByEmail.bind(this.controller));
     }
 
     public getRouter(): Router{

@@ -118,29 +118,101 @@ export default class UserDAO {
         }
     }
 
-    public async getUserByEmail(email: string): Promise<User[] | null> {
+    public async getUserByEmail(email: string): Promise<User | null> {
         const result = await this.collection.findOne(
             { "user.user_settings.email": email },
             { projection: { _id: 0 } }
         );
+        
         if (result && result.user) {
-            return result.user;
+            const userData = result.user;
+            const rightPath = path.resolve(
+                __dirname,
+                "../../midia/photos/users"
+            );
+            const thumbPath = rightPath + "/" + userData.photo;
+            const convert64 = this.encodeImageToBase64(thumbPath);
+
+            const userSettings = new UserSetting(
+                userData.user_settings.userid,
+                userData.user_settings.name,
+                userData.user_settings.email
+            );
+            const users = new User(
+                userSettings,
+                userData.videos || null,
+                userData.watched_videos,
+                userData.subscribed || null,
+                userData.subscribers || 0,
+                userData.nickname,
+                convert64
+            )
+
+            return users;
         } else {
             return null;
         }
     }
 
-    public async getUserByName(name: string): Promise<User[] | null> {
+    public async getUserByName(name: string): Promise<User | null> {
         const result = await this.collection.findOne(
             { "user.user_settings.name": name },
             { projection: { _id: 0 } }
         );
 
         if (result && result.user) {
-            return result.user;
+            const userData = result.user;
+            const rightPath = path.resolve(
+                __dirname,
+                "../../midia/photos/users"
+            );
+            const thumbPath = rightPath + "/" + userData.photo;
+            const convert64 = this.encodeImageToBase64(thumbPath);
+
+            const userSettings = new UserSetting(
+                userData.user_settings.userid,
+                userData.user_settings.name,
+                userData.user_settings.email
+            );
+            const users = new User(
+                userSettings,
+                userData.videos || null,
+                userData.watched_videos,
+                userData.subscribed || null,
+                userData.subscribers || 0,
+                userData.nickname,
+                convert64
+            )
+            return users;
         } else {
             return null;
         }
+    }
+
+    public async getRegistersByName(name: string): Promise<Boolean>{
+        const result = await this.collection.findOne(
+            { "user.user_settings.name": name },
+            { projection: { _id: 0 } }
+        );
+
+        if(result && result.user){
+            return true;
+        }
+
+        return false;
+    }
+
+    public async getRegistersByEmail(email: string): Promise<Boolean>{
+        const result = await this.collection.findOne(
+            { "user.user_settings.email": email },
+            { projection: { _id: 0 } }
+        );
+
+        if(result && result.user){
+            return true;
+        }
+
+        return false;
     }
 
     public async postUserByCredentials(
