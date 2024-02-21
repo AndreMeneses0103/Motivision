@@ -21,8 +21,17 @@ async function verifyLog(userId){
     return !!req;
 }
 
+async function verifyName(name){
+    const req = await api.get(`/user/getRegisteredName?name=${name}`);
+    return req.data;
+}
+
+async function verifyEmail(email){
+    const req = await api.get(`/user/getRegisteredEmail?email=${email}`);
+    return req.data;
+}
+
 function setLogin(name,password){
-    console.log("NOME:", name," E SENHA:", password);
     const req = log_api.post(`/user/postUserCredentials`, {
         "name": name,
         "password": password
@@ -34,5 +43,7 @@ export {
     getUser,
     getUsers,
     setLogin,
-    verifyLog
+    verifyLog,
+    verifyEmail,
+    verifyName
 }

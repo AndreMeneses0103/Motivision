@@ -2,9 +2,9 @@ import "../../styles/Register.css";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 // import axios from "axios";
-import { setLogin } from "../../services/userFetch";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { verifyEmail, verifyName } from "../../services/userFetch";
 
 function Register() {
 
@@ -18,9 +18,12 @@ function Register() {
 		item3: false,
 		item4: false
 	})
+	const [existentData, setExistentData] = useState({
+		hasName: false,
+		hasEmail: false
+	})
 	const [photo, setPhoto] = useState("../icons/default_user.png");
 	const [showNext, setShowNext] = useState(false);
-	const [isHovered, setIsHovered] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const photoInput = useRef(null);
 	const navigate = useNavigate();
@@ -42,7 +45,7 @@ function Register() {
 		}else if(!(regexPass.test(password))){
 			errorToast("Please insert a strong password!");
 		}else{
-			setShowNext(true);
+			tryGetInformation();
 		}
 	}
 
@@ -93,30 +96,52 @@ function Register() {
 		}
 	}
 
-	async function setUserLogin(){
-		setLoading(true);
-		const req = await setLogin(name,password);
-		const data = req.data;
-		if(data.success === true){
-			successToast();
-			document.cookie = `accessToken=${data.accessToken}; path=/`;
-			document.cookie = `refreshToken=${data.refreshToken}; path=/`;
-			setTimeout(()=>{
-				navigate("/main");
-			}, 2000);
+
+	// async function setUserLogin(){
+	// 	setLoading(true);
+	// 	const req = await setLogin(name,password);
+	// 	const data = req.data;
+	// 	if(data.success === true){
+	// 		successToast();
+	// 		document.cookie = `accessToken=${data.accessToken}; path=/`;
+	// 		document.cookie = `refreshToken=${data.refreshToken}; path=/`;
+	// 		setTimeout(()=>{
+	// 			navigate("/main");
+	// 		}, 2000);
+	// 	}else{
+	// 		errorToast();
+	// 	}
+	// }
+
+	async function getInformation(){
+		const updateExData = existentData;
+		const req_a = await verifyName(name);
+		const req_b = await verifyEmail(email);
+		if(req_a.user === true){
+			errorToast("Sorry, this username is already taken. Please choose a different username.");
+			updateExData.hasName = true;
 		}else{
-			console.log("ERRO");
-			errorToast();
+			updateExData.hasName = false;
+		}
+		if(req_b.user === true){
+			errorToast("Sorry, this email is already taken. Please choose a different email.");
+			updateExData.hasEmail = true;
+		}else{
+			updateExData.hasEmail = false;
+		}
+
+		setExistentData(updateExData);
+
+		if(existentData.hasName === false && existentData.hasEmail === false){
+			setShowNext(true);
 		}
 	}
 
-	async function tryLogin(){
+	async function tryGetInformation(){
 		try{
-			await setUserLogin();
+			getInformation();
 		}catch(error){
 			console.error(error);
-		}finally{
-			setLoading(false);
 		}
 	}
 
@@ -131,8 +156,6 @@ function Register() {
 			autoClose: 1500
 		});
 	}
-	
-	//
 
 	return (
 		<div className="registerpage">
@@ -154,8 +177,6 @@ function Register() {
 						<button
 							className="photo_button"
 							id="photo_button"
-							onMouseEnter={() => setIsHovered(true)}
-							onMouseLeave={() => setIsHovered(false)}
 							onClick={getPhoto}
 						>
 							<img className="button_image" src={photo}></img>
@@ -170,7 +191,7 @@ function Register() {
 					</div>
 					<button
 						className="btn_next"
-						onClick={tryLogin}
+						onClick={console.log("OI")}
 						disabled={loading}
 					>Register</button>
 				</div>
@@ -221,7 +242,7 @@ function Register() {
 					<button
 						className="btn_next"
 						onClick={nextPage}
-					>Next</button>
+					>{loading ? "..." : "Next"}</button>
 					<a className="login_page" href="/login">
 						Already have a login? Click here
 					</a>
