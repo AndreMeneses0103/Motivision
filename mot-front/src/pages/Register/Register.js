@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 // import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { verifyEmail, verifyName } from "../../services/userFetch";
+import { registerNewUser, verifyEmail, verifyName } from "../../services/userFetch";
 
 function Register() {
 
@@ -25,6 +25,7 @@ function Register() {
 	const [photo, setPhoto] = useState("../icons/default_user.png");
 	const [showNext, setShowNext] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [regloading, setRegLoading] = useState(false);
 	const photoInput = useRef(null);
 	const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ function Register() {
 		}else if(!(regexPass.test(password))){
 			errorToast("Please insert a strong password!");
 		}else{
+			setLoading(true);
 			tryGetInformation();
 		}
 	}
@@ -96,23 +98,6 @@ function Register() {
 		}
 	}
 
-
-	// async function setUserLogin(){
-	// 	setLoading(true);
-	// 	const req = await setLogin(name,password);
-	// 	const data = req.data;
-	// 	if(data.success === true){
-	// 		successToast();
-	// 		document.cookie = `accessToken=${data.accessToken}; path=/`;
-	// 		document.cookie = `refreshToken=${data.refreshToken}; path=/`;
-	// 		setTimeout(()=>{
-	// 			navigate("/main");
-	// 		}, 2000);
-	// 	}else{
-	// 		errorToast();
-	// 	}
-	// }
-
 	async function getInformation(){
 		const updateExData = existentData;
 		const req_a = await verifyName(name);
@@ -134,6 +119,20 @@ function Register() {
 
 		if(existentData.hasName === false && existentData.hasEmail === false){
 			setShowNext(true);
+			setLoading(false);
+		}
+	}
+
+	async function registerUser(){
+		// const req = await registerNewUser(name, email, password, channel, photo);
+
+		if((1+1) === 2){
+			successToast("Registered successfully!");
+			// setTimeout(()=>{
+			// 	navigate("/main");
+			// }, 2000);
+		}else{
+			errorToast("An error occurred in register");
 		}
 	}
 
@@ -142,6 +141,18 @@ function Register() {
 			getInformation();
 		}catch(error){
 			console.error(error);
+		}finally{
+			setLoading(true);
+		}
+	}
+
+	async function tryRegisterUser(){
+		try{
+			registerUser();
+		}catch(error){
+			console.error(error);
+		}finally{
+			setRegLoading(true);
 		}
 	}
 
@@ -151,8 +162,8 @@ function Register() {
 		});
 	}
 
-	const successToast = () =>{
-		toast.success("Login successful. Welcome back!",{
+	const successToast = (message) =>{
+		toast.success(message,{
 			autoClose: 1500
 		});
 	}
@@ -191,9 +202,8 @@ function Register() {
 					</div>
 					<button
 						className="btn_next"
-						onClick={console.log("OI")}
-						disabled={loading}
-					>Register</button>
+						onClick={tryRegisterUser}
+					>{loading ? "..." : "Register"}</button>
 				</div>
 			) : (
 				<div className="card_reg">

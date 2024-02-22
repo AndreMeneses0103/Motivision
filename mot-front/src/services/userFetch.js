@@ -31,6 +31,16 @@ async function verifyEmail(email){
     return req.data;
 }
 
+async function registerNewUser(name, email, password, channel, photo){
+    const req = log_api.post(`user/register`,{
+        "name":name,
+        "email": email,
+        "password": password,
+        "channel":channel,
+        "photo" : photo
+    })
+}
+
 function setLogin(name,password){
     const req = log_api.post(`/user/postUserCredentials`, {
         "name": name,
@@ -45,5 +55,6 @@ export {
     setLogin,
     verifyLog,
     verifyEmail,
-    verifyName
+    verifyName,
+    registerNewUser
 }

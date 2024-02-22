@@ -96,13 +96,14 @@ body{
     margin: 11vh 6vw 4vh 6vw;
     background-color: transparent;
     height: 4vh;
-    width: 70%;
+    width: 40%;
     text-align: center;
     font-size: 110%;
+    transition: width 0.3s ease;
 }
 
 .reg_channel:focus{
-    border-bottom: 2px solid #00f;
+    width: 70%;
 }
 
 .photo_button{
