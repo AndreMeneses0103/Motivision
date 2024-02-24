@@ -28,6 +28,8 @@ export default class userRouter {
         this.route.get("/getRegisteredName", this.controller.getRegistersByName.bind(this.controller));
 
         this.route.get("/getRegisteredEmail", this.controller.getRegistersByEmail.bind(this.controller));
+
+        this.route.post("/postRegisterUser", this.controller.postRegisterUser.bind(this.controller));
     }
 
     public getRouter(): Router{

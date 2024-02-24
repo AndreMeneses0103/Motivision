@@ -7,6 +7,7 @@ import Database from "../../database";
 import createKey from "../../middlewares/createKey";
 import * as fs from "fs";
 import path from "path";
+import got from "got";
 
 export default class UserDAO {
     private collection: Collection;
@@ -255,5 +256,48 @@ export default class UserDAO {
                 message: "An error occurred in login, please review the information.",
             };
         }
+    }
+
+    public async postRegisterUser(
+        name:string,
+        email:string,
+        password:string,
+        channel:string,
+        photo:string
+    ): Promise<Object|null>{
+        const blobContent = Buffer.from(photo, 'base64');
+        let userid = Math.floor(Math.random() * 1e16).toString(36).substring(0, 6);
+        const new_photo = await this.saveBlobToMedia(blobContent, userid);
+        // console.log("USER ID:",userid)
+        const new_user = {
+            user: {
+                user_settings: {
+                    userid: userid,
+                    name: name,
+                    email: email,
+                    password: this.encrypt(password)
+                },
+                videos: [
+                ],
+                watched_videos: [
+                ],
+                subscribed: [
+                ],
+                subscribers: 0,
+                photo: new_photo,
+                nickname: channel
+            }
+        };
+        
+        return new_user;
+    }
+
+    private async saveBlobToMedia(blobContent: Buffer, userid: string){
+        const rightPath = path.resolve(__dirname,"../../midia/photos/users");
+        const photo_path = rightPath+`/pic_${userid}.jpg`;
+        console.log('Tamanho do Buffer:', blobContent.length);
+        await fs.promises.writeFile(photo_path, blobContent);
+        console.log(`\nImagem salva em ${photo_path}`);
+        return `pic_${userid}`;
     }
 }
