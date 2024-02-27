@@ -1,5 +1,5 @@
 import { refreshCookieValue } from "../scripts/getUser";
-import { api, log_api } from "./api";
+import { api, form_api, log_api } from "./api";
 
 async function getUser(userId) {
     const req = await api.get(`/user/getIdInfo?user=${userId}`);
@@ -32,13 +32,21 @@ async function verifyEmail(email){
 }
 
 async function registerNewUser(name, email, password, channel, photo){
-    const req = log_api.post(`user/register`,{
-        "name":name,
-        "email": email,
-        "password": password,
-        "channel":channel,
-        "photo" : photo
-    })
+    const formdata = new FormData();
+    let photofile = new File([photo], "teste.png");
+    console.log("PHOTOFILE:",photofile);
+    formdata.append('file', photo);
+    formdata.append('name', name);
+    formdata.append('email', email);
+    formdata.append('password', password);
+    formdata.append('channel', channel);
+
+    const req = form_api.post(`user/postRegisterUser`,formdata,{
+        headers:{
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return req;
 }
 
 function setLogin(name,password){

@@ -25,6 +25,13 @@ const log_api = axios.create({
     }
 })
 
+const form_api = axios.create({
+    baseURL:"//localhost:8080",
+    headers:{
+        'Content-Type': 'multipart/form-data'
+    }
+})
+
 api.interceptors.request.use(config =>{
     if(accessToken() !== null){
         config.headers.Authorization = accessToken();
@@ -49,4 +56,4 @@ blob_api.interceptors.request.use(config =>{
     return config;
 })
 
-export {api, log_api, blob_api};
+export {api, log_api, blob_api, form_api};

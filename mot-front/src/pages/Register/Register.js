@@ -23,6 +23,7 @@ function Register() {
 		hasEmail: false
 	})
 	const [photo, setPhoto] = useState("../icons/default_user.png");
+	const [photoFile, setPhotoFile] = useState("");
 	const [showNext, setShowNext] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [regloading, setRegLoading] = useState(false);
@@ -90,9 +91,10 @@ function Register() {
 
 	function changePhoto(e){
 		const selectedPhoto = e.target.files[0];
-		console.log(selectedPhoto);
+		const photoBlob = new Blob([selectedPhoto], {type: selectedPhoto.type});
 		if(selectedPhoto && selectedPhoto.type.startsWith("image/")){
-			setPhoto(URL.createObjectURL(selectedPhoto));
+			setPhoto(URL.createObjectURL(photoBlob));
+			setPhotoFile(selectedPhoto);
 		}else{
 			errorToast("Please, select a image type file")
 		}
@@ -124,9 +126,10 @@ function Register() {
 	}
 
 	async function registerUser(){
-		// const req = await registerNewUser(name, email, password, channel, photo);
+		console.log(photoFile);
+		const req = await registerNewUser(name, email, password, channel, photoFile);
 
-		if((1+1) === 2){
+		if(req.success){
 			successToast("Registered successfully!");
 			// setTimeout(()=>{
 			// 	navigate("/main");
