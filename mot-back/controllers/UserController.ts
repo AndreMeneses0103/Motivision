@@ -61,15 +61,14 @@ class UserController{
 
     async postRegisterUser(req: Request, res: Response){
         try{
-            const {name, email, password, channel, photo} = req.body;
-            const new_user = await this.userDao.postRegisterUser(name,email,password,channel,photo);
+            const formData = req.body;
+            const new_user = await this.userDao.postRegisterUser(formData, req.file);
             if(new_user){
                 res.status(200).json({success: true,
                 data:new_user});
             }else{
                 res.status(404).json({success: false});
             }
-            console.log(photo);
         }catch(error){
             console.error(error);
             res.status(500).json({error:"An error occurred in server."});

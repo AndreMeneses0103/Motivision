@@ -2,13 +2,16 @@ import express, { Router, Request, Response } from "express";
 import UserDAO from "../models/DAO/UserDAO";
 import Database from "../database";
 import Permission from "../middlewares/permission";
+import multer, { Multer } from "multer";
 import { UserController } from "../controllers/UserController";
 
 export default class userRouter {
     private route: Router;
+    private upload: Multer;
     private controller: UserController;
     constructor(database: Database) {
         this.route = express.Router();
+        this.upload = multer({storage: multer.memoryStorage()});
         this.controller = new UserController(new UserDAO(database));
         this.configRouter();
     }
@@ -29,7 +32,7 @@ export default class userRouter {
 
         this.route.get("/getRegisteredEmail", this.controller.getRegistersByEmail.bind(this.controller));
 
-        this.route.post("/postRegisterUser", this.controller.postRegisterUser.bind(this.controller));
+        this.route.post("/postRegisterUser",this.upload.single('file') , this.controller.postRegisterUser.bind(this.controller));
     }
 
     public getRouter(): Router{

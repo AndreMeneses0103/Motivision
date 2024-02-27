@@ -7,8 +7,7 @@ import Database from "../../database";
 import createKey from "../../middlewares/createKey";
 import * as fs from "fs";
 import path from "path";
-import got from "got";
-
+import axios from "axios";
 export default class UserDAO {
     private collection: Collection;
     constructor(database: Database) {
@@ -258,17 +257,13 @@ export default class UserDAO {
         }
     }
 
-    public async postRegisterUser(
-        name:string,
-        email:string,
-        password:string,
-        channel:string,
-        photo:string
-    ): Promise<Object|null>{
-        const blobContent = Buffer.from(photo, 'base64');
+    public async postRegisterUser(formData: any, file:any): Promise<Object|null>{
+        const name = formData.name;
+        const email = formData.email;
+        const password = formData.password;
+        const channel = formData.channel;
         let userid = Math.floor(Math.random() * 1e16).toString(36).substring(0, 6);
-        const new_photo = await this.saveBlobToMedia(blobContent, userid);
-        // console.log("USER ID:",userid)
+        const new_photo = await this.saveBlobToMedia(file.buffer, userid);
         const new_user = {
             user: {
                 user_settings: {
@@ -295,9 +290,7 @@ export default class UserDAO {
     private async saveBlobToMedia(blobContent: Buffer, userid: string){
         const rightPath = path.resolve(__dirname,"../../midia/photos/users");
         const photo_path = rightPath+`/pic_${userid}.jpg`;
-        console.log('Tamanho do Buffer:', blobContent.length);
         await fs.promises.writeFile(photo_path, blobContent);
-        console.log(`\nImagem salva em ${photo_path}`);
         return `pic_${userid}`;
     }
 }
