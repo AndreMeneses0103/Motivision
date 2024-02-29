@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 // import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerNewUser, verifyEmail, verifyName } from "../../services/userFetch";
+import { registerNewUser, setLogin, verifyEmail, verifyName } from "../../services/userFetch";
 
 function Register() {
 
@@ -126,16 +126,38 @@ function Register() {
 	}
 
 	async function registerUser(){
-		console.log(photoFile);
 		const req = await registerNewUser(name, email, password, channel, photoFile);
-
-		if(req.success){
+		if(req.data.success){
 			successToast("Registered successfully!");
-			// setTimeout(()=>{
-			// 	navigate("/main");
-			// }, 2000);
+			tryLogin();
 		}else{
 			errorToast("An error occurred in register");
+		}
+	}
+
+	async function setUserLogin(){
+		const req = await setLogin(name,password);
+		const data = req.data;
+		if(data.success === true){
+			successToast();
+			document.cookie = `accessToken=${data.accessToken}; path=/`;
+			document.cookie = `refreshToken=${data.refreshToken}; path=/`;
+			setTimeout(()=>{
+				navigate("/main");
+			}, 2000);
+		}else{
+			console.log("ERRO");
+			errorToast("An error occurred in login");
+		}
+	}
+
+	async function tryLogin(){
+		try{
+			await setUserLogin();
+		}catch(error){
+			console.error(error);
+		}finally{
+			setLoading(false);
 		}
 	}
 
