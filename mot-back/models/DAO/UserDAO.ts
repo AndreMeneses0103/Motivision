@@ -53,7 +53,7 @@ export default class UserDAO {
                 __dirname,
                 "../../midia/photos/users"
             );
-            const thumbPath = rightPath + "/" + userData.photo;
+            const thumbPath = rightPath + "\\" + userData.photo;
             const convert64 = this.encodeImageToBase64(thumbPath);
 
             const userSettings = new UserSetting(
@@ -264,6 +264,39 @@ export default class UserDAO {
         const channel = formData.channel;
         let userid = Math.floor(Math.random() * 1e16).toString(36).substring(0, 6);
         const new_photo = await this.saveBlobToMedia(file.buffer, userid);
+
+        // {
+        //     "_id": {
+        //       "$oid": "655ca800c6abc4c74191721e"
+        //     },
+        //     "user": {
+        //       "user_settings": {
+        //         "userid": "1a2b3c",
+        //         "name": "andre777",
+        //         "email": "teste@email.com",
+        //         "password": "fa3c1cdee866e8b57b644e55aa85ad1f001ea14471da9d41cdd3195e5613f4b8b6fff905e7f1afb3954a3e182e92c52497e41decf5718b51a09bfadf52e77f20"
+        //       },
+        //       "videos": [
+        //         "2d5s1x",
+        //         "3l9f2a",
+        //         "4r5t6y"
+        //       ],
+        //       "watched_videos": [
+        //         "l2m4c6",
+        //         "s9k4n2",
+        //         "f3j5b9"
+        //       ],
+        //       "subscribed": [
+        //         "g8j5m1",
+        //         "2v3c6z",
+        //         "k7u5i9"
+        //       ],
+        //       "subscribers": 40,
+        //       "photo": "user1.png",
+        //       "nickname": "Canal do Andre"
+        //     }
+        //   }
+
         const new_user = {
             user: {
                 user_settings: {
@@ -283,14 +316,22 @@ export default class UserDAO {
                 nickname: channel
             }
         };
+        //Inserir new_user no mongo
+
+        const insert = await this.collection.insertOne(new_user);
+
+        if(insert){
+            return new_user;
+        }else{
+            return null;
+        }
         
-        return new_user;
     }
 
     private async saveBlobToMedia(blobContent: Buffer, userid: string){
         const rightPath = path.resolve(__dirname,"../../midia/photos/users");
         const photo_path = rightPath+`/pic_${userid}.jpg`;
         await fs.promises.writeFile(photo_path, blobContent);
-        return `pic_${userid}`;
+        return `pic_${userid}.jpg`;
     }
 }
