@@ -5,6 +5,11 @@ async function getAllUserVideos(userVideos){
     return req.data;
 }
 
+async function getAllVideos(){
+    const req = await api.get(`/video/all`);
+    return req.data;
+}
+
 async function getVideoInfo(id){
     const req = await api.get(`/video/search?videos=${id}`);
     return req.data;
@@ -18,5 +23,6 @@ async function getVideoSource(id){
 export {
     getAllUserVideos,
     getVideoInfo,
-    getVideoSource
+    getVideoSource,
+    getAllVideos
 }

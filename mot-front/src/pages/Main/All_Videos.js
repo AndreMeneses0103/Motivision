@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {accessToken, refreshToken, refreshCookieValue} from "../../scripts/getUser";
+import { getAllVideos } from "../../services/videoFetch";
 
 function One({id, imageSrc, alt, video}) {
     const navigate = useNavigate();
@@ -37,18 +38,13 @@ function Videos(){
                     "Authorization": `${accessToken()}`,
                     "Refresh-Token": `${refreshToken()}`,
                 }
-                const resp = await axios.get("http://192.168.15.146:8080/video/all", {headers:headers});
-                let all_videos = resp.data;
+                const resp = await getAllVideos();
+                let all_videos = resp;
                 let data = [];
-                if(all_videos.isValid && 'newAccessToken' in all_videos.isValid){
-                    refreshCookieValue("accessToken", all_videos.isValid.newAccessToken);
-                    await fetchData();
-                }else{
-                    for(let x = 0; x < all_videos.videos.length; x++){
-                        data.push({ id: all_videos.videos[x].id , imageSrc: all_videos.videos[x].thumb, alt: all_videos.videos[x].title, video: all_videos.videos[x].source})
-                    }
-                    setData(data);
+                for(let x = 0; x < all_videos.videos.length; x++){
+                    data.push({ id: all_videos.videos[x].id , imageSrc: all_videos.videos[x].thumb, alt: all_videos.videos[x].title, video: all_videos.videos[x].source})
                 }
+                setData(data);
 
                 
             } catch (err) {
