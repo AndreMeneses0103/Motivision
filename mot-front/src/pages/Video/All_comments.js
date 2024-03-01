@@ -141,7 +141,7 @@ function AllComments() {
                         return (
                             <Comment
                                 key={comment.id}
-                                id={comment._userid}
+                                id={comment.userid}
                                 src={user.userphoto}
                                 channel={user.nickname}
                                 date={comment.date}

@@ -14,7 +14,7 @@ function renderVideoLoading(user){
     return(
         <div className="profile_main">
             <div className="username">
-                {user.profile}
+                {user.nickname}
             </div>
                 <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`}/>
             <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
@@ -37,9 +37,9 @@ function renderNoVideos(user){
     return(
         <div className="profile_main">
             <div className="username">
-                {user.profile}
+                {user.nickname}
             </div>
-                <ProfilePhoto imageSrc={`data:image/png;base64,${user.photo}`}/>
+                <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`}/>
             <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
             <div className="user_videos">
             <div className="Profile_Videos">
@@ -79,7 +79,7 @@ function renderAllProfile(user, video){
         <div className="profile_main">
             
             <div className="username">
-                {user.profile}
+                {user.nickname}
             </div>
                 <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`}/>
             <UserInfos num_subs={user.subscribers} num_vids={numVids}/>
