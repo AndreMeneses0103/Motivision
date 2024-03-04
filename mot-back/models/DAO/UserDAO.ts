@@ -330,8 +330,8 @@ export default class UserDAO {
 
     private async saveBlobToMedia(blobContent: Buffer, userid: string){
         const rightPath = path.resolve(__dirname,"../../midia/photos/users");
-        const photo_path = rightPath+`/pic_${userid}.jpg`;
+        const photo_path = rightPath+`/pic_${userid}.png`;
         await fs.promises.writeFile(photo_path, blobContent);
-        return `pic_${userid}.jpg`;
+        return `pic_${userid}.png`;
     }
 }

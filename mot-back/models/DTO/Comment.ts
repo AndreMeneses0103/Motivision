@@ -23,6 +23,21 @@ export default class Comments {
         this.videoid = videoid;
     }    
 
+    public commentDatabase(): Record<string, string> {
+        const obj: Record<string, string> = {
+            id: this.id,
+            userid: this.userid,
+            date: this.date,
+            text: this.text,
+        };
+
+        if (this.videoid !== undefined && this.videoid !== null) {
+            obj.videoid = this.videoid;
+        }
+
+        return obj;
+    }
+
     public get getId(): string {
         return this.id;
     }

@@ -50,7 +50,6 @@ class VideoController {
             const access = req.headers.authorization;
             const refresh = req.headers['refresh-token'];
             const allvideos = typeof req.query.videos === 'string' ? req.query.videos.split(',') : [];
-            console.log(allvideos);
             if (access && refresh) {
                 const pm = new Permission();
                 const isValid = await pm.getPermission(`${access}, ${refresh}`);

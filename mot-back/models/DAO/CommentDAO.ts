@@ -33,4 +33,32 @@ export default class CommentDAO{
             return null;
         }
     }
+
+    public async postNewComment(video_id: string, date: string, text: string, userid: string) : Promise<Comments|null>{
+        let commentid = Math.floor(Math.random() * 1e16).toString(36).substring(0, 6);
+
+        const new_comment = new Comments(
+            commentid,
+            userid,
+            date,
+            text
+        )
+
+        const comments = new_comment.commentDatabase();
+
+        const insert = await this.collection.updateOne(
+            {video_id: video_id},
+            {
+                $push:{
+                    comments
+                }
+            }
+        )
+
+        if(insert){
+            return new_comment;
+        }else{
+            return null;
+        }
+    }
 }

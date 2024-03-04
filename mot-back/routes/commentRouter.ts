@@ -15,6 +15,7 @@ export default class CommentRouter{
     //CONTINUAR CONFIGROUTER
     private configRouter(): void{
         this.route.get("/allComments", this.controller.getAllComments.bind(this.controller));
+        this.route.post("/newComment", this.controller.postNewComment.bind(this.controller))
     }
 
     public getRouter(): Router{

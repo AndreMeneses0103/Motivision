@@ -43,6 +43,41 @@ class CommentController {
             res.status(500).json({error: "An error occurred in server."})
         }
     }
+
+    async postNewComment(req: Request, res: Response){
+        try{
+            const access = req.headers.authorization;
+            const refresh = req.headers['refresh-token'];
+            const {videoid, date, text} = req.body;
+            if (access && refresh) {
+                const pm = new Permission();
+                const isValid = await pm.getPermission(`${access}, ${refresh}`);
+                if(isValid.auth === true){
+                    let response = {};
+                    if(isValid.newAccessToken){
+                        response = {isValid}
+                    }else{
+                        let newComment = await this.commentDao.postNewComment(videoid, date, text, isValid.value.userId);
+                        response = {newComment};
+                    }
+                    if(response){
+                        res.status(200).json(response);
+                    }else{
+                        res.status(404).json({message: "No Comments found."})
+                    }
+                }else{
+                    res.status(401).json({auth:false, message:"Both tokens are not valid. Please login again."});
+                }
+            }else{
+                return res
+                    .status(401)
+                    .json({ auth: false, message: "Tokens not found" });
+            }
+        }catch(error){
+            console.error(error);
+            res.status(500).json({error: "An error occurred in server."})
+        }
+    }
 }
 
 export{
