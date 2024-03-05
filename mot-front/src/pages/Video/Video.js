@@ -7,10 +7,13 @@ import { useEffect, useState } from "react";
 import { getTokenId, refreshToken,} from "../../scripts/getUser";
 import { getUser, verifyLog } from "../../services/userFetch";
 import { getVideoInfo, getVideoSource } from "../../services/videoFetch";
+import { Popup } from "../../components/CommentPopup";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 
 function Video() {
+
+    const [isPop, setIsPop] = useState(false);
 
     function renderLoading(){
         return(
@@ -36,7 +39,15 @@ function Video() {
             </div>
         );
     }
+
+    function addNewComment(){
+        console.log("VINDO")
+        setIsPop(true);
+    }
     
+    function closeComment(){
+        setIsPop(false);
+    }
     
     const loadChannel = () => {
         navigate(`/profile?user=${userData.usersettings._userid}`);
@@ -46,6 +57,7 @@ function Video() {
         const info = videoData[0];
         return(
             <div className="mainpage">
+            {isPop ? <Popup/> : null}
                 <div className="video_itens">
                     <div className="video_channel">
                         <div className="channel_user">
@@ -90,7 +102,7 @@ function Video() {
                 </div>
                 <div className="comments_field">
                     <div className="comments_title">All Comments</div>
-                    <button className="add_comment_btn">Add a comment!</button>
+                    <button className="add_comment_btn" onClick={addNewComment}>Add a comment!</button>
                     <div className="all_comments">
                         <AllComments/>
                     </div>

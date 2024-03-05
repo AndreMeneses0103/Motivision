@@ -132,8 +132,6 @@ function AllComments() {
             )
         }else{
             let allData = {...commentData, ...userData};
-            console.log(allData);
-            console.log(allData.user[0].usersettings);
             return (
                 <div>
                     {allData.allComments.map(comment =>{
