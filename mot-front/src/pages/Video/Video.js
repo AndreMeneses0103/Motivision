@@ -8,6 +8,9 @@ import { getTokenId, refreshToken,} from "../../scripts/getUser";
 import { getUser, verifyLog } from "../../services/userFetch";
 import { getVideoInfo, getVideoSource } from "../../services/videoFetch";
 import { Popup } from "../../components/CommentPopup";
+import { setComment } from "../../services/commentFetch";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 
@@ -39,25 +42,12 @@ function Video() {
             </div>
         );
     }
-
-    function addNewComment(){
-        console.log("VINDO")
-        setIsPop(true);
-    }
-    
-    function closeComment(){
-        setIsPop(false);
-    }
-    
-    const loadChannel = () => {
-        navigate(`/profile?user=${userData.usersettings._userid}`);
-    };
     
     function renderVideo(videoData,userData,videoSource){
         const info = videoData[0];
         return(
             <div className="mainpage">
-            {isPop ? <Popup/> : null}
+            {isPop ? <Popup cmtControl={closeComment} sendMessage={sendMessage}/> : null}
                 <div className="video_itens">
                     <div className="video_channel">
                         <div className="channel_user">
@@ -95,6 +85,7 @@ function Video() {
                                 <span className="hashtag"><a href="https://www.spacejam.com/1996/">#{item}</a></span>
                             ))}
                         </div>
+                        <ToastContainer/>
                     </div>
                 </div>
                 <div className="recommend_video">
@@ -176,6 +167,18 @@ function Video() {
         }
     }
 
+    async function newMessage(text){
+        const logUser = await verifyLog(getTokenId(refreshToken()));
+        if(logUser){
+            const msg = await setComment(url, text);
+            if(msg){
+                successToast();
+            }else{
+                errorToast();
+            }
+        }
+    }
+
     async function tryGetVideoData(){
         try{
             await getVideoData();
@@ -209,7 +212,40 @@ function Video() {
         }
     }
 
+    async function tryNewMessage(text){
+        try{
+            await newMessage(text);
+        }catch(error){
+            console.error(error);
+        }
+    }
 
+    function addNewComment(){
+        setIsPop(true);
+    }
+    function closeComment(){
+        setIsPop(false);
+    }
+
+    function sendMessage(text){
+        tryNewMessage(text);
+    }
+    
+    const loadChannel = () => {
+        navigate(`/profile?user=${userData.usersettings._userid}`);
+    };
+
+    const errorToast = () =>{
+		toast.error("Invalid username or password. Please try again.",{
+			autoClose: 5000
+		});
+	}
+
+    const successToast = () =>{
+		toast.success("Login successful. Welcome back!",{
+			autoClose: 1500
+		});
+	}
 
     useEffect(()=>{
         reset();

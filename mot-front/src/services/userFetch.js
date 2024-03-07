@@ -41,7 +41,7 @@ async function registerNewUser(name, email, password, channel, photo){
     formdata.append('password', password);
     formdata.append('channel', channel);
 
-    const req = form_api.post(`user/postRegisterUser`,formdata,{
+    const req = await form_api.post(`user/postRegisterUser`,formdata,{
         headers:{
             'Content-Type': 'multipart/form-data'
         }
@@ -49,8 +49,8 @@ async function registerNewUser(name, email, password, channel, photo){
     return req;
 }
 
-function setLogin(name,password){
-    const req = log_api.post(`/user/postUserCredentials`, {
+async function setLogin(name,password){
+    const req = await log_api.post(`/user/postUserCredentials`, {
         "name": name,
         "password": password
     })

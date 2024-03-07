@@ -72,7 +72,6 @@ function AllComments() {
         }
         const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
-            console.log("ALL USERS:", allUsers);
             const data = await getUsers(allUsers);
             if(data === null){
                 setError("nonexistent");

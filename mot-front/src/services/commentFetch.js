@@ -5,6 +5,16 @@ async function getComments(id) {
     return req.data;
 }
 
+async function setComment(videoid, text){
+    const req = await api.post(`comment/newComment`,{
+        "videoid":videoid,
+        "date": new Date(),
+        "text":text
+    })
+    return req.data;
+}
+
 export{
-    getComments
+    getComments,
+    setComment
 }

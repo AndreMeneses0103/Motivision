@@ -109,14 +109,14 @@ body{
 
 .vidImage{
     height: 100%;
-    width: 100%;
+    /* width: 100%; */
     object-fit: cover;
     border-radius: 10px;
 }
 
 .vidButton{
     height: 100%;
-    width: 18em;
+    /* width: 18em; */
     background-color: transparent;
     padding: 0;
     border-radius: 10px;
@@ -277,11 +277,11 @@ a{
 .cmt_pop{
     inset: 0;
     position: fixed;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(2, 2, 2, 0.19);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(1.4px);
-    -webkit-backdrop-filter: blur(1.4px);
+    backdrop-filter: blur(5.3px);
+    -webkit-backdrop-filter: blur(5.3px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -289,9 +289,11 @@ a{
 }
 
 .cmt_square{
-    background-color: burlywood;
-    width: 80%;
-    height: 25vh;
+    background-color: #81926e;
+    /* width: 80%; */
+    max-width: 50em;
+    width: 80vw;
+    height: 28vh;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -312,12 +314,16 @@ a{
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 1vh;
+    font-size: x-large;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 .cmt_btn{
     width: 5vw;
     margin: 0 auto;
-    /* margin-top: 1vh; */
+    margin-top: 3vh;
     margin-bottom: 1vh;
     width: 120px;
     height: 34px;

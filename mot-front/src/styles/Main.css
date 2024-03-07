@@ -57,7 +57,7 @@ body, html{
 
 .vidMainImage{
     height: 100%;
-    max-width: 200px;
+    max-width: 60vw;
     width: inherit;
     border-radius: 10px;
     object-fit: cover;
