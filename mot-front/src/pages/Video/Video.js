@@ -16,8 +16,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Video() {
 
-    const [isPop, setIsPop] = useState(false);
-
     function renderLoading(){
         return(
             <div className="mainpage">
@@ -47,7 +45,7 @@ function Video() {
         const info = videoData[0];
         return(
             <div className="mainpage">
-            {isPop ? <Popup cmtControl={closeComment} sendMessage={sendMessage}/> : null}
+            {isPop ? <Popup cmtControl={closeComment} sendMessage={sendMessage} updateMessage={nextKeyComment}/> : null}
                 <div className="video_itens">
                     <div className="video_channel">
                         <div className="channel_user">
@@ -93,9 +91,11 @@ function Video() {
                 </div>
                 <div className="comments_field">
                     <div className="comments_title">All Comments</div>
-                    <button className="add_comment_btn" onClick={addNewComment}>Add a comment!</button>
+                    <button className="add_comment_btn" onClick={()=>{
+                        addNewComment();
+                    }}>Add a comment!</button>
                     <div className="all_comments">
-                        <AllComments/>
+                        <AllComments key={keyComment}/>
                     </div>
                 </div>
             </div>
@@ -110,6 +110,8 @@ function Video() {
     const [dataLoading, setDataLoading] = useState(true);
     const [userLoading, setUserLoading] = useState(true);
     const [videoLoading, setVideoLoading] = useState(true);
+    const [isPop, setIsPop] = useState(false);
+    const [keyComment, setKeyComment] = useState(0);
     const navigate = useNavigate();
 
     const local = useLocation();
@@ -172,9 +174,10 @@ function Video() {
         if(logUser){
             const msg = await setComment(url, text);
             if(msg){
-                successToast();
+                successToast("Comment send successfully!");
+                setIsPop(false);
             }else{
-                errorToast();
+                errorToast("An error occurred in comment sending...");
             }
         }
     }
@@ -217,6 +220,9 @@ function Video() {
             await newMessage(text);
         }catch(error){
             console.error(error);
+            errorToast();
+        }finally{
+            setIsPop(false);
         }
     }
 
@@ -230,19 +236,24 @@ function Video() {
     function sendMessage(text){
         tryNewMessage(text);
     }
+
+    const nextKeyComment = () =>{
+        console.log("NEXT KEY")
+        setKeyComment((prevKey)=> prevKey + 1); 
+    }
     
     const loadChannel = () => {
         navigate(`/profile?user=${userData.usersettings._userid}`);
     };
 
-    const errorToast = () =>{
-		toast.error("Invalid username or password. Please try again.",{
+    const errorToast = (text) =>{
+		toast.error(text,{
 			autoClose: 5000
 		});
 	}
 
-    const successToast = () =>{
-		toast.success("Login successful. Welcome back!",{
+    const successToast = (text) =>{
+		toast.success(text,{
 			autoClose: 1500
 		});
 	}

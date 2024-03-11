@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Popup({cmtControl, sendMessage}){
+function Popup({cmtControl, sendMessage, updateMessage}){
 
     const [text, setText] = useState(null);
     return(
@@ -14,7 +14,10 @@ function Popup({cmtControl, sendMessage}){
                     maxLength={150}
                     onChange={(e)=> setText(e.target.value)}
                 ></textarea>
-                <button className="cmt_btn" onClick={()=>{sendMessage(text)}}>Send!</button>
+                <button className="cmt_btn" onClick={()=>{
+                    sendMessage(text);
+                    updateMessage();
+                }}>Send!</button>
             </div>
         </div>
     )

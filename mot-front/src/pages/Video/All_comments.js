@@ -11,6 +11,17 @@ function AllComments() {
     };
 
     function Comment({ id, src, channel, date, text }) {
+        const new_date = new Date(date);
+        const formatDate = new Intl.DateTimeFormat('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        });
+        const commentDate = formatDate.format(new_date)
         return (
         <div className="comment" id={id}>
             <div className="c_profile">
@@ -23,7 +34,7 @@ function AllComments() {
                 />
             </button>
             <span id="channel_name_prof">{channel}</span>
-            <span id="data_comment">{date}</span>
+            <span id="data_comment">{commentDate}</span>
             </div>
             <div id="comment_text">{text}</div>
         </div>
