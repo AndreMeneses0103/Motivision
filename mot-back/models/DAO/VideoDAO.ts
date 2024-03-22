@@ -1,6 +1,7 @@
 import { Collection, MongoClient } from "mongodb";
 import Database from "../../database";
 import Video from "../DTO/Video";
+import User from "../DTO/User";
 import * as fs from 'fs';
 import path from 'path';
 
@@ -88,6 +89,23 @@ export default class VideoDAO{
             ));
         } else {
             return null;
+        }
+    }
+
+    //continuar
+    public async addView(videoid: string): Promise<boolean>{
+        const video = await this.collection.updateOne(
+            {"video.id": videoid},
+            {
+                $inc:{
+                    "video.video_data.views": 1
+                }
+            }
+        )
+        if(video.modifiedCount > 0){
+            return true;
+        }else{
+            return false;
         }
     }
 }

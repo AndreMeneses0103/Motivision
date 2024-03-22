@@ -1,6 +1,7 @@
 import UserDAO from "../models/DAO/UserDAO";
 import { Request, Response } from "express";
 import Permission from "../middlewares/permission";
+import User from "../models/DTO/User";
 
 class UserController{
     private userDao: UserDAO;
@@ -56,6 +57,29 @@ class UserController{
         }catch(error){
             console.error(error);
             res.status(500).json({error:"An error occurred in server."})
+        }
+    }
+
+    async postNewView(req: Request, res: Response){
+        try{
+            const {videoid, user} = req.body;
+            const user_s = new User(
+                user.user_settings,
+                user.videos,
+                user.watched_videos,
+                user.subscribed,
+                user.subscribers,
+                user.nickname
+            )
+            const new_view = await this.userDao.countView(videoid, user_s);
+            if(new_view){
+                res.status(200).json(true);
+            }else{
+                res.status(404).json(false);
+            }
+        }catch(error){
+            console.error(error);
+            res.status(500).json({error: "An error occurred in server."})
         }
     }
 

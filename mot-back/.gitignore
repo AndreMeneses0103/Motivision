@@ -1,5 +1,7 @@
 ### Node ###
 midia/videos/*
+midia/photos/thumbs/*
+midia/photos/users/*
 # Logs
 logs
 *.log

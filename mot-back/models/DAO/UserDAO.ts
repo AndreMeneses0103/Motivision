@@ -8,6 +8,8 @@ import createKey from "../../middlewares/createKey";
 import * as fs from "fs";
 import path from "path";
 import axios from "axios";
+import VideoDAO from "./VideoDAO";
+import { VideoController } from "../../controllers/VideoController";
 export default class UserDAO {
     private collection: Collection;
     constructor(database: Database) {
@@ -265,38 +267,6 @@ export default class UserDAO {
         let userid = Math.floor(Math.random() * 1e16).toString(36).substring(0, 6);
         const new_photo = await this.saveBlobToMedia(file.buffer, userid);
 
-        // {
-        //     "_id": {
-        //       "$oid": "655ca800c6abc4c74191721e"
-        //     },
-        //     "user": {
-        //       "user_settings": {
-        //         "userid": "1a2b3c",
-        //         "name": "andre777",
-        //         "email": "teste@email.com",
-        //         "password": "fa3c1cdee866e8b57b644e55aa85ad1f001ea14471da9d41cdd3195e5613f4b8b6fff905e7f1afb3954a3e182e92c52497e41decf5718b51a09bfadf52e77f20"
-        //       },
-        //       "videos": [
-        //         "2d5s1x",
-        //         "3l9f2a",
-        //         "4r5t6y"
-        //       ],
-        //       "watched_videos": [
-        //         "l2m4c6",
-        //         "s9k4n2",
-        //         "f3j5b9"
-        //       ],
-        //       "subscribed": [
-        //         "g8j5m1",
-        //         "2v3c6z",
-        //         "k7u5i9"
-        //       ],
-        //       "subscribers": 40,
-        //       "photo": "user1.png",
-        //       "nickname": "Canal do Andre"
-        //     }
-        //   }
-
         const new_user = {
             user: {
                 user_settings: {
@@ -326,6 +296,35 @@ export default class UserDAO {
             return null;
         }
         
+    }
+
+    public async countView(videoid: string, user_s: User): Promise<boolean>{
+        if((user_s.getWatched_videos).includes(videoid)){
+            return false;
+        }else{
+            //arrumar erro de requisicao
+            const req = await axios.post("//localhost:8080/video/newView",{
+                "code": "sR#9Kp2&DnQ!7@vFg5^HjLm*O3u1ySxI4zWc8EaNb6tYqUoPwXeZrTvYiGuJhFkDlCbV",
+                "videoid": videoid
+            })
+            if(req.status === 200){
+                const update = await this.collection.updateOne(
+                    {"user.user_settings.userid": user_s.getUserSettings.userid},
+                    {
+                        $push:{
+                            "user.watched_videos": videoid
+                        }
+                    }
+                )
+                if(update){
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
     }
 
     private async saveBlobToMedia(blobContent: Buffer, userid: string){

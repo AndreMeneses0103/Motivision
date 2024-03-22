@@ -33,6 +33,8 @@ export default class userRouter {
         this.route.get("/getRegisteredEmail", this.controller.getRegistersByEmail.bind(this.controller));
 
         this.route.post("/postRegisterUser",this.upload.single('file') , this.controller.postRegisterUser.bind(this.controller));
+
+        this.route.post("/postNewView", this.controller.postNewView.bind(this.controller))
     }
 
     public getRouter(): Router{
