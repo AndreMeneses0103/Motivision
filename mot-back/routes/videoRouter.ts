@@ -22,8 +22,6 @@ export default class videoRouter {
         this.route.get("/search", this.controller.searchVideo.bind(this.controller));
 
         this.route.get("/source", this.controller.getSource.bind(this.controller));
-
-        this.route.post("/newView", this.controller.addView.bind(this.controller))
     }
 
     public getRouter(): Router {

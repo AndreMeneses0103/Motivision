@@ -7,9 +7,8 @@ import Database from "../../database";
 import createKey from "../../middlewares/createKey";
 import * as fs from "fs";
 import path from "path";
-import axios from "axios";
-import VideoDAO from "./VideoDAO";
 import { VideoController } from "../../controllers/VideoController";
+import VideoDAO from "./VideoDAO";
 export default class UserDAO {
     private collection: Collection;
     constructor(database: Database) {
@@ -298,17 +297,14 @@ export default class UserDAO {
         
     }
 
-    public async countView(videoid: string, user_s: User): Promise<boolean>{
+    public async countView(videoid: string, user_s: User, videoDao: VideoDAO): Promise<boolean>{
         if((user_s.getWatched_videos).includes(videoid)){
             return false;
-        }else{
-            //arrumar erro de requisicao
-            const req = await axios.post("//localhost:8080/video/newView",{
-                "code": "sR#9Kp2&DnQ!7@vFg5^HjLm*O3u1ySxI4zWc8EaNb6tYqUoPwXeZrTvYiGuJhFkDlCbV",
-                "videoid": videoid
-            })
-            if(req.status === 200){
-                const update = await this.collection.updateOne(
+        }
+        try{
+            const isViewAdded = await videoDao.addView(videoid);
+            if(isViewAdded){
+                const updateResult = await this.collection.updateOne(
                     {"user.user_settings.userid": user_s.getUserSettings.userid},
                     {
                         $push:{
@@ -316,14 +312,13 @@ export default class UserDAO {
                         }
                     }
                 )
-                if(update){
-                    return true;
-                }else{
-                    return false;
-                }
+                return updateResult.modifiedCount > 0;
             }else{
                 return false;
             }
+        }catch(error){
+            console.error("Error in countView:", error);
+            return false;
         }
     }
 

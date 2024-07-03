@@ -2,12 +2,15 @@ import UserDAO from "../models/DAO/UserDAO";
 import { Request, Response } from "express";
 import Permission from "../middlewares/permission";
 import User from "../models/DTO/User";
+import VideoDAO from "../models/DAO/VideoDAO";
 
 class UserController{
     private userDao: UserDAO;
+    private videoDao: VideoDAO;
 
-    constructor(userDao: UserDAO){
+    constructor(userDao: UserDAO, videoDao: VideoDAO){
         this.userDao = userDao;
+        this.videoDao = videoDao;
     }
 
     async getAllUsers(req: Request, res: Response){
@@ -63,6 +66,12 @@ class UserController{
     async postNewView(req: Request, res: Response){
         try{
             const {videoid, user} = req.body;
+
+            if(!videoid || !user){
+                return res.status(400).json({
+                    error: "Missing content in body."
+                })
+            }
             const user_s = new User(
                 user.user_settings,
                 user.videos,
@@ -71,15 +80,15 @@ class UserController{
                 user.subscribers,
                 user.nickname
             )
-            const new_view = await this.userDao.countView(videoid, user_s);
+            const new_view = await this.userDao.countView(videoid, user_s, this.videoDao);
             if(new_view){
-                res.status(200).json(true);
+                return res.status(200).json({success:true});
             }else{
-                res.status(404).json(false);
+                return res.status(404).json({error: "View couldn't be counted, this video might already be watched by the user."});
             }
         }catch(error){
-            console.error(error);
-            res.status(500).json({error: "An error occurred in server."})
+            console.error("Error in postNewView:", error);
+            return res.status(500).json({error: "An error occurred in server."})
         }
     }
 

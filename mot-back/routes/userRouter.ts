@@ -4,6 +4,7 @@ import Database from "../database";
 import Permission from "../middlewares/permission";
 import multer, { Multer } from "multer";
 import { UserController } from "../controllers/UserController";
+import VideoDAO from "../models/DAO/VideoDAO";
 
 export default class userRouter {
     private route: Router;
@@ -12,7 +13,7 @@ export default class userRouter {
     constructor(database: Database) {
         this.route = express.Router();
         this.upload = multer({storage: multer.memoryStorage()});
-        this.controller = new UserController(new UserDAO(database));
+        this.controller = new UserController(new UserDAO(database), new VideoDAO(database));
         this.configRouter();
     }
     private configRouter(): void {
