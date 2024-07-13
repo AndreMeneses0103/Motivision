@@ -31,6 +31,7 @@ function Register() {
 	const navigate = useNavigate();
 
 	function nextPage(){
+		setLoading(true);
 		const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 		const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_\-])[A-Za-z\d@$!%*?&_\-]{8,}$/;
 		
@@ -47,7 +48,6 @@ function Register() {
 		}else if(!(regexPass.test(password))){
 			errorToast("Please insert a strong password!");
 		}else{
-			setLoading(true);
 			tryGetInformation();
 		}
 	}
@@ -101,18 +101,21 @@ function Register() {
 	}
 
 	async function getInformation(){
+		setLoading(true);
 		const updateExData = existentData;
 		const req_a = await verifyName(name);
 		const req_b = await verifyEmail(email);
 		if(req_a.user === true){
 			errorToast("Sorry, this username is already taken. Please choose a different username.");
 			updateExData.hasName = true;
+			setLoading(false)
 		}else{
 			updateExData.hasName = false;
 		}
 		if(req_b.user === true){
 			errorToast("Sorry, this email is already taken. Please choose a different email.");
 			updateExData.hasEmail = true;
+			setLoading(false)
 		}else{
 			updateExData.hasEmail = false;
 		}
@@ -126,9 +129,11 @@ function Register() {
 	}
 
 	async function registerUser(){
+		setLoading(true);
 		const req = await registerNewUser(name, email, password, channel, photoFile);
 		if(req.data.success){
 			successToast("Registered successfully!");
+			setRegLoading(false);
 			tryLogin();
 		}else{
 			errorToast("An error occurred in register");
@@ -156,8 +161,6 @@ function Register() {
 			await setUserLogin();
 		}catch(error){
 			console.error(error);
-		}finally{
-			setLoading(false);
 		}
 	}
 
@@ -166,8 +169,6 @@ function Register() {
 			getInformation();
 		}catch(error){
 			console.error(error);
-		}finally{
-			setLoading(true);
 		}
 	}
 
@@ -228,7 +229,7 @@ function Register() {
 					<button
 						className="btn_next"
 						onClick={tryRegisterUser}
-					>{loading ? "..." : "Register"}</button>
+					>{regloading ? "..." : "Register"}</button>
 				</div>
 			) : (
 				<div className="card_reg">

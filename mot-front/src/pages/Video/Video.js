@@ -4,13 +4,14 @@ import AllComments from "./All_comments";
 import AllVideos from "./All_Random_Videos";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getTokenId, refreshToken,} from "../../scripts/getUser";
-import { getUser, verifyLog } from "../../services/userFetch";
+import { getTokenId, refreshToken, refreshCookieValue} from "../../scripts/getUser";
+import { getUser, postVideoView, verifyLog } from "../../services/userFetch";
 import { getVideoInfo, getVideoSource } from "../../services/videoFetch";
 import { Popup } from "../../components/CommentPopup";
 import { setComment } from "../../services/commentFetch";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUser } from "../../contexts/UserContext";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 
@@ -118,6 +119,8 @@ function Video() {
     const params = new URLSearchParams(local.search);
     const url = params.get("videoId");
 
+    const {user: currentUser} = useUser();
+
     function reset(){
         setError("");
         setVideoData(null);
@@ -128,6 +131,7 @@ function Video() {
         setVideoLoading(true);
     }
 
+
     async function getVideoData(){
         const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
@@ -136,6 +140,7 @@ function Video() {
                 setError("nonexistent")
             }else{
                 setError("");
+                console.log(data)
                 setVideoData(data.videos);
             }
         }
@@ -149,8 +154,16 @@ function Video() {
                 setError("nonexistent");
             }else{
                 setError("");
-                setUserData(data.user)
+                setUserData(data.user);
             }
+        }
+    }
+
+    async function VideoView(){
+        const logUser = await verifyLog(getTokenId(refreshToken()));
+        if(logUser){
+            const view = await postVideoView(url, currentUser);
+            console.log("1");
         }
     }
 
@@ -179,6 +192,17 @@ function Video() {
             }else{
                 errorToast("An error occurred in comment sending...");
             }
+        }
+    }
+
+    async function tryVideoView(){
+        try{
+            await VideoView();
+        }catch(error){
+            console.error(error);
+            setError(error);
+        }finally{
+            setUserLoading(false);
         }
     }
 
@@ -238,7 +262,6 @@ function Video() {
     }
 
     const nextKeyComment = () =>{
-        console.log("NEXT KEY")
         setKeyComment((prevKey)=> prevKey + 1); 
     }
     
@@ -261,6 +284,7 @@ function Video() {
     useEffect(()=>{
         reset();
         (async()=>{
+            await tryVideoView();
             await tryGetVideoData();
         })();
     },[local]);
@@ -296,6 +320,7 @@ function Video() {
         }
         else{
             if(videoSource !== undefined){
+                console.log("2")
                 return renderVideo(videoData, userData, videoSource);
             }
         }

@@ -57,6 +57,15 @@ async function setLogin(name,password){
     return req;
 }
 
+async function postVideoView(videoid, user){
+    delete user.userphoto;
+    const req = await api.post(`/user/postNewView`, {
+        "videoid": videoid,
+        "user": user
+    });
+    return req;
+}
+
 export {
     getUser,
     getUsers,
@@ -64,5 +73,6 @@ export {
     verifyLog,
     verifyEmail,
     verifyName,
-    registerNewUser
+    registerNewUser,
+    postVideoView
 }

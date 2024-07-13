@@ -245,7 +245,7 @@ a{
 #channel_name_prof{
     margin-left: 15px;
     font-weight: 600;
-    font-size: large;
+    /* font-size: large; */
 }
 
 #data_comment{
@@ -256,7 +256,7 @@ a{
 }
 
 #comment_text{
-    margin: 0px 0px 20px 55px;
+    margin: 0.5vh 0px 3vh 60px;
     text-align: justify;
 }
 
