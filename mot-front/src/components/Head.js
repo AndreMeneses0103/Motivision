@@ -1,51 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
-// import axios from "axios";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import {refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
 import "../styles/Head.css";
-import { getUser } from "../services/userFetch";
+import { useUser } from "../contexts/UserContext";
 
 function Head() {
     // const [userData, setUserData] = useState([]);
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(true);
+    const {user, loading, error} = useUser();
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-
-    async function getUserData(){
-        const userSelected = getTokenId(refreshToken());
-        let data = await getUser(userSelected);
-        if (data.isValid && "newAccessToken" in data.isValid) {
-            refreshCookieValue("accessToken",data.isValid.newAccessToken);
-            data = await getUser(userSelected);
-        }
-        setUser(data.user)
-    }
-
-    async function tryGetUser(){
-        try {
-            await getUserData();
-        } catch(error){
-            console.error(error);
-            setError(error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        (async () => {
-            await tryGetUser();
-        })();
-    },[])
 
     const loadUpload = () => {
         navigate("/upload");
     };
 
     const loadProfile = () => {
-        navigate(`/profile?user=${getTokenId(refreshToken())}`);
+        navigate(`/profile?user=${user.id}`);
     };
 
     const loadMain = () => {
