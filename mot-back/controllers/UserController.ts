@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Permission from "../middlewares/permission";
 import User from "../models/DTO/User";
 import VideoDAO from "../models/DAO/VideoDAO";
+import UserSetting from "../models/DTO/UserSetting";
 
 class UserController{
     private userDao: UserDAO;
@@ -72,8 +73,13 @@ class UserController{
                     error: "Missing content in body."
                 })
             }
+            const user_s_settings = new UserSetting(
+                user.usersettings._userid,
+                user.usersettings._name,
+                user.usersettings._email,
+            )
             const user_s = new User(
-                user.user_settings,
+                user_s_settings,
                 user.videos,
                 user.watched_videos,
                 user.subscribed,
@@ -152,7 +158,6 @@ class UserController{
                     if(isValid.newAccessToken){
                         response = {isValid}
                     }else{
-                        // console.log(isValid.value);
                         const user = await this.userDao.getUsersByIds(allUsers);
                         response = {user};
                     }
@@ -188,7 +193,6 @@ class UserController{
                     if(isValid.newAccessToken){
                         response = {isValid}
                     }else{
-                        // console.log(isValid.value);
                         const user = await this.userDao.getUserById(userSelected);
                         response = {user};
                     }
@@ -224,7 +228,6 @@ class UserController{
                     if(isValid.newAccessToken){
                         response = {isValid}
                     }else{
-                        // console.log(isValid.value);
                         const user = await this.userDao.getUserByName(nome);
                         response = {user};
                     }

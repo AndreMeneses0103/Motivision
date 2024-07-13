@@ -90,7 +90,6 @@ export default class UserDAO {
                 __dirname,
                 "../../midia/photos/users"
             );
-            // console.log(userData.map(doc => doc.photo));
             const thumbPaths = userData.map(user => path.join(rightPath, user.photo));
             const convert64Array = thumbPaths.map(thumbPath => this.encodeImageToBase64(thumbPath));
 
@@ -312,7 +311,11 @@ export default class UserDAO {
                         }
                     }
                 )
-                return updateResult.modifiedCount > 0;
+                if(updateResult){
+                    return true;
+                }else{
+                    return false;
+                }
             }else{
                 return false;
             }
