@@ -119,7 +119,7 @@ function Video() {
     const params = new URLSearchParams(local.search);
     const url = params.get("videoId");
 
-    const {user: currentUser} = useUser();
+    const {user: currentUser, updateUser} = useUser();
 
     function reset(){
         setError("");
@@ -161,9 +161,10 @@ function Video() {
 
     async function VideoView(){
         const logUser = await verifyLog(getTokenId(refreshToken()));
+        console.log("USUARIO:", currentUser);
         if(logUser){
-            const view = await postVideoView(url, currentUser);
-            console.log("1");
+            await postVideoView(url, currentUser);
+            await updateUser();
         }
     }
 

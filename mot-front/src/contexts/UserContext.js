@@ -31,6 +31,11 @@ export const UserProvider = ({children})=>{
         }
     }
 
+    const updateUser = async ()=>{
+        setLoading(true);
+        await tryGetUser();
+    };
+
     useEffect(() => {
         (async () => {
             await tryGetUser();
@@ -38,7 +43,7 @@ export const UserProvider = ({children})=>{
     },[]);
 
     return (
-        <UserContext.Provider value={{ user, loading, error }}>
+        <UserContext.Provider value={{ user, loading, error, updateUser }}>
             {children}
         </UserContext.Provider>
     );
