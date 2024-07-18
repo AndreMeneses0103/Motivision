@@ -34,7 +34,6 @@ async function verifyEmail(email){
 async function registerNewUser(name, email, password, channel, photo){
     const formdata = new FormData();
     let photofile = new File([photo], "teste.png");
-    console.log("PHOTOFILE:",photofile);
     formdata.append('file', photo);
     formdata.append('name', name);
     formdata.append('email', email);
@@ -58,10 +57,11 @@ async function setLogin(name,password){
 }
 
 async function postVideoView(videoid, user){
-    delete user.userphoto;
+    let newUser = { ...user };
+    delete newUser.userphoto;
     const req = await api.post(`/user/postNewView`, {
         "videoid": videoid,
-        "user": user
+        "user": newUser
     });
     return req;
 }

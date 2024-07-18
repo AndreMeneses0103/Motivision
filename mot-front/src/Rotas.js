@@ -9,38 +9,44 @@ import Profile from "./pages/Profile/Profile";
 import Head from "./components/Head";
 import Register from "./pages/Register/Register";
 
+function Layout({ children }) {
+    return (
+        <>
+            <Head />
+            {children}
+        </>
+    );
+}
+
 function Rotas() {
     return (
         <Routes>
-            <Route path="/video" element={
-                <>
-                    <Head/>
-                    <Video />
-                </>
-            } />
             <Route path="/" element={<LoginChecker />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            
+            <Route path="/video" element={
+                <Layout>
+                    <Video />
+                </Layout>
+            } />
             <Route path="/upload" element={
-                <>
-                <Head/>
-                <Upload />
-            </>
+                <Layout>
+                    <Upload />
+                </Layout>
             } />
             <Route path="/main" element={
-                <>
-                <Head/>
-                <Main />
-            </>
-            }/>
+                <Layout>
+                <Main/>
+                </Layout>
+            } />
             <Route path="/profile" element={
-                <>
-                <Head/>
-                <Profile />
-            </>
-            }/>
-            <Route path="/register" element={<Register />} />
+                <Layout>
+                    <Profile />
+                </Layout>
+            } />
         </Routes>
-		);
+    );
 }
 
 export default Rotas;

@@ -16,7 +16,7 @@ function LoginChecker() {
 
     function getToken() {
         const haveRefresh = refreshToken();
-        console.log("Refresh:", haveRefresh)
+        // console.log("Refresh:", haveRefresh)
         if (haveRefresh !== null) {
             return true;
         } else {

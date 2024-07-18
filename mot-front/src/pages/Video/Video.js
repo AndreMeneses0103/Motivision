@@ -140,7 +140,6 @@ function Video() {
                 setError("nonexistent")
             }else{
                 setError("");
-                console.log(data)
                 setVideoData(data.videos);
             }
         }
@@ -161,7 +160,6 @@ function Video() {
 
     async function VideoView(){
         const logUser = await verifyLog(getTokenId(refreshToken()));
-        console.log("USUARIO:", currentUser);
         if(logUser){
             await postVideoView(url, currentUser);
             await updateUser();
@@ -321,7 +319,6 @@ function Video() {
         }
         else{
             if(videoSource !== undefined){
-                console.log("2")
                 return renderVideo(videoData, userData, videoSource);
             }
         }

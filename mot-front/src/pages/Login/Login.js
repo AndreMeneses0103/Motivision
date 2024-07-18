@@ -5,6 +5,7 @@ import { useState } from "react";
 import { setLogin } from "../../services/userFetch";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUser } from "../../contexts/UserContext";
 
 function Login() {
 
@@ -12,6 +13,8 @@ function Login() {
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
+
+	const {updateUser} = useUser();
 
 	async function setUserLogin(){
 		setLoading(true);
@@ -21,11 +24,11 @@ function Login() {
 			successToast();
 			document.cookie = `accessToken=${data.accessToken}; path=/`;
 			document.cookie = `refreshToken=${data.refreshToken}; path=/`;
+			await updateUser();
 			setTimeout(()=>{
 				navigate("/main");
 			}, 2000);
 		}else{
-			console.log("ERRO");
 			errorToast();
 		}
 	}

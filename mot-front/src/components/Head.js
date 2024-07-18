@@ -13,18 +13,14 @@ function Head() {
     };
 
     const loadProfile = () => {
-        navigate(`/profile?user=${user.id}`);
+        navigate(`/profile?user=${user.usersettings._userid}`);
     };
 
     const loadMain = () => {
         navigate("/main");
     };
 
-    if (error) {
-        if (error.code === "ERR_BAD_REQUEST") {
-            return <h1>Erro de autenticação, realize o login novamente.</h1>;
-        }
-    } else {
+    if(user){
         return (
             <div className="header">
                     <div className="user" id="user">
@@ -63,6 +59,11 @@ function Head() {
                 </div>
             </div>
         );
+    }else{
+        console.error(error);
+        if (error.code === "ERR_BAD_REQUEST") {
+            return <h1>Erro de autenticação, realize o login novamente.</h1>;
+        }
     }
 }
 

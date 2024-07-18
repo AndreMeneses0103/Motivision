@@ -7,10 +7,6 @@ import { useEffect } from "react";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Main() {
-
-    useEffect(()=>{
-        
-    })
     return (
         <div className="div_main">
             <div className="Align_Videos">

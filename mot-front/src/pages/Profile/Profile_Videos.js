@@ -56,8 +56,6 @@ export function ProfilePhoto({imageSrc}){
 }
 
 export function ProfileVideos({videoData}){
-    console.log(videoData.map(item => (item.thumb)))
-
     return(
         <>
             {videoData.map(item => (

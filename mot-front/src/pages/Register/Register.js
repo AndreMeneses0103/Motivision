@@ -151,7 +151,6 @@ function Register() {
 				navigate("/main");
 			}, 2000);
 		}else{
-			console.log("ERRO");
 			errorToast("An error occurred in login");
 		}
 	}
