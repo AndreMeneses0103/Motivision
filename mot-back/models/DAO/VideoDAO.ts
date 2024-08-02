@@ -92,19 +92,60 @@ export default class VideoDAO{
         }
     }
 
-    //continuar
     public async addView(videoid: string): Promise<boolean>{
-        const video = await this.collection.updateOne(
-            {"video.id": videoid},
-            {
-                $inc:{
-                    "video.video_data.views": 1
+        try{
+            const video = await this.collection.updateOne(
+                {"video.id": videoid},
+                {
+                    $inc:{
+                        "video.video_data.views": 1
+                    }
                 }
+            )
+            return video.modifiedCount > 0;
+        }catch(error){
+            console.error("Error adding View:", error);
+            return false;
+        }
+    }
+
+    public async manageLike(videoid: string, opt: boolean): Promise<number>{
+        try{
+            const result = await this.collection.updateOne(
+                {"video.id": videoid},{
+                    $inc:{
+                        "video.video_data.likes": opt ? 1 : -1
+                    }
+                }
+            )
+            if(result.modifiedCount > 0){
+                if(opt){
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }else{
+                return -1;
             }
-        )
-        if(video.modifiedCount > 0){
-            return true;
-        }else{
+        }catch(error){
+            console.error("Error managing Like:", error);
+            return -1;
+        }
+    }
+
+    public async manageDislike(videoid: string, opt: boolean): Promise<boolean>{
+        try{
+            const result = await this.collection.updateOne(
+                {"video.id": videoid},{
+                    $inc:{
+                        "video.video_data.dislikes": opt ? 1 : -1
+                    }
+                }
+            )
+
+            return result.modifiedCount > 0;
+        }catch(error){
+            console.error("Error managing Dislike:", error);
             return false;
         }
     }

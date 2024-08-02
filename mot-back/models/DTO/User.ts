@@ -4,6 +4,8 @@ export default class User {
     private usersettings: UserSetting;
     private videos: string[];
     private watched_videos: string[];
+    private liked_videos: string[];
+    private disliked_videos: string[];
     private subscribed: string[];
     private subscribers: number;
     private userphoto?: string;
@@ -13,6 +15,8 @@ export default class User {
         usersettings: UserSetting,
         videos: string[],
         watched_videos: string[],
+        liked_videos: string[],
+        disliked_videos: string[],
         subscribed: string[],
         subscribers: number,
         nickname: string,
@@ -21,6 +25,8 @@ export default class User {
         this.usersettings = usersettings;
         this.videos = videos;
         this.watched_videos = watched_videos;
+        this.liked_videos = liked_videos;
+        this.disliked_videos = disliked_videos;
         this.subscribed = subscribed;
         this.subscribers = subscribers;
         this.nickname = nickname;
@@ -37,6 +43,14 @@ export default class User {
 
     get getWatched_videos(): string[] {
         return this.watched_videos;
+    }
+
+    get getLiked_Videos(): string[]{
+        return this.liked_videos;
+    }
+
+    get getDisliked_Videos(): string[]{
+        return this.disliked_videos;
     }
 
     get getSubscribed(): string[] {
@@ -59,28 +73,35 @@ export default class User {
         this.usersettings = value;
     }
 
-    set getVideos(value: string[]) {
+    set setVideos(value: string[]) {
         this.videos = value;
     }
 
-    set getWatched_videos(value: string[]) {
+    set setWatched_videos(value: string[]) {
         this.watched_videos = value;
     }
 
-    set getSubscribed(value: string[]) {
+    set setLiked_videos(value: string[]) {
+        this.liked_videos = value;
+    }
+
+    set setDisliked_videos(value: string[]) {
+        this.disliked_videos = value;
+    }
+
+    set setSubscribed(value: string[]) {
         this.subscribed = value;
     }
 
-    set getSubscribers(value: number) {
-        // Validando que subscribers não seja negativo
+    set setSubscribers(value: number) {
         this.subscribers = Math.max(value, 0);
     }
 
-    set getUserphoto(value: string) {
+    set setUserphoto(value: string) {
         this.userphoto = value;
     }
 
-    set getNickname(value: string){
+    set setNickname(value: string){
         this.nickname = value;
     }
 }

@@ -35,7 +35,9 @@ export default class userRouter {
 
         this.route.post("/postRegisterUser",this.upload.single('file') , this.controller.postRegisterUser.bind(this.controller));
 
-        this.route.post("/postNewView", this.controller.postNewView.bind(this.controller))
+        this.route.post("/postNewView", this.controller.postNewView.bind(this.controller));
+
+        this.route.post("/postLike", this.controller.postLike.bind(this.controller));
     }
 
     public getRouter(): Router{

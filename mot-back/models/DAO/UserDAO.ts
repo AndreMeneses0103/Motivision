@@ -54,7 +54,7 @@ export default class UserDAO {
                 __dirname,
                 "../../midia/photos/users"
             );
-            const thumbPath = rightPath + "\\" + userData.photo;
+            const thumbPath = rightPath + "/" + userData.photo;
             const convert64 = this.encodeImageToBase64(thumbPath);
 
             const userSettings = new UserSetting(
@@ -66,6 +66,8 @@ export default class UserDAO {
                 userSettings,
                 userData.videos || null,
                 userData.watched_videos,
+                userData.liked_videos,
+                userData.disliked_videos,
                 userData.subscribed || null,
                 userData.subscribers || 0,
                 userData.nickname,
@@ -103,6 +105,8 @@ export default class UserDAO {
                     userSettings,
                     user.videos || [],
                     user.watched_videos || [],
+                    user.liked_videos || [],
+                    user.disliked_videos || [],
                     user.subscribed || [],
                     user.subscribers || 0,
                     user.nickname,
@@ -142,6 +146,8 @@ export default class UserDAO {
                 userSettings,
                 userData.videos || null,
                 userData.watched_videos,
+                userData.liked_videos,
+                userData.disliked_videos,
                 userData.subscribed || null,
                 userData.subscribers || 0,
                 userData.nickname,
@@ -178,6 +184,8 @@ export default class UserDAO {
                 userSettings,
                 userData.videos || null,
                 userData.watched_videos,
+                userData.liked_videos,
+                userData.disliked_videos,
                 userData.subscribed || null,
                 userData.subscribers || 0,
                 userData.nickname,
@@ -277,6 +285,10 @@ export default class UserDAO {
                 ],
                 watched_videos: [
                 ],
+                liked_videos: [
+                ],
+                disliked_videos: [
+                ],
                 subscribed: [
                 ],
                 subscribers: 0,
@@ -297,6 +309,7 @@ export default class UserDAO {
     }
 
     public async countView(videoid: string, user_s: User, videoDao: VideoDAO): Promise<boolean>{
+        console.log(user_s.getWatched_videos);
         if((user_s.getWatched_videos).includes(videoid)){
             return false;
         }
@@ -321,6 +334,36 @@ export default class UserDAO {
             }
         }catch(error){
             console.error("Error in countView:", error);
+            return false;
+        }
+    }
+
+    public async countLike(videoid: string, user_s: User, videoDao: VideoDAO): Promise<boolean>{
+        let alreadyLiked = true;
+        if((user_s.getLiked_Videos).includes(videoid)){
+            alreadyLiked = false;
+        }
+        try{
+            const isLikeAdded = await videoDao.manageLike(videoid, alreadyLiked);
+            if(isLikeAdded){
+                const updateOperator = isLikeAdded === 0
+                    ? { $push: { "user.liked_videos": videoid } }
+                    : { $pull: { "user.liked_videos": videoid } };
+                    
+                const updateResult = await this.collection.updateOne(
+                    {"user.user_settings.userid": user_s.getUserSettings.userid},
+                    updateOperator
+                );
+                if(updateResult){
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }catch(error){
+            console.error("Error in countLike:", error);
             return false;
         }
     }

@@ -119,7 +119,7 @@ class VideoController {
     }
 
     async addView(code: string, videoid:string): Promise<boolean>{
-        const addCode = "sR#9Kp2&DnQ!7@vFg5^HjLm*O3u1ySxI4zWc8EaNb6tYqUoPwXeZrTvYiGuJhFkDlCbV"
+        const addCode = "sR#9Kp2&DnQ!7@vFg5^HjLm*O3u1ySxI4zWc8EaNb6tYqUoPwXeZrTvYiGuJhFkDlCbV";
         try{
             if (code !== addCode) {
                 return false;
@@ -129,6 +129,34 @@ class VideoController {
             return result;
         }catch(error){
             console.error("Error in addView:", error);
+            return false;
+        }
+    }
+
+    async addLike(code: string, videoid: string, opt: boolean): Promise<number>{
+        const addCode = "sR#9Kp2&DnQ!7@vFg5^HjLm*O3u1ySxI4zWc8EaNb6tYqUoPwXeZrTvYiGuJhFkDlCbV";
+        try{
+            if(code !== addCode){
+                return -1;
+            }
+            const result: number = await this.videoDao.manageLike(videoid, opt);
+            return result;
+        }catch(error){
+            console.error("Error in addLike:", error);
+            return -1;
+        }
+    }
+
+    async addDislike(code: string, videoid: string, opt: boolean): Promise<boolean>{
+        const addCode = "sR#9Kp2&DnQ!7@vFg5^HjLm*O3u1ySxI4zWc8EaNb6tYqUoPwXeZrTvYiGuJhFkDlCbV";
+        try{
+            if(code !== addCode){
+                return false;
+            }
+            const result: boolean = await this.videoDao.manageDislike(videoid, opt);
+            return result;
+        }catch(error){
+            console.error("Error in addDislike:", error);
             return false;
         }
     }

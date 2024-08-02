@@ -82,6 +82,8 @@ class UserController{
                 user_s_settings,
                 user.videos,
                 user.watched_videos,
+                user.liked_videos,
+                user.disliked_videos,
                 user.subscribed,
                 user.subscribers,
                 user.nickname
@@ -94,6 +96,42 @@ class UserController{
             }
         }catch(error){
             console.error("Error in postNewView:", error);
+            return res.status(500).json({error: "An error occurred in server."})
+        }
+    }
+
+    async postLike(req: Request, res: Response){
+        try{
+            const {videoid, user} = req.body;
+
+            if(!videoid || !user){
+                return res.status(400).json({
+                    error: "Missing content in body."
+                })
+            }
+            const user_s_settings = new UserSetting(
+                user.user_settings.userid,
+                user.user_settings.name,
+                user.user_settings.email,
+            )
+            const user_s = new User(
+                user_s_settings,
+                user.videos,
+                user.watched_videos,
+                user.liked_videos,
+                user.disliked_videos,
+                user.subscribed,
+                user.subscribers,
+                user.nickname
+            )
+            const new_like = await this.userDao.countLike(videoid, user_s, this.videoDao);
+            if(new_like){
+                return res.status(200).json({success:true});
+            }else{
+                return res.status(404).json({error: "An error occurred to manage Like."});
+            }
+        }catch(error){
+            console.error("Error in postLike:", error);
             return res.status(500).json({error: "An error occurred in server."})
         }
     }
