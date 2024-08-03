@@ -133,7 +133,7 @@ export default class VideoDAO{
         }
     }
 
-    public async manageDislike(videoid: string, opt: boolean): Promise<boolean>{
+    public async manageDislike(videoid: string, opt: boolean): Promise<number>{
         try{
             const result = await this.collection.updateOne(
                 {"video.id": videoid},{
@@ -142,11 +142,18 @@ export default class VideoDAO{
                     }
                 }
             )
-
-            return result.modifiedCount > 0;
+            if(result.modifiedCount > 0){
+                if(opt){
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }else{
+                return -1;
+            }
         }catch(error){
             console.error("Error managing Dislike:", error);
-            return false;
+            return -1;
         }
     }
 }

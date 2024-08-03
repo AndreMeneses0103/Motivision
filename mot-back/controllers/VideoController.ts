@@ -147,17 +147,17 @@ class VideoController {
         }
     }
 
-    async addDislike(code: string, videoid: string, opt: boolean): Promise<boolean>{
+    async addDislike(code: string, videoid: string, opt: boolean): Promise<number>{
         const addCode = "sR#9Kp2&DnQ!7@vFg5^HjLm*O3u1ySxI4zWc8EaNb6tYqUoPwXeZrTvYiGuJhFkDlCbV";
         try{
             if(code !== addCode){
-                return false;
+                return -1;
             }
-            const result: boolean = await this.videoDao.manageDislike(videoid, opt);
+            const result: number = await this.videoDao.manageDislike(videoid, opt);
             return result;
         }catch(error){
             console.error("Error in addDislike:", error);
-            return false;
+            return -1;
         }
     }
 }

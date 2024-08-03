@@ -345,7 +345,7 @@ export default class UserDAO {
         }
         try{
             const isLikeAdded = await videoDao.manageLike(videoid, alreadyLiked);
-            if(isLikeAdded){
+            if(isLikeAdded !== -1){
                 const updateOperator = isLikeAdded === 0
                     ? { $push: { "user.liked_videos": videoid } }
                     : { $pull: { "user.liked_videos": videoid } };
@@ -364,6 +364,36 @@ export default class UserDAO {
             }
         }catch(error){
             console.error("Error in countLike:", error);
+            return false;
+        }
+    }
+
+    public async countDislike(videoid: string, user_s: User, videoDao: VideoDAO): Promise<boolean>{
+        let alreadyDisliked = true;
+        if((user_s.getDisliked_Videos).includes(videoid)){
+            alreadyDisliked = false;
+        }
+        try{
+            const isDislikeAdded = await videoDao.manageDislike(videoid, alreadyDisliked);
+            if(isDislikeAdded !== -1){
+                const updateOperator = isDislikeAdded === 0
+                    ? { $push: { "user.disliked_videos": videoid } }
+                    : { $pull: { "user.disliked_videos": videoid } };
+                    
+                const updateResult = await this.collection.updateOne(
+                    {"user.user_settings.userid": user_s.getUserSettings.userid},
+                    updateOperator
+                );
+                if(updateResult){
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }catch(error){
+            console.error("Error in countDislike:", error);
             return false;
         }
     }
