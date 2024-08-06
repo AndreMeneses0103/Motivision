@@ -17,6 +17,8 @@ import { useUser } from "../../contexts/UserContext";
 
 function Video() {
 
+    let info = null;
+
     function renderLoading(){
         return(
             <div className="mainpage">
@@ -43,7 +45,7 @@ function Video() {
     }
     
     function renderVideo(videoData,userData,videoSource){
-        const info = videoData[0];
+        info = videoData[0];
         return(
             <div className="mainpage">
             {isPop ? <Popup cmtControl={closeComment} sendMessage={sendMessage} updateMessage={nextKeyComment}/> : null}
@@ -70,11 +72,7 @@ function Video() {
                     <div className="screen_video">
                         <video id="playing_video" controls src={videoSource} type="video/mp4"></video>
                     </div>
-                    <div className="video_stats">
-                        <span className="video_icon_span"><img className="video_icons" id="view_icon" src="./icons/olho.png" alt="View"/> {info.videodata.views}</span>
-                        <span className="video_icon_span"><img className="video_icons" id="like_icon" src="./icons/afirmativo.png" alt="View"/> {info.videodata.likes}</span>
-                        <span className="video_icon_span"><img className="video_icons" id="dislike_icon" src="./icons/afirmativo.png" alt="View"/> {info.videodata.dislikes}</span>
-                    </div>
+                    <VideoStats initialLikes={info.videodata.likes} initialDislikes={info.videodata.dislikes}/>           
                     <div className="video_text">
                         <span className="desc_title">Description</span>
                         <span className="desc_text">{info.description}</span>
@@ -129,6 +127,77 @@ function Video() {
         setDataLoading(true);
         setUserLoading(true);
         setVideoLoading(true);
+    }
+
+    const VideoStats = ({initialLikes, initialDislikes, alreadyLiked, alreadyDisliked}) =>{
+        const [likes, setLikes] = useState(initialLikes);
+        const [dislikes, setDislikes] = useState(initialDislikes);
+        const [hasLiked, setHasLiked] = useState(alreadyLiked);
+        const [hasDislked, setHasDisliked] = useState(alreadyDisliked);
+
+        const likeClickEvent = ()=>{
+            if(hasLiked){
+                setLikes(likes - 1);
+                setHasLiked(false);
+            }else{
+                setLikes(likes + 1);
+                setHasLiked(true);
+            }
+        }
+    
+        const dislikeClickEvent = ()=>{
+            if(hasDislked){
+                setDislikes(dislikes - 1);
+                setHasDisliked(false);
+            }else{
+                setDislikes(dislikes + 1);
+                setHasDisliked(true);
+            };
+        }
+
+        return(
+            <div className="video_stats">
+            <span className="video_icon_span">
+                <img 
+                    className="video_icons" 
+                    id="view_icon" 
+                    src="./icons/olho.png" 
+                    alt="View"
+                />
+                {info.videodata.views}
+            </span>
+            <span className="video_icon_span">
+                <button 
+                    className="btn_feedback" 
+                    id="btn_like" 
+                    onClick={likeClickEvent}
+                >
+                    <img 
+                        className="video_icons" 
+                        id="like_icon" 
+                        src="./icons/afirmativo.png" 
+                        alt="Like Button"
+                    />
+                </button> 
+                {likes}
+            </span>
+            <span className="video_icon_span">
+                <button 
+                    className="btn_feedback" 
+                    id="btn_dislike" 
+                    onClick={dislikeClickEvent}
+                >
+                    <img 
+                        className="video_icons" 
+                        id="dislike_icon" 
+                        src="./icons/afirmativo.png" 
+                        alt="Dislike Button"
+                    />
+                </button>
+                {dislikes}
+            </span>
+        </div>
+        )
     }
 
 
