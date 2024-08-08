@@ -12,6 +12,7 @@ export const UserProvider = ({children})=>{
     async function getUserData(){
         const userSelected = getTokenId(refreshToken());
         let data = await getUser(userSelected);
+        console.log(data);
         if (data.isValid && "newAccessToken" in data.isValid) {
             refreshCookieValue("accessToken",data.isValid.newAccessToken);
             data = await getUser(userSelected);

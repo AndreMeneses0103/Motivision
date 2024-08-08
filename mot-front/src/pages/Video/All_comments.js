@@ -145,7 +145,7 @@ function AllComments() {
             return (
                 <div>
                     {allData.allComments.map(comment =>{
-                        const user = allData.user.find(u => u.usersettings._userid === comment.userid);
+                        const user = allData.user.find(u => u.usersettings.userid === comment.userid);
                         return (
                             <Comment
                                 key={comment.id}

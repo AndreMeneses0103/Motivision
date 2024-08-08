@@ -5,7 +5,7 @@ import AllVideos from "./All_Random_Videos";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getTokenId, refreshToken, refreshCookieValue} from "../../scripts/getUser";
-import { getUser, postVideoView, verifyLog } from "../../services/userFetch";
+import { getUser, postDislike, postLike, postVideoView, verifyLog } from "../../services/userFetch";
 import { getVideoInfo, getVideoSource } from "../../services/videoFetch";
 import { Popup } from "../../components/CommentPopup";
 import { setComment } from "../../services/commentFetch";
@@ -72,7 +72,7 @@ function Video() {
                     <div className="screen_video">
                         <video id="playing_video" controls src={videoSource} type="video/mp4"></video>
                     </div>
-                    <VideoStats initialLikes={info.videodata.likes} initialDislikes={info.videodata.dislikes}/>           
+                    <VideoStats initialLikes={info.videodata.likes} initialDislikes={info.videodata.dislikes} alreadyLiked={(userData.liked_videos).includes(url)} alreadyDisliked={(userData.disliked_videos).includes(url)}/>           
                     <div className="video_text">
                         <span className="desc_title">Description</span>
                         <span className="desc_text">{info.description}</span>
@@ -133,27 +133,53 @@ function Video() {
         const [likes, setLikes] = useState(initialLikes);
         const [dislikes, setDislikes] = useState(initialDislikes);
         const [hasLiked, setHasLiked] = useState(alreadyLiked);
-        const [hasDislked, setHasDisliked] = useState(alreadyDisliked);
+        const [hasDisliked, setHasDisliked] = useState(alreadyDisliked);
 
-        const likeClickEvent = ()=>{
-            if(hasLiked){
-                setLikes(likes - 1);
-                setHasLiked(false);
-            }else{
-                setLikes(likes + 1);
-                setHasLiked(true);
+        console.log(`JA DEU LIKE: ${hasLiked}, JA DEU DISLIKE: ${hasDisliked}`);
+
+        const likeClickEvent = async () => {
+            try {
+                if (hasLiked) {
+                    setLikes(likes - 1);
+                    await postLike(url, currentUser);
+                    setHasLiked(false);
+                } else {
+                    setLikes(likes + 1);
+                    await postLike(url, currentUser);
+                    if (hasDisliked) {
+                        setDislikes(dislikes - 1);
+                        await postDislike(url, currentUser);
+                        setHasDisliked(false);
+                    }
+                    setHasLiked(true);
+                }
+                await updateUser();
+            } catch (error) {
+                console.error('Error handling like:', error);
             }
-        }
+        };
     
-        const dislikeClickEvent = ()=>{
-            if(hasDislked){
-                setDislikes(dislikes - 1);
-                setHasDisliked(false);
-            }else{
-                setDislikes(dislikes + 1);
-                setHasDisliked(true);
-            };
-        }
+        const dislikeClickEvent = async () => {
+            try {
+                if (hasDisliked) {
+                    setDislikes(dislikes - 1);
+                    setHasDisliked(false);
+                } else {
+                    setDislikes(dislikes + 1);
+                    await postDislike(url, currentUser);
+                    if (hasLiked) {
+                        setLikes(likes - 1);
+                        setHasLiked(false);
+                        await postLike(url, currentUser);
+                    }
+                    setHasDisliked(true);
+                }
+                await updateUser();
+            } catch (error) {
+                console.error('Error handling dislike:', error);
+            }
+        };
+        
 
         return(
             <div className="video_stats">
@@ -334,7 +360,7 @@ function Video() {
     }
     
     const loadChannel = () => {
-        navigate(`/profile?user=${userData.usersettings._userid}`);
+        navigate(`/profile?user=${userData.usersettings.userid}`);
     };
 
     const errorToast = (text) =>{

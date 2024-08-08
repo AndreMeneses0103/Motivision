@@ -13,7 +13,7 @@ function Head() {
     };
 
     const loadProfile = () => {
-        navigate(`/profile?user=${user.usersettings._userid}`);
+        navigate(`/profile?user=${user.usersettings.userid}`);
     };
 
     const loadMain = () => {

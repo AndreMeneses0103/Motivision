@@ -66,6 +66,26 @@ async function postVideoView(videoid, user){
     return req;
 }
 
+async function postLike(videoid, user){
+    let newUser = { ...user };
+    delete newUser.userphoto;
+    const req = await api.post(`/user/postLike`, {
+        "videoid": videoid,
+        "user": newUser
+    });
+    return req;
+}
+
+async function postDislike(videoid, user){
+    let newUser = { ...user };
+    delete newUser.userphoto;
+    const req = await api.post(`/user/postDislike`, {
+        "videoid": videoid,
+        "user": newUser
+    });
+    return req;
+}
+
 export {
     getUser,
     getUsers,
@@ -74,5 +94,7 @@ export {
     verifyEmail,
     verifyName,
     registerNewUser,
-    postVideoView
+    postVideoView,
+    postLike,
+    postDislike
 }
