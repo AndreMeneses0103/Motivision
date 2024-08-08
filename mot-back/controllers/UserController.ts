@@ -74,9 +74,9 @@ class UserController{
                 })
             }
             const user_s_settings = new UserSetting(
-                user.usersettings._userid,
-                user.usersettings._name,
-                user.usersettings._email,
+                user.usersettings.userid,
+                user.usersettings.name,
+                user.usersettings.email,
             )
             const user_s = new User(
                 user_s_settings,
@@ -109,10 +109,11 @@ class UserController{
                     error: "Missing content in body."
                 })
             }
+            console.table(user);
             const user_s_settings = new UserSetting(
-                user.user_settings.userid,
-                user.user_settings.name,
-                user.user_settings.email,
+                user.usersettings.userid,
+                user.usersettings.name,
+                user.usersettings.email,
             )
             const user_s = new User(
                 user_s_settings,
@@ -125,7 +126,6 @@ class UserController{
                 user.nickname
             )
             const new_like = await this.userDao.countLike(videoid, user_s, this.videoDao);
-            console.log(new_like);
             if(new_like){
                 return res.status(200).json({success:true});
             }else{

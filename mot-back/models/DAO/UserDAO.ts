@@ -73,7 +73,6 @@ export default class UserDAO {
                 userData.nickname,
                 convert64
             )
-
             return users;
         } else {
             return null;
@@ -309,7 +308,6 @@ export default class UserDAO {
     }
 
     public async countView(videoid: string, user_s: User, videoDao: VideoDAO): Promise<boolean>{
-        console.log(user_s.getWatched_videos);
         if((user_s.getWatched_videos).includes(videoid)){
             return false;
         }
@@ -317,7 +315,7 @@ export default class UserDAO {
             const isViewAdded = await videoDao.addView(videoid);
             if(isViewAdded){
                 const updateResult = await this.collection.updateOne(
-                    {"user.user_settings.userid": user_s.getUserSettings.userid},
+                    {"user.user_settings.userid": user_s.getUserSettings.getUserId},
                     {
                         $push:{
                             "user.watched_videos": videoid
@@ -351,7 +349,7 @@ export default class UserDAO {
                     : { $pull: { "user.liked_videos": videoid } };
                     
                 const updateResult = await this.collection.updateOne(
-                    {"user.user_settings.userid": user_s.getUserSettings.userid},
+                    {"user.user_settings.userid": user_s.getUserSettings.getUserId},
                     updateOperator
                 );
                 if(updateResult){
@@ -381,7 +379,7 @@ export default class UserDAO {
                     : { $pull: { "user.disliked_videos": videoid } };
                     
                 const updateResult = await this.collection.updateOne(
-                    {"user.user_settings.userid": user_s.getUserSettings.userid},
+                    {"user.user_settings.userid": user_s.getUserSettings.getUserId},
                     updateOperator
                 );
                 if(updateResult){
