@@ -203,13 +203,15 @@ function Video() {
         return(
             <div className="video_stats">
             <span className="video_icon_span">
-                <img 
-                    className="video_icons" 
-                    id="view_icon" 
-                    src="./icons/olho.png" 
-                    alt="View"
-                />
-                {info.videodata.views}
+                <div className="video_icon_div">
+                    <img 
+                        className="video_icons" 
+                        id="view_icon" 
+                        src="./icons/olho.png" 
+                        alt="View"
+                    />
+                    {info.videodata.views}
+                </div>
             </span>
             <span className="video_icon_span">
                 <button 

@@ -362,3 +362,16 @@ a{
     border: none;
     cursor: pointer;
 }
+
+.video_icon_div{
+    display: inline-flex;
+    width: 25px;
+    /* height: 25px; */
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+}
+
+#view_icon{
+    margin-right: 4px;
+}
