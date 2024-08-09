@@ -72,7 +72,7 @@ function Video() {
                     <div className="screen_video">
                         <video id="playing_video" controls src={videoSource} type="video/mp4"></video>
                     </div>
-                    <VideoStats initialLikes={info.videodata.likes} initialDislikes={info.videodata.dislikes} alreadyLiked={(userData.liked_videos).includes(url)} alreadyDisliked={(userData.disliked_videos).includes(url)}/>           
+                    <VideoStats alreadyLiked={(currentUser.liked_videos).includes(url)} alreadyDisliked={(currentUser.disliked_videos).includes(url)}/>           
                     <div className="video_text">
                         <span className="desc_title">Description</span>
                         <span className="desc_text">{info.description}</span>
@@ -106,6 +106,8 @@ function Video() {
     const [videoSource, setVideoSource] = useState(null);
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState("");
+    const [likes, setLikes] = useState(0);
+    const [dislikes, setDislikes] = useState(0);
     const [dataLoading, setDataLoading] = useState(true);
     const [userLoading, setUserLoading] = useState(true);
     const [videoLoading, setVideoLoading] = useState(true);
@@ -129,29 +131,26 @@ function Video() {
         setVideoLoading(true);
     }
 
-    const VideoStats = ({initialLikes, initialDislikes, alreadyLiked, alreadyDisliked}) =>{
-        const [likes, setLikes] = useState(initialLikes);
-        const [dislikes, setDislikes] = useState(initialDislikes);
+    const VideoStats = ({alreadyLiked, alreadyDisliked}) =>{
         const [hasLiked, setHasLiked] = useState(alreadyLiked);
         const [hasDisliked, setHasDisliked] = useState(alreadyDisliked);
 
-        console.log(`JA DEU LIKE: ${hasLiked}, JA DEU DISLIKE: ${hasDisliked}`);
-
         const likeClickEvent = async () => {
+            //CORRIGIR A ATUALIZACAO DO LIKE E DISLIKE PRO USUARIO
             try {
                 if (hasLiked) {
-                    setLikes(likes - 1);
                     await postLike(url, currentUser);
                     setHasLiked(false);
+                    setLikes(prevLikes=>prevLikes -1);
                 } else {
-                    setLikes(likes + 1);
                     await postLike(url, currentUser);
                     if (hasDisliked) {
-                        setDislikes(dislikes - 1);
                         await postDislike(url, currentUser);
                         setHasDisliked(false);
+                        setDislikes(prevDislikes=>prevDislikes -1);
                     }
                     setHasLiked(true);
+                    setLikes(prevLikes=>prevLikes+1);
                 }
                 await updateUser();
             } catch (error) {
@@ -160,19 +159,39 @@ function Video() {
         };
     
         const dislikeClickEvent = async () => {
+            // try {
+            //     if (hasLiked) {
+            //         await postLike(url, currentUser);
+            //         setHasLiked(false);
+            //         setLikes(prevLikes=>prevLikes -1);
+            //     } else {
+            //         await postLike(url, currentUser);
+            //         if (hasDisliked) {
+            //             await postDislike(url, currentUser);
+            //             setHasDisliked(false);
+            //             setDislikes(prevDislikes=>prevDislikes -1);
+            //         }
+            //         setHasLiked(true);
+            //         setLikes(prevLikes=>prevLikes+1);
+            //     }
+            //     await updateUser();
+            // } catch (error) {
+            //     console.error('Error handling like:', error);
+            // }
             try {
                 if (hasDisliked) {
-                    setDislikes(dislikes - 1);
+                    await postDislike(url, currentUser);
                     setHasDisliked(false);
+                    setDislikes(prevDislikes => prevDislikes -1);
                 } else {
-                    setDislikes(dislikes + 1);
                     await postDislike(url, currentUser);
                     if (hasLiked) {
-                        setLikes(likes - 1);
-                        setHasLiked(false);
                         await postLike(url, currentUser);
+                        setHasLiked(false);
+                        setLikes(prevLikes=> prevLikes -1);
                     }
                     setHasDisliked(true);
+                    setDislikes(prevDislikes=> prevDislikes + 1);
                 }
                 await updateUser();
             } catch (error) {
@@ -235,6 +254,8 @@ function Video() {
                 setError("nonexistent")
             }else{
                 setError("");
+                setLikes(data.videos[0].videodata.likes);
+                setDislikes(data.videos[0].videodata.dislikes);
                 setVideoData(data.videos);
             }
         }
