@@ -109,7 +109,6 @@ class UserController{
                     error: "Missing content in body."
                 })
             }
-            console.table(user);
             const user_s_settings = new UserSetting(
                 user.usersettings.userid,
                 user.usersettings.name,
@@ -147,9 +146,9 @@ class UserController{
                 })
             }
             const user_s_settings = new UserSetting(
-                user.user_settings.userid,
-                user.user_settings.name,
-                user.user_settings.email,
+                user.usersettings.userid,
+                user.usersettings.name,
+                user.usersettings.email,
             )
             const user_s = new User(
                 user_s_settings,
@@ -161,8 +160,8 @@ class UserController{
                 user.subscribers,
                 user.nickname
             )
-            const new_like = await this.userDao.countDislike(videoid, user_s, this.videoDao);
-            if(new_like){
+            const new_dislike = await this.userDao.countDislike(videoid, user_s, this.videoDao);
+            if(new_dislike){
                 return res.status(200).json({success:true});
             }else{
                 return res.status(404).json({error: "An error occurred to manage Dislike."});
