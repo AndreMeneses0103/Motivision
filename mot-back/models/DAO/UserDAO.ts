@@ -307,6 +307,37 @@ export default class UserDAO {
         
     }
 
+    public async manageSubscription(channelId: string, user_s: User): Promise<Object|null>{
+        const alreadySubscribed = user_s.getSubscribed.includes(channelId);
+        try{
+            const updateOperator = alreadySubscribed === false
+                ? { $push: { "user.subscribed": channelId } }
+                : { $pull: { "user.subscribed": channelId } };
+                
+            const updateResult = await this.collection.updateOne(
+                {"user.user_settings.userid": user_s.getUserSettings.getUserId},
+                updateOperator
+            );
+            if(updateResult){
+                return {
+                    success: true,
+                    message: alreadySubscribed ? "Unsubscribed successfully" : "Subscribed successfully"
+                };
+            }else{
+                return {
+                    success: false,
+                    message: "No changes were made"
+                };
+            }
+        }catch(error){
+            console.error("Error in manageSubscription:", error);
+            return {
+                success: false,
+                message: "An error occurred during the operation"
+            };
+        }
+    }
+
     public async countView(videoid: string, user_s: User, videoDao: VideoDAO): Promise<boolean>{
         if((user_s.getWatched_videos).includes(videoid)){
             return false;

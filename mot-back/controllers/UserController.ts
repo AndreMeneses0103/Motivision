@@ -64,6 +64,18 @@ class UserController{
         }
     }
 
+    // async postNewSubscription(req: Request, res: Response){
+    //     try{
+    //         const {channel, user} = req.body;
+    //         if(!channel || !user){
+    //             return res.status(400).json({
+    //                 error:"Missing content in body"
+    //             })
+    //         }
+    //         const 
+    //     }
+    // }
+
     async postNewView(req: Request, res: Response){
         try{
             const {videoid, user} = req.body;
@@ -73,7 +85,6 @@ class UserController{
                     error: "Missing content in body."
                 })
             }
-            console.log(user);
             const user_s_settings = new UserSetting(
                 user.usersettings.userid,
                 user.usersettings.name,
