@@ -59,7 +59,7 @@ export function ProfileVideos({videoData}){
     return(
         <>
             {videoData.map(item => (
-                <Videos id={item.id} src={item.thumb} video={item.id}/>
+                <Videos key={item.id} id={item.id} src={item.thumb} video={item.id}/>
             ))}
         </>
     );

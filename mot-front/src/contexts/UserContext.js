@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import {refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
 import { getUser } from "../services/userFetch";
+import { InvalidTokenError } from "jwt-decode";
 
 const UserContext = createContext();
 
@@ -16,6 +17,7 @@ export const UserProvider = ({children})=>{
             refreshCookieValue("accessToken",data.isValid.newAccessToken);
             data = await getUser(userSelected);
         }
+        console.log(data);
         setUser(data.user)
     }
 
@@ -23,7 +25,11 @@ export const UserProvider = ({children})=>{
         try {
             await getUserData();
         } catch(error){
-            console.error(error);
+            if (error instanceof InvalidTokenError) {
+                console.warn('Invalid Token, please login again.');
+            }else{
+                console.error(error);
+            }
             setError(error);
         } finally {
             setLoading(false);

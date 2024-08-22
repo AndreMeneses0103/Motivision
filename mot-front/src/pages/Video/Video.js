@@ -79,7 +79,7 @@ function Video() {
                         <span className="desc_title">Tags</span>
                         <div className="hashtags_field">
                             {(info.tags).map((item)=>(
-                                <span className="hashtag"><a href="https://www.spacejam.com/1996/">#{item}</a></span>
+                                <span className="hashtag" key={item}><a href="https://www.spacejam.com/1996/">#{item}</a></span>
                             ))}
                         </div>
                         <ToastContainer/>
@@ -113,6 +113,7 @@ function Video() {
     const [videoLoading, setVideoLoading] = useState(true);
     const [isPop, setIsPop] = useState(false);
     const [keyComment, setKeyComment] = useState(0);
+    const [isUserLoaded, setIsUserLoaded] = useState(false);
     const navigate = useNavigate();
 
     const local = useLocation();
@@ -120,6 +121,13 @@ function Video() {
     const url = params.get("videoId");
 
     const {user: currentUser, updateUser} = useUser();
+
+    const loadCurrentUser = async ()=>{
+        if(!currentUser){
+            await updateUser();
+        }
+        setIsUserLoaded(true);
+    }
 
     function reset(){
         setError("");
@@ -159,25 +167,6 @@ function Video() {
         };
     
         const dislikeClickEvent = async () => {
-            // try {
-            //     if (hasLiked) {
-            //         await postLike(url, currentUser);
-            //         setHasLiked(false);
-            //         setLikes(prevLikes=>prevLikes -1);
-            //     } else {
-            //         await postLike(url, currentUser);
-            //         if (hasDisliked) {
-            //             await postDislike(url, currentUser);
-            //             setHasDisliked(false);
-            //             setDislikes(prevDislikes=>prevDislikes -1);
-            //         }
-            //         setHasLiked(true);
-            //         setLikes(prevLikes=>prevLikes+1);
-            //     }
-            //     await updateUser();
-            // } catch (error) {
-            //     console.error('Error handling like:', error);
-            // }
             try {
                 if (hasDisliked) {
                     await postDislike(url, currentUser);
@@ -266,12 +255,14 @@ function Video() {
     async function getUserData(){
         const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
-            const data = await getUser(videoData[0].userid);
-            if(data.user === null){
-                setError("nonexistent");
-            }else{
-                setError("");
-                setUserData(data.user);
+            if(videoData !== null){
+                const data = await getUser(videoData[0].userid);
+                if(data.user === null){
+                    setError("nonexistent");
+                }else{
+                    setError("");
+                    setUserData(data.user);
+                }
             }
         }
     }
@@ -280,6 +271,7 @@ function Video() {
         const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
             await postVideoView(url, currentUser);
+            console.log("passa aqui");
             await updateUser();
         }
     }
@@ -399,12 +391,20 @@ function Video() {
 	}
 
     useEffect(()=>{
-        reset();
         (async()=>{
-            await tryVideoView();
-            await tryGetVideoData();
-        })();
-    },[local]);
+            loadCurrentUser();
+        })()
+    },[])
+
+    useEffect(()=>{
+        if(isUserLoaded){
+            reset();
+            (async()=>{
+                await tryVideoView();
+                await tryGetVideoData();
+            })();
+        }
+    },[isUserLoaded,url]);
 
     useEffect(()=>{
         (async()=>{
@@ -416,7 +416,7 @@ function Video() {
         (async()=>{
             await tryGetSource();
         })();
-    },[local]);
+    },[url]);
 
     if(error){
         if (error.code === "ERR_BAD_REQUEST") {

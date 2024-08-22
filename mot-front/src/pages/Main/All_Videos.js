@@ -1,12 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import {accessToken, refreshToken, refreshCookieValue} from "../../scripts/getUser";
 import { getAllVideos } from "../../services/videoFetch";
 
-function One({id, imageSrc, alt, video}) {
-    const navigate = useNavigate();
-
+function One({id, imageSrc, alt, video, navigate}) {
     function loadVideo(link){
         navigate(`/video?videoId=${link}`);
     };
@@ -29,6 +26,7 @@ function One({id, imageSrc, alt, video}) {
 function Videos(){
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,22 +54,23 @@ function Videos(){
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (error && error.code === "ERR_BAD_REQUEST") {
+            navigate("/login");
+        }
+    }, [error, navigate]);
+
     if (error) {
-        if(error.code === "ERR_BAD_REQUEST")
-        return (
-            <h1>
-                Erro de autenticacao, realize o login novamente.
-            </h1>
-        );
-    } else {
-        return (
-            <>
-                {data.map(com => (
-                    <One key={com.id} id={com.id} imageSrc={com.imageSrc} alt={com.alt} video={com.id}/>
-                ))}
-            </>
-        );
+        return null;
     }
+    
+    return (
+        <>
+            {data.map(com => (
+                <One key={com.id} id={com.id} imageSrc={com.imageSrc} alt={com.alt} video={com.id} navigate={navigate}/>
+            ))}
+        </>
+    );
 }
 
 export default Videos;

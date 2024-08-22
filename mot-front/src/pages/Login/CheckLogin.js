@@ -10,7 +10,7 @@ function LoginChecker() {
         if (userToken) {
             navigate("/main");
         }else{
-            navigate("/login")
+            navigate("/login");
         }
     }, [navigate]);
 
