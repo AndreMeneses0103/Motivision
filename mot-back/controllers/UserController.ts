@@ -73,6 +73,7 @@ class UserController{
                     error: "Missing content in body."
                 })
             }
+            console.log(user);
             const user_s_settings = new UserSetting(
                 user.usersettings.userid,
                 user.usersettings.name,
@@ -92,7 +93,7 @@ class UserController{
             if(new_view){
                 return res.status(200).json({success:true});
             }else{
-                return res.status(404).json({error: "View couldn't be counted, this video might already be watched by the user."});
+                return res.status(200).json({success:false, error: "View couldn't be counted, this video might already be watched by the user."});
             }
         }catch(error){
             console.error("Error in postNewView:", error);
