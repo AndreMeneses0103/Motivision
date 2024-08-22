@@ -271,7 +271,6 @@ function Video() {
         const logUser = await verifyLog(getTokenId(refreshToken()));
         if(logUser){
             await postVideoView(url, currentUser);
-            console.log("passa aqui");
             await updateUser();
         }
     }

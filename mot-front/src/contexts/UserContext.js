@@ -17,7 +17,6 @@ export const UserProvider = ({children})=>{
             refreshCookieValue("accessToken",data.isValid.newAccessToken);
             data = await getUser(userSelected);
         }
-        console.log(data);
         setUser(data.user)
     }
 
