@@ -9,6 +9,7 @@ import * as fs from "fs";
 import path from "path";
 import { VideoController } from "../../controllers/VideoController";
 import VideoDAO from "./VideoDAO";
+import { SubscriptionResponse } from "../../types/userTypes";
 export default class UserDAO {
     private collection: Collection;
     constructor(database: Database) {
@@ -295,7 +296,6 @@ export default class UserDAO {
                 nickname: channel
             }
         };
-        //Inserir new_user no mongo
 
         const insert = await this.collection.insertOne(new_user);
 
@@ -307,7 +307,7 @@ export default class UserDAO {
         
     }
 
-    public async manageSubscription(channelId: string, user_s: User): Promise<Object|null>{
+    public async manageSubscription(channelId: string, user_s: User): Promise<SubscriptionResponse|null>{
         const alreadySubscribed = user_s.getSubscribed.includes(channelId);
         try{
             const updateOperator = alreadySubscribed === false
@@ -321,7 +321,8 @@ export default class UserDAO {
             if(updateResult){
                 return {
                     success: true,
-                    message: alreadySubscribed ? "Unsubscribed successfully" : "Subscribed successfully"
+                    status: alreadySubscribed ? 0 : 1,
+                    message: alreadySubscribed ? "Subscribed successfully" : "Unsubscribed successfully"
                 };
             }else{
                 return {

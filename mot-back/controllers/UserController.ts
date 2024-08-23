@@ -64,17 +64,46 @@ class UserController{
         }
     }
 
-    // async postNewSubscription(req: Request, res: Response){
-    //     try{
-    //         const {channel, user} = req.body;
-    //         if(!channel || !user){
-    //             return res.status(400).json({
-    //                 error:"Missing content in body"
-    //             })
-    //         }
-    //         const 
-    //     }
-    // }
+    async postSubscription(req: Request, res: Response){
+        try{
+            const {channel, user} = req.body;
+            if(!channel || !user){
+                return res.status(400).json({
+                    error:"Missing content in body"
+                })
+            }
+            const user_s_settings = new UserSetting(
+                user.usersettings.userid,
+                user.usersettings.name,
+                user.usersettings.email,
+            )
+            const user_s = new User(
+                user_s_settings,
+                user.videos,
+                user.watched_videos,
+                user.liked_videos,
+                user.disliked_videos,
+                user.subscribed,
+                user.subscribers,
+                user.nickname
+            )
+            const subs = await this.userDao.manageSubscription(channel, user_s);
+            if(subs){
+                return res.status(200).json({
+                    success: true,
+                    message: subs.status == 0 ? "Subscribed successfully" : "Unsubscribed successfully"
+                })
+            }else{
+                return res.status(404).json({
+                    success: false,
+                    message: "An error occurred to manage subscription"
+                })
+            }
+            //continuar
+        }catch(error){
+            console.error("Error in postSubscription:", error);
+        }
+    }
 
     async postNewView(req: Request, res: Response){
         try{

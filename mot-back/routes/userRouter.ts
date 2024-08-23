@@ -40,6 +40,8 @@ export default class userRouter {
         this.route.post("/postLike", this.controller.postLike.bind(this.controller));
 
         this.route.post("/postDislike", this.controller.postDislike.bind(this.controller));
+
+        this.route.post("/postSubscription", this.controller.postSubscription.bind(this.controller));
     }
 
     public getRouter(): Router{
