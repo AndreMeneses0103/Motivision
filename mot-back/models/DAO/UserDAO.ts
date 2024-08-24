@@ -307,28 +307,53 @@ export default class UserDAO {
         
     }
 
+    public async addNewSub(channelId: string, opt: boolean): Promise<boolean|null>{
+        try{
+            const newSub = await this.collection.updateOne(
+                {"user.user_settings.userid": channelId},{
+                    $inc:{
+                        "user.subscribers": opt ? -1 : 1
+                    }
+                }
+            );
+            return newSub.modifiedCount > 0;
+        }catch(error){
+            console.error("Error in addNewSub:", error);
+            return false;
+        }
+    }
+
     public async manageSubscription(channelId: string, user_s: User): Promise<SubscriptionResponse|null>{
         const alreadySubscribed = user_s.getSubscribed.includes(channelId);
         try{
-            const updateOperator = alreadySubscribed === false
-                ? { $push: { "user.subscribed": channelId } }
-                : { $pull: { "user.subscribed": channelId } };
-                
-            const updateResult = await this.collection.updateOne(
-                {"user.user_settings.userid": user_s.getUserSettings.getUserId},
-                updateOperator
-            );
-            if(updateResult){
-                return {
-                    success: true,
-                    status: alreadySubscribed ? 0 : 1,
-                    message: alreadySubscribed ? "Subscribed successfully" : "Unsubscribed successfully"
-                };
+            const addSub = await this.addNewSub(channelId, alreadySubscribed);
+            if(addSub){
+
+                const updateOperator = alreadySubscribed === false
+                    ? { $push: { "user.subscribed": channelId } }
+                    : { $pull: { "user.subscribed": channelId } };
+                    
+                const updateResult = await this.collection.updateOne(
+                    {"user.user_settings.userid": user_s.getUserSettings.getUserId},
+                    updateOperator
+                );
+                if(updateResult){
+                    return {
+                        success: true,
+                        status: alreadySubscribed ? 0 : 1,
+                        message: alreadySubscribed ? "Subscribed successfully" : "Unsubscribed successfully"
+                    };
+                }else{
+                    return {
+                        success: false,
+                        message: "No changes were made"
+                    };
+                }
             }else{
-                return {
+                return{
                     success: false,
-                    message: "No changes were made"
-                };
+                    message: "An error occurred to add a new Subscription to this channel."
+                }
             }
         }catch(error){
             console.error("Error in manageSubscription:", error);

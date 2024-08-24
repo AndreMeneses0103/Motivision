@@ -91,7 +91,7 @@ class UserController{
             if(subs){
                 return res.status(200).json({
                     success: true,
-                    message: subs.status == 0 ? "Subscribed successfully" : "Unsubscribed successfully"
+                    message: subs.status == 0 ? "Unsubscribed successfully" : "Subscribed successfully"
                 })
             }else{
                 return res.status(404).json({
