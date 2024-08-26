@@ -40,7 +40,7 @@ export function UserInfos({num_subs, num_vids}){
 
 }
 
-export function ProfilePhoto({imageSrc}){
+export function ProfilePhoto({imageSrc, isOwnUser}){
     return(
         <div className="user_photo">
                 <button type="button" className="photo_btn">
@@ -51,6 +51,9 @@ export function ProfilePhoto({imageSrc}){
                     alt="Foto do Usuario"
                     />
                 </button>
+                {!isOwnUser && (
+                    <button className="subs_btn">Subscribe!</button>
+                )}
             </div>
     )
 }

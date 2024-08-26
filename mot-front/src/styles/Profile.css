@@ -28,7 +28,9 @@
 }
 
 .user_photo{
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .user_infos{
@@ -60,6 +62,7 @@
     overflow: hidden;
     cursor: pointer;
     margin: auto;
+    margin-bottom: 20px;
 }
 
 #profile_photo{

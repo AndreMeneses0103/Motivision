@@ -1,53 +1,73 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import {refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
+import { refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
 import { getUser } from "../services/userFetch";
 import { InvalidTokenError } from "jwt-decode";
 
 const UserContext = createContext();
 
-export const UserProvider = ({children})=>{
+export const UserProvider = ({ children }) => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
 
-    async function getUserData(){
-        const userSelected = getTokenId(refreshToken());
-        let data = await getUser(userSelected);
-        if (data.isValid && "newAccessToken" in data.isValid) {
-            refreshCookieValue("accessToken",data.isValid.newAccessToken);
-            data = await getUser(userSelected);
+    const handleError = (error) => {
+        if (error instanceof InvalidTokenError) {
+            console.warn('Invalid Token, please login again.');
+        } else {
+            console.error(error);
         }
-        setUser(data.user)
-    }
+        setError(error);
+    };
 
-    async function tryGetUser(){
+    const getUserData = async () => {
+        const tokenId = getTokenId(refreshToken());
         try {
-            await getUserData();
-        } catch(error){
-            if (error instanceof InvalidTokenError) {
-                console.warn('Invalid Token, please login again.');
-            }else{
-                console.error(error);
+            let data = await getUser(tokenId);
+            if (data.isValid?.newAccessToken) {
+                refreshCookieValue("accessToken", data.isValid.newAccessToken);
+                data = await getUser(tokenId);
             }
-            setError(error);
+            if (data.user) {
+                setUser(data.user);
+                return data.user;
+            }
+        } catch (error) {
+            handleError(error);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
-    const updateUser = async ()=>{
+    const tryGetUser = async () => {
         setLoading(true);
-        await tryGetUser();
+        return await getUserData();
+    };
+
+    const updateUser = async () => {
+        setLoading(true);
+        return await tryGetUser();
+    };
+
+    const logout = () => {
+        setUser(null);
+        // Aqui você pode limpar o cookie ou qualquer outra informação relevante
+        // Exemplo: clearCookie("accessToken");
     };
 
     useEffect(() => {
         (async () => {
-            await tryGetUser();
+            try {
+                await tryGetUser();
+            } catch (error) {
+                handleError(error);
+            } finally {
+                setLoading(false);
+            }
         })();
-    },[]);
+    }, []);
 
     return (
-        <UserContext.Provider value={{ user, loading, error, updateUser }}>
+        <UserContext.Provider value={{ user, loading, error, updateUser, logout }}>
             {children}
         </UserContext.Provider>
     );
