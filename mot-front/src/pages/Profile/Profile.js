@@ -18,6 +18,7 @@ function Profile() {
     const params = new URLSearchParams(location.search);
     const userSelected = params.get("user");
     const [loggedUser, setLoggedUser] = useState(false);
+    const [subscribed, setSubscribed] = useState(false);
     
     let { currentUser, loading, userError, updateUser } = useUser();
 
@@ -60,6 +61,7 @@ function Profile() {
             }
             if (currentUser && userSelected) {
                 setLoggedUser(currentUser.usersettings.userid === userSelected);
+                setSubscribed((currentUser.subscribed).includes(userSelected));
             }
         })();
     }, [location]);
@@ -89,27 +91,27 @@ function Profile() {
                 return renderError("User not found.");
             }
         } else if (photoLoading && videoLoading) {
-            return renderAllLoading(loggedUser);
+            return renderAllLoading(loggedUser, subscribed);
         } else if (!photoLoading && videoLoading) {
-            return renderVideoLoading(user, loggedUser);
+            return renderVideoLoading(user, loggedUser, subscribed);
         } else if (!video && !videoLoading) {
-            return renderNoVideos(user, loggedUser);
+            return renderNoVideos(user, loggedUser, subscribed);
         } else {
-            return renderAllProfile(user, video, loggedUser);
+            return renderAllProfile(user, video, loggedUser, subscribed);
         }
     }
 
     return renderContent();
 }
 
-function renderVideoLoading(user, loggedUser) {
+function renderVideoLoading(user, loggedUser, subscribed) {
     const numVids = user.videos ? user.videos.length : 0;
     return (
         <div className="profile_main">
             <div className="username">
                 {user.nickname}
             </div>
-            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} />
+            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} isSubscribed={subscribed}/>
             <UserInfos num_subs={user.subscribers} num_vids={numVids} />
             <div className="user_videos">
                 <div className="Profile_Videos">
@@ -125,14 +127,14 @@ function renderVideoLoading(user, loggedUser) {
     );
 }
 
-function renderNoVideos(user, loggedUser) {
+function renderNoVideos(user, loggedUser, subscribed) {
     const numVids = user.videos ? user.videos.length : 0;
     return (
         <div className="profile_main">
             <div className="username">
                 {user.nickname}
             </div>
-            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} />
+            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} isSubscribed={subscribed}/>
             <UserInfos num_subs={user.subscribers} num_vids={numVids} />
             <div className="user_videos">
                 <div className="Profile_Videos">
@@ -143,13 +145,13 @@ function renderNoVideos(user, loggedUser) {
     );
 }
 
-function renderAllLoading(loggedUser) {
+function renderAllLoading(loggedUser, subscribed) {
     return (
         <div className="profile_main">
             <div className="username">
                 Loading...
             </div>
-            <ProfilePhoto imageSrc={"../icons/loading.gif"} isOwnUser={loggedUser} />
+            <ProfilePhoto imageSrc={"../icons/loading.gif"} isOwnUser={loggedUser} isSubscribed={subscribed}/>
             <UserInfos num_subs="x" num_vids="x" />
             <div className="user_videos">
                 <div className="Profile_Videos">
@@ -165,14 +167,14 @@ function renderAllLoading(loggedUser) {
     );
 }
 
-function renderAllProfile(user, video, loggedUser) {
+function renderAllProfile(user, video, loggedUser, subscribed) {
     const numVids = video.length;
     return (
         <div className="profile_main">
             <div className="username">
                 {user.nickname}
             </div>
-            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} />
+            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} isSubscribed={subscribed}/>
             <UserInfos num_subs={user.subscribers} num_vids={numVids} />
             <div className="user_videos">
                 <div className="Profile_Videos">

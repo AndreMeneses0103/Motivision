@@ -8,6 +8,8 @@ function Videos({id, src, video}){
         navigate(`/video?videoId=${link}`);
     }
 
+
+
     return(
         <div className="mvid" id={id}>
             <button className="vidButton" onClick={()=>loadVideo(video)}>
@@ -40,7 +42,8 @@ export function UserInfos({num_subs, num_vids}){
 
 }
 
-export function ProfilePhoto({imageSrc, isOwnUser}){
+export function ProfilePhoto({imageSrc, isOwnUser, isSubscribed}){
+
     return(
         <div className="user_photo">
                 <button type="button" className="photo_btn">
@@ -52,7 +55,7 @@ export function ProfilePhoto({imageSrc, isOwnUser}){
                     />
                 </button>
                 {!isOwnUser && (
-                    <button className="subs_btn">Subscribe!</button>
+                    <button className={isSubscribed ? "subs_btn_subscribed" : "subs_btn"} onClick={subscribe}>{isSubscribed ? "Subscribed" : "Subscribe!"}</button>
                 )}
             </div>
     )
