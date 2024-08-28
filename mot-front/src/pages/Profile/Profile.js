@@ -3,7 +3,7 @@ import "../../styles/Scroll.css";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getTokenId, refreshToken } from "../../scripts/getUser";
-import { getUser, verifyLog } from "../../services/userFetch";
+import { getUser, postSubscription, verifyLog } from "../../services/userFetch";
 import { getAllUserVideos } from "../../services/videoFetch";
 import { ProfilePhoto, ProfileVideos, UserInfos } from "./Profile_Videos";
 import { useUser } from "../../contexts/UserContext";
@@ -54,11 +54,37 @@ function Profile() {
         }
     }
 
+    const subscribe = () =>{
+        alert("hi");
+    }
+
+    const postNewSubscription = async() => {
+        try{
+            const logUser = await verifyLog(getTokenId(refreshToken()));
+            console.log(logUser);
+            if(logUser){
+                currentUser = await updateUser();
+                console.log(currentUser);
+                if(currentUser){
+                    const subs = await postSubscription(user.usersettings.userid, currentUser);
+                    if(subs){
+                        console.log("success");
+                    }else{
+                        console.log("fail");
+                    }
+                }
+            }
+        }catch(error){
+            setError(error);
+        }
+    }
+
     useEffect(() => {
         (async () => {
             if(!currentUser){
                 currentUser = await updateUser();
             }
+            console.log(currentUser);
             if (currentUser && userSelected) {
                 setLoggedUser(currentUser.usersettings.userid === userSelected);
                 setSubscribed((currentUser.subscribed).includes(userSelected));
@@ -91,27 +117,32 @@ function Profile() {
                 return renderError("User not found.");
             }
         } else if (photoLoading && videoLoading) {
-            return renderAllLoading(loggedUser, subscribed);
+            return renderAllLoading(loggedUser, subscribed, postNewSubscription);
         } else if (!photoLoading && videoLoading) {
-            return renderVideoLoading(user, loggedUser, subscribed);
+            return renderVideoLoading(user, loggedUser, subscribed, postNewSubscription);
         } else if (!video && !videoLoading) {
-            return renderNoVideos(user, loggedUser, subscribed);
+            return renderNoVideos(user, loggedUser, subscribed, postNewSubscription);
         } else {
-            return renderAllProfile(user, video, loggedUser, subscribed);
+            return renderAllProfile(user, video, loggedUser, subscribed, postNewSubscription);
         }
     }
 
     return renderContent();
 }
 
-function renderVideoLoading(user, loggedUser, subscribed) {
+function renderVideoLoading(user, loggedUser, subscribed, sub_function) {
     const numVids = user.videos ? user.videos.length : 0;
     return (
         <div className="profile_main">
             <div className="username">
                 {user.nickname}
             </div>
-            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} isSubscribed={subscribed}/>
+            <div className="user_photo">
+            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`}/>
+            {!loggedUser && (
+                <button className={subscribed ? "subs_btn_subscribed" : "subs_btn"} onClick={sub_function}>{subscribed ? "Subscribed" : "Subscribe!"}</button>
+            )}
+            </div>
             <UserInfos num_subs={user.subscribers} num_vids={numVids} />
             <div className="user_videos">
                 <div className="Profile_Videos">
@@ -127,14 +158,19 @@ function renderVideoLoading(user, loggedUser, subscribed) {
     );
 }
 
-function renderNoVideos(user, loggedUser, subscribed) {
+function renderNoVideos(user, loggedUser, subscribed, sub_function) {
     const numVids = user.videos ? user.videos.length : 0;
     return (
         <div className="profile_main">
             <div className="username">
                 {user.nickname}
             </div>
-            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} isSubscribed={subscribed}/>
+            <div className="user_photo">
+                <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`}/>
+                {!loggedUser && (
+                    <button className={subscribed ? "subs_btn_subscribed" : "subs_btn"} onClick={sub_function}>{subscribed ? "Subscribed" : "Subscribe!"}</button>
+                )}
+                </div>
             <UserInfos num_subs={user.subscribers} num_vids={numVids} />
             <div className="user_videos">
                 <div className="Profile_Videos">
@@ -145,13 +181,18 @@ function renderNoVideos(user, loggedUser, subscribed) {
     );
 }
 
-function renderAllLoading(loggedUser, subscribed) {
+function renderAllLoading(loggedUser, subscribed, sub_function) {
     return (
         <div className="profile_main">
             <div className="username">
                 Loading...
             </div>
-            <ProfilePhoto imageSrc={"../icons/loading.gif"} isOwnUser={loggedUser} isSubscribed={subscribed}/>
+            <div className="user_photo">
+                <ProfilePhoto imageSrc={"../icons/loading.gif"}/>
+                {!loggedUser && (
+                    <button className={subscribed ? "subs_btn_subscribed" : "subs_btn"} onClick={sub_function}>{subscribed ? "Subscribed" : "Subscribe!"}</button>
+                )}
+                </div>
             <UserInfos num_subs="x" num_vids="x" />
             <div className="user_videos">
                 <div className="Profile_Videos">
@@ -167,14 +208,20 @@ function renderAllLoading(loggedUser, subscribed) {
     );
 }
 
-function renderAllProfile(user, video, loggedUser, subscribed) {
+function renderAllProfile(user, video, loggedUser, subscribed, sub_function) {
     const numVids = video.length;
     return (
         <div className="profile_main">
             <div className="username">
                 {user.nickname}
             </div>
-            <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`} isOwnUser={loggedUser} isSubscribed={subscribed}/>
+
+            <div className="user_photo">
+                <ProfilePhoto imageSrc={`data:image/png;base64,${user.userphoto}`}/>
+                {!loggedUser && (
+                    <button className={subscribed ? "subs_btn_subscribed" : "subs_btn"} onClick={sub_function}>{subscribed ? "Subscribed" : "Subscribe!"}</button>
+                )}
+                </div>
             <UserInfos num_subs={user.subscribers} num_vids={numVids} />
             <div className="user_videos">
                 <div className="Profile_Videos">

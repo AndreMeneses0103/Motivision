@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { postNewSubscription } from "./Profile";
 
 function Videos({id, src, video}){
 
@@ -42,22 +43,19 @@ export function UserInfos({num_subs, num_vids}){
 
 }
 
-export function ProfilePhoto({imageSrc, isOwnUser, isSubscribed}){
+export function ProfilePhoto({imageSrc}){
 
     return(
-        <div className="user_photo">
-                <button type="button" className="photo_btn">
-                    <img
-                    id="profile_photo"
-                    itemID="profile_photo"
-                    src={imageSrc}
-                    alt="Foto do Usuario"
-                    />
-                </button>
-                {!isOwnUser && (
-                    <button className={isSubscribed ? "subs_btn_subscribed" : "subs_btn"} onClick={subscribe}>{isSubscribed ? "Subscribed" : "Subscribe!"}</button>
-                )}
-            </div>
+        <>
+            <button type="button" className="photo_btn">
+                <img
+                id="profile_photo"
+                itemID="profile_photo"
+                src={imageSrc}
+                alt="Foto do Usuario"
+                />
+            </button>
+        </>
     )
 }
 
