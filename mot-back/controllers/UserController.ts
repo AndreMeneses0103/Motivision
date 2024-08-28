@@ -91,6 +91,7 @@ class UserController{
             if(subs){
                 return res.status(200).json({
                     success: true,
+                    status: subs.status,
                     message: subs.status == 0 ? "Unsubscribed successfully" : "Subscribed successfully"
                 })
             }else{
@@ -99,7 +100,6 @@ class UserController{
                     message: "An error occurred to manage subscription"
                 })
             }
-            //continuar
         }catch(error){
             console.error("Error in postSubscription:", error);
         }
