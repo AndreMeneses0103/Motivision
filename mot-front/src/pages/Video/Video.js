@@ -1,17 +1,17 @@
 import "../../styles/Video.css";
 // import Head from "../../components/Head";
-import AllComments from "./All_comments";
-import AllVideos from "./All_Random_Videos";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getTokenId, refreshToken, refreshCookieValue} from "../../scripts/getUser";
-import { getUser, postDislike, postLike, postVideoView, verifyLog } from "../../services/userFetch";
-import { getVideoInfo, getVideoSource } from "../../services/videoFetch";
-import { Popup } from "../../components/CommentPopup";
-import { setComment } from "../../services/commentFetch";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Popup } from "../../components/CommentPopup";
 import { useUser } from "../../contexts/UserContext";
+import { getTokenId, refreshToken } from "../../scripts/getUser";
+import { setComment } from "../../services/commentFetch";
+import { getUser, postDislike, postLike, postSubscription, postVideoView, verifyLog } from "../../services/userFetch";
+import { getVideoInfo, getVideoSource } from "../../services/videoFetch";
+import AllComments from "./All_comments";
+import AllVideos from "./All_Random_Videos";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 
@@ -63,9 +63,11 @@ function Video() {
                             <span id="channel_name">{userData.nickname}</span>
                         </div>
                         <div className="video_subs">
-                            <button className="subs_btn">
-                                Subscribe!
-                            </button>
+                            {!loggedUser && (
+                                <button className={subscribed ? "subs_btn_subscribed" : "subs_btn"} onClick={postNewSubscriptionVid}>
+                                    {subscribed ? "Subscribed" : "Subscribe!"}
+                                </button>
+                            )}
                         </div>
                     </div>
                     <div className="video_title">{info.title}</div>
@@ -114,6 +116,8 @@ function Video() {
     const [isPop, setIsPop] = useState(false);
     const [keyComment, setKeyComment] = useState(0);
     const [isUserLoaded, setIsUserLoaded] = useState(false);
+    const [subscribed, setSubscribed] = useState(false);
+    const [loggedUser, setLoggedUser] = useState(false);
     const navigate = useNavigate();
 
     const local = useLocation();
@@ -125,6 +129,10 @@ function Video() {
     const loadCurrentUser = async ()=>{
         if(!currentUser){
             await updateUser();
+        }
+        if (currentUser && userData) {
+            setLoggedUser(currentUser.usersettings.userid === userData.usersettings.userid);
+            setSubscribed((currentUser.subscribed).includes(userData.usersettings.userid));
         }
         setIsUserLoaded(true);
     }
@@ -139,12 +147,43 @@ function Video() {
         setVideoLoading(true);
     }
 
+    function updateSubscribers(newSubscriberCount) {
+        setUserData(prevUser => ({
+            ...prevUser,        
+            subscribers: newSubscriberCount
+        }));
+    }
+
+    const postNewSubscriptionVid = async() => {
+        try{
+            const logUser = await verifyLog(getTokenId(refreshToken()));
+            if(logUser){
+                currentUser = await updateUser();
+                if(currentUser){
+                    let subs = await postSubscription(userData.usersettings.userid, currentUser);
+                    if(subs){
+                        if(subs.data.status == 0){
+                            setSubscribed(false);
+                            updateSubscribers(userData.subscribers - 1);
+                        }else{
+                            setSubscribed(true);
+                            updateSubscribers(userData.subscribers + 1);
+                        }
+                    }else{
+                        console.log("fail");
+                    }
+                }
+            }
+        }catch(error){
+            setError(error);
+        }
+    }
+
     const VideoStats = ({alreadyLiked, alreadyDisliked}) =>{
         const [hasLiked, setHasLiked] = useState(alreadyLiked);
         const [hasDisliked, setHasDisliked] = useState(alreadyDisliked);
 
         const likeClickEvent = async () => {
-            //CORRIGIR A ATUALIZACAO DO LIKE E DISLIKE PRO USUARIO
             try {
                 if (hasLiked) {
                     await postLike(url, currentUser);
@@ -390,13 +429,7 @@ function Video() {
 	}
 
     useEffect(()=>{
-        (async()=>{
-            loadCurrentUser();
-        })()
-    },[])
-
-    useEffect(()=>{
-        if(isUserLoaded){
+        if(isUserLoaded && currentUser){
             reset();
             (async()=>{
                 await tryVideoView();
@@ -404,6 +437,12 @@ function Video() {
             })();
         }
     },[isUserLoaded,url]);
+
+    useEffect(()=>{
+        (async()=>{
+            await loadCurrentUser();
+        })()
+    },[videoData, userData])
 
     useEffect(()=>{
         (async()=>{
