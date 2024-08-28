@@ -54,21 +54,28 @@ function Profile() {
         }
     }
 
-    const subscribe = () =>{
-        alert("hi");
+    function updateSubscribers(newSubscriberCount) {
+        setUser(prevUser => ({
+            ...prevUser,       
+            subscribers: newSubscriberCount
+        }));
     }
 
-    const postNewSubscription = async() => {
+    const postNewSubscriptionProf = async() => {
         try{
             const logUser = await verifyLog(getTokenId(refreshToken()));
-            console.log(logUser);
             if(logUser){
                 currentUser = await updateUser();
-                console.log(currentUser);
                 if(currentUser){
-                    const subs = await postSubscription(user.usersettings.userid, currentUser);
+                    let subs = await postSubscription(user.usersettings.userid, currentUser);
                     if(subs){
-                        console.log("success");
+                        if(subs.data.status == 0){
+                            setSubscribed(false);
+                            updateSubscribers(user.subscribers - 1);
+                        }else{
+                            setSubscribed(true);
+                            updateSubscribers(user.subscribers + 1);
+                        }
                     }else{
                         console.log("fail");
                     }
@@ -84,7 +91,6 @@ function Profile() {
             if(!currentUser){
                 currentUser = await updateUser();
             }
-            console.log(currentUser);
             if (currentUser && userSelected) {
                 setLoggedUser(currentUser.usersettings.userid === userSelected);
                 setSubscribed((currentUser.subscribed).includes(userSelected));
@@ -117,13 +123,13 @@ function Profile() {
                 return renderError("User not found.");
             }
         } else if (photoLoading && videoLoading) {
-            return renderAllLoading(loggedUser, subscribed, postNewSubscription);
+            return renderAllLoading(loggedUser, subscribed, postNewSubscriptionProf);
         } else if (!photoLoading && videoLoading) {
-            return renderVideoLoading(user, loggedUser, subscribed, postNewSubscription);
+            return renderVideoLoading(user, loggedUser, subscribed, postNewSubscriptionProf);
         } else if (!video && !videoLoading) {
-            return renderNoVideos(user, loggedUser, subscribed, postNewSubscription);
+            return renderNoVideos(user, loggedUser, subscribed, postNewSubscriptionProf);
         } else {
-            return renderAllProfile(user, video, loggedUser, subscribed, postNewSubscription);
+            return renderAllProfile(user, video, loggedUser, subscribed, postNewSubscriptionProf);
         }
     }
 
