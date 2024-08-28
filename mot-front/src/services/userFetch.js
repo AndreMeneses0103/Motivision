@@ -86,6 +86,16 @@ async function postDislike(videoid, user){
     return req;
 }
 
+async function postSubscription(channel, user) {
+    let newUser = {...user};
+    delete newUser.userphoto;
+    const req = await api.post(`/user/postSubscription`, {
+        "channel" : channel,
+        "user" : newUser
+    });
+    return req;
+}
+
 export {
     getUser,
     getUsers,
@@ -96,5 +106,6 @@ export {
     registerNewUser,
     postVideoView,
     postLike,
-    postDislike
+    postDislike,
+    postSubscription
 }
