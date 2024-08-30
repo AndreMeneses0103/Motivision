@@ -1,5 +1,4 @@
 import "../../styles/Video.css";
-// import Head from "../../components/Head";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,7 +11,6 @@ import { getUser, postDislike, postLike, postSubscription, postVideoView, verify
 import { getVideoInfo, getVideoSource } from "../../services/videoFetch";
 import AllComments from "./All_comments";
 import AllVideos from "./All_Random_Videos";
-// import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 
 function Video() {
@@ -124,7 +122,7 @@ function Video() {
     const params = new URLSearchParams(local.search);
     const url = params.get("videoId");
 
-    const {user: currentUser, updateUser} = useUser();
+    let {user: currentUser, updateUser} = useUser();
 
     const loadCurrentUser = async ()=>{
         if(!currentUser){
@@ -158,23 +156,24 @@ function Video() {
         try{
             const logUser = await verifyLog(getTokenId(refreshToken()));
             if(logUser){
-                currentUser = await updateUser();
+                await updateUser();
                 if(currentUser){
                     let subs = await postSubscription(userData.usersettings.userid, currentUser);
                     if(subs){
                         if(subs.data.status == 0){
                             setSubscribed(false);
-                            updateSubscribers(userData.subscribers - 1);
                         }else{
                             setSubscribed(true);
-                            updateSubscribers(userData.subscribers + 1);
                         }
+                        currentUser = await updateUser();
                     }else{
-                        console.log("fail");
+                        console.error("Subscription failed");
+                        setError("Subscription failed");
                     }
                 }
             }
         }catch(error){
+            console.error(error);
             setError(error);
         }
     }
