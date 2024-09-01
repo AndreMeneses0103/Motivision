@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { refreshToken, getTokenId, refreshCookieValue } from "../scripts/getUser";
+import { refreshToken, getTokenId, refreshCookieValue, removeTokens } from "../scripts/getUser";
 import { getUser } from "../services/userFetch";
 import { InvalidTokenError } from "jwt-decode";
 
@@ -50,8 +50,8 @@ export const UserProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null);
-        // Aqui você pode limpar o cookie ou qualquer outra informação relevante
-        // Exemplo: clearCookie("accessToken");
+        removeTokens('accessToken');
+        removeTokens('refreshToken');
     };
 
     useEffect(() => {

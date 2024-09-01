@@ -49,3 +49,8 @@ export function getTokenId(token){
     var decoded = jwtDecode(token);
     return decoded.userId;
 }
+
+export function removeTokens(name){
+    const pastDate = new Date(0).toUTCString();
+    document.cookie = `${name}=; expires=${pastDate}; path=/`;
+}

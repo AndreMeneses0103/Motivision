@@ -4,7 +4,7 @@ import "../styles/Head.css";
 import { useUser } from "../contexts/UserContext";
 
 function Head() {
-    const {user, loading, error} = useUser();
+    const { user, loading, error, updateUser, logout: logoutAction } = useUser();
     const navigate = useNavigate();
     const [showOptions, setShowOptions] = useState(false);
 
@@ -24,7 +24,8 @@ function Head() {
     };
 
     const logout = () => {
-        
+        logoutAction();
+        navigate('/login');
     };
 
     const toggleOptions = () => {
