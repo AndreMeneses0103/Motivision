@@ -227,6 +227,9 @@ function Video() {
         };
         
 
+        const iconLikSrc = alreadyLiked ? "./icons/afirmativo_act.png" : "./icons/afirmativo.png";
+        const iconDisSrc = alreadyDisliked ? "./icons/negativo_act.png" : "./icons/negativo.png";
+
         return(
             <div className="video_stats">
             <span className="video_icon_span">
@@ -249,7 +252,7 @@ function Video() {
                     <img 
                         className="video_icons" 
                         id="like_icon" 
-                        src="./icons/afirmativo.png" 
+                        src={hasLiked ? "./icons/afirmativo_act.png" : "./icons/afirmativo.png"} 
                         alt="Like Button"
                     />
                 </button> 
@@ -264,7 +267,7 @@ function Video() {
                     <img 
                         className="video_icons" 
                         id="dislike_icon" 
-                        src="./icons/afirmativo.png" 
+                        src={hasDisliked ? "./icons/negativo_act.png" : "./icons/negativo.png"} 
                         alt="Dislike Button"
                     />
                 </button>
