@@ -49,6 +49,33 @@ export default class VideoDAO{
         }
     }
 
+    public async getSubscribedVideos(channelId: string): Promise<Video[] | null> {
+        const result = await this.collection.find({ "video.userid": channelId }).toArray();
+        if (result && result.length > 0) {
+            const videos = result.map(item=>{
+                const rightPath = path.resolve(__dirname, '../../midia/photos/thumbs')
+                const thumbPath = rightPath +"/"+ item.video.thumb;
+                const convert64 = this.encodeImageToBase64(thumbPath);
+
+                return{
+                    ...item.video,
+                    thumb:convert64
+                }
+            })
+            return videos.map(video => new Video(
+                video.id,
+                video.userid,
+                video.thumb,
+                video.title,
+                video.description,
+                video.tags,
+                video.video_data
+            ));
+        } else {
+            return null;
+        }
+    }
+
     public async getSource(id: string): Promise<string|null>{
         const result = await this.collection.findOne(
             { "video.id":id},
