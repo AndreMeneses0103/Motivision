@@ -21,9 +21,7 @@ function One({id, imageSrc, alt, video, navigate}) {
     );
 }
 
-
-
-function Videos(){
+function Videos({filter, search}){
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -31,11 +29,11 @@ function Videos(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const headers = {
-                    "Content-Type": "application/json",
-                    "Authorization": `${accessToken()}`,
-                    "Refresh-Token": `${refreshToken()}`,
-                }
+                // const headers = {
+                //     "Content-Type": "application/json",
+                //     "Authorization": `${accessToken()}`,
+                //     "Refresh-Token": `${refreshToken()}`,
+                // }
                 const resp = await getAllVideos();
                 let all_videos = resp;
                 let data = [];
@@ -43,8 +41,6 @@ function Videos(){
                     data.push({ id: all_videos.videos[x].id , imageSrc: all_videos.videos[x].thumb, alt: all_videos.videos[x].title, video: all_videos.videos[x].source})
                 }
                 setData(data);
-
-                
             } catch (err) {
                 console.error(err);
                 setError(err);

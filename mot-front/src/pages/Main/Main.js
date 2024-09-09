@@ -8,16 +8,41 @@ import { useEffect, useState } from "react";
 
 function Main() {
     const [search, setSearch] = useState("");
+    const [filter, setFilter] = useState("all");
 
     useEffect(() => {
         console.log(search);
         //continuar search de videos
-    });
+    },[search]);
 
     return (
         <div className="div_main">
             <div className="Align_Videos">
-                <div className="src_container">
+                <div className="filter_container">
+                <button
+                    type="button"
+                    id="all_vids"
+                    className="filter_btn"
+                    onClick={(e) => {
+                        document.querySelectorAll('.filter_btn').forEach(btn => btn.classList.remove('selected'));
+                        e.currentTarget.classList.add('selected');
+                        setFilter("all");
+                    }}                   
+                >
+                All
+                </button>
+                    <button
+                        type="button"
+                        id="subs_vids"
+                        className="filter_btn"
+                        onClick={(e) => {
+                            document.querySelectorAll('.filter_btn').forEach(btn => btn.classList.remove('selected'));
+                            e.currentTarget.classList.add('selected');
+                            setFilter("subscribed");
+                        }}
+                    >
+                    Only Subscribed
+                    </button>
                     <input
                         type="text"
                         className="search_input"
@@ -38,7 +63,7 @@ function Main() {
                     </button>
                 </div>
                 <div className="All_Videos">
-                    <Videos />
+                    <Videos filter={filter} search={search}/>
                 </div>
             </div>
         </div>
