@@ -1,20 +1,29 @@
 // import { useState } from "react";
 import "../../styles/Main.css";
-import Head from "../../components/Head";
 import Videos from "./All_Videos";
 // import {accessToken, refreshToken} from "../../scripts/getUser";
 import { useEffect, useState } from "react";
+import { useUser } from "../../contexts/UserContext";
 // import { BrowseRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function Main() {
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("all");
 
+    let { user, loading, error, logout, updateUser } = useUser();
+
     useEffect(() => {
         console.log(search);
         //continuar search de videos
     },[search]);
 
+    // useEffect(()=>{
+    //     if(user){
+    //         console.log(`USER: ${user}`);
+    //     }else{
+    //         console.log("sem user")
+    //     }
+    // },[user])
     return (
         <div className="div_main">
             <div className="Align_Videos">
@@ -63,7 +72,16 @@ function Main() {
                     </button>
                 </div>
                 <div className="All_Videos">
-                    <Videos filter={filter} search={search}/>
+                    {loading ? (
+                        <img
+                            id="userphoto"
+                            itemID="userphoto"
+                            src="../icons/loading.gif"
+                            alt="User Profile"
+                        />
+                    ):(
+                        <Videos filter={filter} search={search} channel={user.subscribed}/>
+                    )}
                 </div>
             </div>
         </div>

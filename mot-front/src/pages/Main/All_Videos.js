@@ -21,7 +21,7 @@ function One({id, imageSrc, alt, video, navigate}) {
     );
 }
 
-function Videos({filter, search}){
+function Videos({filter, search, channel}){
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -34,7 +34,14 @@ function Videos({filter, search}){
                 //     "Authorization": `${accessToken()}`,
                 //     "Refresh-Token": `${refreshToken()}`,
                 // }
-                const resp = await getAllVideos();
+
+                console.log(filter);
+                let resp = null;
+                if(filter === "all"){
+                    resp = await getAllVideos();
+                }else{
+                    console.log("hey")
+                }
                 let all_videos = resp;
                 let data = [];
                 for(let x = 0; x < all_videos.videos.length; x++){

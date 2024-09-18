@@ -10,6 +10,11 @@ async function getAllVideos(){
     return req.data;
 }
 
+async function getSubscribedVideos(){
+    const req = await api.get(`/video/all`);
+    return req.data;
+}
+
 async function getVideoInfo(id){
     const req = await api.get(`/video/search?videos=${id}`);
     return req.data;
