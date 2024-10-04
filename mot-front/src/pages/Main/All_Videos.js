@@ -23,39 +23,52 @@ function One({id, imageSrc, alt, video, navigate}) {
 
 function Videos({filter, search, channel}){
     const [data, setData] = useState([]);
+    const [allVideos, setAllVideos] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // const headers = {
-                //     "Content-Type": "application/json",
-                //     "Authorization": `${accessToken()}`,
-                //     "Refresh-Token": `${refreshToken()}`,
-                // }
-
-                console.log(filter);
-                let resp = null;
-                if(filter === "all"){
-                    resp = await getAllVideos();
-                }else{
-                    console.log("hey")
-                }
-                let all_videos = resp;
-                let data = [];
-                for(let x = 0; x < all_videos.videos.length; x++){
-                    data.push({ id: all_videos.videos[x].id , imageSrc: all_videos.videos[x].thumb, alt: all_videos.videos[x].title, video: all_videos.videos[x].source})
-                }
-                setData(data);
-            } catch (err) {
-                console.error(err);
-                setError(err);
+    const fetchData = async () => {
+        try {
+            let resp = null;
+            if(filter === "all"){
+                resp = await getAllVideos();
+            }else{
+                //trocar para requisicao de videos inscritos
+                resp = await getAllVideos();
             }
-        };
+            let allData = resp.videos.map(video=>({
+                id:video.id,
+                imageSrc: video.thumb,
+                alt: video.title
+            }))
+            setData(allData);
+            setAllVideos(allData);
+        } catch (err) {
+            console.error(err);
+            setError(err);
+        }
+    };
 
+    useEffect(() => {
         fetchData();
-    }, []);
+    }, [filter]);
+
+    useEffect(()=>{
+        if(!search || search.trim() === ""){
+            setData(allVideos);
+            return;
+        }
+        if(data && data.length != 0){
+            setData(
+                allVideos.filter(video=>
+                    video.alt.toLowerCase().includes(search.toLowerCase())
+                )
+            );
+            return;
+        }else{
+            //fazer requisicao de pesquisa por titulo
+        }
+    },[search, allVideos])
 
     useEffect(() => {
         if (error && error.code === "ERR_BAD_REQUEST") {

@@ -13,7 +13,6 @@ function Main() {
     let { user, loading, error, logout, updateUser } = useUser();
 
     useEffect(() => {
-        console.log(search);
         //continuar search de videos
     },[search]);
 
